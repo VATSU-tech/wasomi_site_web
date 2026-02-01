@@ -1,8 +1,53 @@
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin, Calendar } from "lucide-react";
 
 const Contact = () => {
+  const contact = [
+    {
+      icon: <Mail size={32} color="var(--primary-color)" />,
+      content: "cswasomi@gmail.com",
+    },
+    {
+      icon: <Phone size={32} color="var(--primary-color)" />,
+      content: "+243 812 227 787, +243 998 862 270",
+    },
+    {
+      icon: <MapPin size={32} color="var(--primary-color)" />,
+      content: "Beni, Com.Bungulu Q.Residentiel 5rue SIVIRWA",
+    },
+    {
+      icon: <Calendar size={32} color="var(--primary-color)" />,
+      content: "Lundi - Vendredi : 7h30 - 16h00",
+    },
+    {
+      icon: <i style={{color: "var(--primary-color)"}} className="fa-brands fa-whatsapp text-3xl"></i>,
+      content: "+243 812 227 787",
+    },
+    {
+      icon: <i style={{color: "var(--primary-color)"}} className="fa-brands fa-facebook text-3xl"></i>,
+      content: "complexe scolaire wasomi",
+    },
+    {
+      icon: <i style={{color: "var(--primary-color)"}} className="fa-brands fa-x-twitter text-3xl"></i>,
+      content: "@wasomi_edu",
+    },
+    {
+      icon: <i style={{color: "var(--primary-color)"}} className="fa-brands fa-instagram text-3xl"></i>,
+      content: "@wasomi_edu",
+    },
+    {
+      icon: <i style={{color: "var(--primary-color)"}} className="fa-brands fa-tiktok text-3xl"></i>,
+      content: "cs_wasomi",
+    },
+  ];
   return (
-    <section id="contact" style={{ background: "rgba(30, 59, 32,.8)", color: "white" }}>
+    <section
+      id="contact"
+      style={{
+        background: "rgba(30, 59, 32,.8)",
+        color: "white",
+        minHeight: "100vh",
+      }}
+    >
       <div className="container">
         <div
           style={{
@@ -33,18 +78,30 @@ const Contact = () => {
                 gap: "1.5rem",
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+              {contact.map((item, index) => (
+                <div className="flex gap-1 items-center" key={index}>
+                  {item.icon}
+                  <span >{item.content}</span>
+                </div>
+              ))}
+              {/* <div
+                style={{ display: "flex", alignItems: "center", gap: "1rem" }}
+              >
                 <MapPin color="var(--primary-color)" />
                 <span>123 Avenue de l'Éducation, Ville-Moderne</span>
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "1rem" }}
+              >
                 <Phone color="var(--primary-color)" />
                 <span>+33 1 23 45 67 89</span>
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "1rem" }}
+              >
                 <Mail color="var(--primary-color)" />
                 <span>contact@visionfuture.edu</span>
-              </div>
+              </div> */}
             </div>
           </div>
 
@@ -124,12 +181,12 @@ const Contact = () => {
           style={{
             marginTop: "4rem",
             paddingTop: "2rem",
-            borderTop: "1px solid #334155",
+            borderTop: "1px solid var(--primary-color)",
             textAlign: "center",
             color: "#94a3b8",
           }}
         >
-          <p>&copy; 2024 École Primaire Vision Future. Tous droits réservés.</p>
+          <p>&copy; 2026 WASOMI. Tous droits réservés.</p>
         </footer>
       </div>
     </section>
