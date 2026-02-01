@@ -1,4 +1,3 @@
-import React from "react";
 import { Mail, Phone, MapPin } from "lucide-react";
 
 const Contact = () => {
@@ -34,15 +33,15 @@ const Contact = () => {
                 gap: "1.5rem",
               }}
             >
-              <div style={{ display: "flex", items: "center", gap: "1rem" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
                 <MapPin color="var(--primary-color)" />
                 <span>123 Avenue de l'Éducation, Ville-Moderne</span>
               </div>
-              <div style={{ display: "flex", items: "center", gap: "1rem" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
                 <Phone color="var(--primary-color)" />
                 <span>+33 1 23 45 67 89</span>
               </div>
-              <div style={{ display: "flex", items: "center", gap: "1rem" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
                 <Mail color="var(--primary-color)" />
                 <span>contact@visionfuture.edu</span>
               </div>

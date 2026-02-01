@@ -1,4 +1,3 @@
-import React from "react";
 import { Star, Heart, Shield } from "lucide-react";
 
 const reasons = [
