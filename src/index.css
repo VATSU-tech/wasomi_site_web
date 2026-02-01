@@ -2,7 +2,7 @@
 @plugin "daisyui";
 
 :root {
-  --primary-color: rgb(53, 235, 37);
+  --primary-color: #35eb25;
   --primary-hover: #2dd81d;
   --secondary-color: #f8fafc;
   --accent-color: #f59e0b;
@@ -27,6 +27,7 @@
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
+  cursor: url('/src/assets/mouse.svg'), auto;
   scrollbar-color: var(--primary-hover) var(--none);  /* Firefox */
 }
 
@@ -96,3 +97,18 @@ padding: 0 20px;
   margin: 30px 0 0 0;
 }
   
+.container{
+  animation: slideIn 1s ease-in-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+.container:hover .card:not(:hover) {
+  filter: grayscale(100%);
+}

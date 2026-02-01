@@ -12,7 +12,7 @@ const Hero = () => {
         paddingTop: "var(--nav-height)"
       }}
     >
-      <div
+      <div 
         className="container"
         style={{
           display: "grid",

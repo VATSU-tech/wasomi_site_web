@@ -17,17 +17,17 @@ const reasons = [
     text: "Un environnement bienveillant et sécurisé où votre enfant peut s'épanouir en toute confiance.",
   },
   {
-    icon: <Cpu size={32} color="#fa0001" />,
+    icon: <Cpu size={32} color="#10b9f1" />,
     title: "Technologie de pointe",
     text: "Des outils modernes pour accompagner les enfants dans leur apprentissage.",
   },
   {
-    icon:<Medal size={32} color="#10b9f1" />,
+    icon:<Medal size={32} color="#a9a911" />,
     title:"Vie sportive",
     text:"Des activités sportives pour développer le corps et l'esprit."
   },
   {
-    icon:<Bus size={32} color="#10b9f1" />,
+    icon:<Bus size={32} color="#6f6f6f" />,
     title:"Transport securiser",
     text:"Des bus pour le transport securiser de vos enfant en toute cisronstance et en toute intemperie"
   }

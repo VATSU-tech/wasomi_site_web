@@ -4,6 +4,8 @@ import About from "./sections/About";
 import Projects from "./sections/Projects";
 import Motivation from "./sections/Motivation";
 import Contact from "./sections/Contact";
+import './Typescript/events'
+import Galerie from "./sections/Galerie";
 
 function App() {
   return (
@@ -14,6 +16,7 @@ function App() {
         <About />
         <Projects />
         <Motivation />
+        <Galerie />
         <Contact />
       </main>
     </div>
