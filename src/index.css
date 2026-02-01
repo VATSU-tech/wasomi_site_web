@@ -26,9 +26,11 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: var(--nav-height);
   overflow-x: hidden;
   cursor: url('/src/assets/mouse.svg'), auto;
-  scrollbar-color: var(--primary-hover) var(--none);  /* Firefox */
+  scrollbar-color: var(--primary-hover) var(--none);
+  /* Firefox */
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -42,7 +44,12 @@ body {
   line-height: 1.6;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   /* font-family: var(--font-heading); */
   line-height: 1.2;
 }
@@ -71,12 +78,16 @@ button {
   padding: 0.75rem 1.5rem;
 }
 
+.secondary-btn {
+  padding: 0.75rem 1.5rem;
+}
+
 .btn-primary:hover {
   background-color: var(--primary-hover);
   transform: translateY(-2px);
 }
 
-.app-container{
+.app-container {
   background-image: url('/src/assets/image_hero.jpeg');
   background-repeat: no-repeat;
   background-size: 100% 100vh;
@@ -90,14 +101,15 @@ a:hover {
   transform: translateY(-2px);
 }
 
-.navbar-st{
-padding: 0 20px;
+.navbar-st {
+  padding: 0 20px;
 }
-.sideBar{
+
+.sideBar {
   margin: 30px 0 0 0;
 }
-  
-.container{
+
+.container {
   animation: slideIn 1s ease-in-out;
 }
 
@@ -105,10 +117,12 @@ padding: 0 20px;
   from {
     transform: translateX(-100%);
   }
+
   to {
     transform: translateX(0%);
   }
 }
+
 .container:hover .card:not(:hover) {
   filter: grayscale(100%);
 }

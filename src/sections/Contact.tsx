@@ -4,38 +4,74 @@ const Contact = () => {
   const contact = [
     {
       icon: <Mail size={32} color="var(--primary-color)" />,
-      content: "cswasomi@gmail.com",
+      content: (
+        <a className="hover:text-[var(--primary-color)]" href="mailto:cswasomi@gmail.com">cswasomi@gmail.com</a>
+      ),
     },
     {
       icon: <Phone size={32} color="var(--primary-color)" />,
-      content: "+243 812 227 787, +243 998 862 270",
+      content: (
+        <>
+          <a className="hover:text-[var(--primary-color)]" href="tel:+243812227787">+243 812 227 787</a>,
+          <a className="hover:text-[var(--primary-color)]" href="tel:+243998862270">+243 998 862 270</a>
+        </>
+      ),
     },
     {
       icon: <MapPin size={32} color="var(--primary-color)" />,
-      content: "Beni, Com.Bungulu Q.Residentiel 5rue SIVIRWA",
+      content: (
+        <a className="hover:text-[var(--primary-color)]" href="https://maps.app.goo.gl/xqfZnZgjdTyaFeoY6" target="_blank" rel="noopener noreferrer">Complexe scolaire wasomi</a>
+      )
     },
     {
       icon: <Calendar size={32} color="var(--primary-color)" />,
       content: "Lundi - Vendredi : 7h30 - 16h00",
     },
     {
-      icon: <i style={{color: "var(--primary-color)"}} className="fa-brands fa-whatsapp text-3xl"></i>,
-      content: "+243 812 227 787",
+      icon: (
+        <i
+          style={{ color: "var(--primary-color)" }}
+          className="fa-brands fa-whatsapp text-3xl"
+        ></i>
+      ),
+      content: (
+        <a className="hover:text-[var(--primary-color)]" href="https://api.whatsapp.com/send?phone=+243814694982&text=Bonjour wasomi">+243 814 694 982</a>
+      ),
     },
     {
-      icon: <i style={{color: "var(--primary-color)"}} className="fa-brands fa-facebook text-3xl"></i>,
+      icon: (
+        <i
+          style={{ color: "var(--primary-color)" }}
+          className="fa-brands fa-facebook text-3xl"
+        ></i>
+      ),
       content: "complexe scolaire wasomi",
     },
     {
-      icon: <i style={{color: "var(--primary-color)"}} className="fa-brands fa-x-twitter text-3xl"></i>,
+      icon: (
+        <i
+          style={{ color: "var(--primary-color)" }}
+          className="fa-brands fa-x-twitter text-3xl"
+        ></i>
+      ),
       content: "@wasomi_edu",
     },
     {
-      icon: <i style={{color: "var(--primary-color)"}} className="fa-brands fa-instagram text-3xl"></i>,
+      icon: (
+        <i
+          style={{ color: "var(--primary-color)" }}
+          className="fa-brands fa-instagram text-3xl"
+        ></i>
+      ),
       content: "@wasomi_edu",
     },
     {
-      icon: <i style={{color: "var(--primary-color)"}} className="fa-brands fa-tiktok text-3xl"></i>,
+      icon: (
+        <i
+          style={{ color: "var(--primary-color)" }}
+          className="fa-brands fa-tiktok text-3xl"
+        ></i>
+      ),
       content: "cs_wasomi",
     },
   ];
@@ -81,7 +117,7 @@ const Contact = () => {
               {contact.map((item, index) => (
                 <div className="flex gap-1 items-center" key={index}>
                   {item.icon}
-                  <span >{item.content}</span>
+                  <span>{item.content}</span>
                 </div>
               ))}
               {/* <div

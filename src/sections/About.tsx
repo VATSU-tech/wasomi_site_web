@@ -1,7 +1,9 @@
-
 const About = () => {
   return (
-    <section id="about" style={{ background: "var(--white)",minHeight:"100vh" }}>
+    <section
+      id="about"
+      style={{ background: "var(--white)", minHeight: "100vh" }}
+    >
       <div className="container">
         <div
           style={{
@@ -10,7 +12,7 @@ const About = () => {
             margin: "0 auto 4rem auto",
           }}
         >
-          <h2 className="text-4xl mb-1" style={{marginBottom: "1rem"}}>
+          <h2 className="text-4xl mb-1" style={{ marginBottom: "1rem" }}>
             Notre École, Notre Mission
           </h2>
           <p className="text-lg text-gray-600 mb-4">
@@ -58,7 +60,8 @@ const About = () => {
               intégrant les nouvelles technologies et des méthodes
               d'apprentissage actives.
             </p>
-          </div>     <div
+          </div>{" "}
+          <div
             style={{
               padding: "2rem",
               background: "var(--secondary-color)",
@@ -73,7 +76,8 @@ const About = () => {
               intégrant les nouvelles technologies et des méthodes
               d'apprentissage actives.
             </p>
-          </div>     <div
+          </div>{" "}
+          <div
             style={{
               padding: "2rem",
               background: "var(--secondary-color)",
@@ -89,7 +93,7 @@ const About = () => {
               d'apprentissage actives.
             </p>
           </div>
-               <div
+          <div
             style={{
               padding: "2rem",
               background: "var(--secondary-color)",
@@ -100,7 +104,8 @@ const About = () => {
               Philosophie
             </h3>
             <p>
-              Chaque eleve est unique et nous devons a tout prix trouver la methode d'apprentissage qui lui convient le mieux.
+              Chaque eleve est unique et nous devons a tout prix trouver la
+              methode d'apprentissage qui lui convient le mieux.
             </p>
           </div>
           <div

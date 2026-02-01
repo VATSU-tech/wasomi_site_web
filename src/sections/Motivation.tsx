@@ -1,4 +1,4 @@
-import { Star, Heart, Shield, Cpu, Medal,Bus } from "lucide-react";
+import { Star, Heart, Shield, Cpu, Medal, Bus } from "lucide-react";
 
 const reasons = [
   {
@@ -22,21 +22,23 @@ const reasons = [
     text: "Des outils modernes pour accompagner les enfants dans leur apprentissage.",
   },
   {
-    icon:<Medal size={32} color="#a9a911" />,
-    title:"Vie sportive",
-    text:"Des activités sportives pour développer le corps et l'esprit."
+    icon: <Medal size={32} color="#a9a911" />,
+    title: "Vie sportive",
+    text: "Des activités sportives pour développer le corps et l'esprit.",
   },
   {
-    icon:<Bus size={32} color="#6f6f6f" />,
-    title:"Transport securiser",
-    text:"Des bus pour le transport securiser de vos enfant en toute cisronstance et en toute intemperie"
-  }
-
+    icon: <Bus size={32} color="#6f6f6f" />,
+    title: "Transport securiser",
+    text: "Des bus pour le transport securiser de vos enfant en toute cisronstance et en toute intemperie",
+  },
 ];
 
 const Motivation = () => {
   return (
-    <section id="motivation" style={{ background: "var(--white)", minHeight:'100vh' }}>
+    <section
+      id="motivation"
+      style={{ background: "var(--white)", minHeight: "100vh" }}
+    >
       <div className="container">
         <h2
           style={{
@@ -45,7 +47,8 @@ const Motivation = () => {
             textAlign: "center",
           }}
         >
-          Pourquoi choisir <span style={{color: "var(--primary-color)"}}>WASOMI</span> ?
+          Pourquoi choisir{" "}
+          <span style={{ color: "var(--primary-color)" }}>WASOMI</span> ?
         </h2>
 
         <div
