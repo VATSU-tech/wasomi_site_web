@@ -1,100 +1,91 @@
-import React from "react";
-import { Menu, X } from "lucide-react";
-
 const Navbar = () => {
-  const [isOpen, setIsOpen] = React.useState(false);
-
   return (
-    <nav
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        height: "var(--nav-height)",
-        backgroundColor: "rgba(255, 255, 255, 0.01)",
-        backdropFilter: "blur(10px)",
-        boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-        zIndex: 1000,
-        display: "flex",
-        alignItems: "center",
-      }}
-    >
-      <div
-        className="container"
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          width: "100%",
-        }}
-      >
-        <span
-          style={{
-            fontSize: "1.5rem",
-            fontWeight: "bold",
-            color: "var(--primary-color)",
-            textShadow: "0 0 15px var(--text-color)"
-          }}
-        >
-          WASOMI
-        </span>
-
-        {/* Desktop Menu */}
-        <div className="desktop-menu" style={{ display: "none", gap: "2rem" }}>
-          {/* We will toggle display via media queries in CSS if we had them or inline styles logic */}
-          <a href="#hero">Accueil</a>
-          <a href="#about">À propos</a>
-          <a href="#projects">Projets</a>
-          <a href="#motivation">Parents</a>
-          <a href="#contact" className="btn-primary">
-            Contact
-          </a>
+    <div className="drawer text-green-100 font-bold text-2xl p-10">
+      <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
+      <div className="drawer-content flex flex-col">
+        {/* Navbar */}
+        <div className="navbar navbar-st bg-black/40 shadow-xl w-full">
+          <div className="flex-none lg:hidden">
+            <label
+              htmlFor="my-drawer-2"
+              aria-label="open sidebar"
+              className="btn btn-square btn-ghost"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                className="inline-block h-6 w-6 stroke-current"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                ></path>
+              </svg>
+            </label>
+          </div>
+          <div className="mx-2 flex-1 ml-10 px-2">WASOMI</div>
+          <div className="hidden flex-none lg:block mr-10">
+            <ul className="menu menu-horizontal flex-1 gap-4 p-10">
+              {/* Navbar menu content here */}
+              <li>
+                <a href="#hero">Accueil</a>
+              </li>
+              <li>
+                <a href="#about">À propos</a>
+              </li>
+              <li>
+                <a href="#projects">Projets</a>
+              </li>
+              <li>
+                <a href="#motivation">Parents</a>
+              </li>
+              <li>
+                <a href="#contact">Contact</a>
+              </li>
+            </ul>
+          </div>
         </div>
-
-        {/* Mobile Menu Toggle */}
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          style={{ background: "transparent", color: "var(--text-color)" }}
-        >
-          {isOpen ? <X /> : <Menu />}
-        </button>
+        {/* Page content here*/}
       </div>
-
-      {/* Simple Mobile Menu Implementation */}
-      {isOpen && (
-        <div
-          style={{
-            position: "absolute",
-            top: "var(--nav-height)",
-            left: 0,
-            right: 0,
-            background: "white",
-            padding: "2rem",
-            display: "flex",
-            flexDirection: "column",
-            gap: "1rem",
-            boxShadow: "0 4px 6px -1px rgba(0,0,0,0.1)",
-          }}
-        >
-          <a href="#hero" onClick={() => setIsOpen(false)}>
-            Accueil
-          </a>
-          <a href="#about" onClick={() => setIsOpen(false)}>
-            À propos
-          </a>
-          <a href="#projects" onClick={() => setIsOpen(false)}>
-            Projets
-          </a>
-          <a href="#motivation" onClick={() => setIsOpen(false)}>
-            Parents
-          </a>
-          <a href="#contact" onClick={() => setIsOpen(false)}>
-            Contact
-          </a>
-        </div>
-      )}
-    </nav>
+      <div className="drawer-side">
+        <label
+          htmlFor="my-drawer-2"
+          aria-label="close sidebar"
+          className="drawer-overlay"
+        ></label>
+        <ul className="menu text-2xl text-white items-center bg-green-900/60 flex-col flex gap-2 min-h-full w-80 p-4">
+          {/* Sidebar content here */}
+          <li>
+            <a href="#hero" className=" sideBar">
+              Accueil
+            </a>
+          </li>
+          <li>
+            <a href="#about" className="">
+              À propos
+            </a>
+          </li>
+          <li>
+            <a href="#projects" className="">
+              Projets
+            </a>
+          </li>
+          <li>
+            <a href="#motivation" className="">
+              Parents
+            </a>
+          </li>
+          <li>
+            <a href="#contact" className="">
+              Contact
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
   );
 };
 
