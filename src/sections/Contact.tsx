@@ -3,7 +3,7 @@ import { Mail, Phone, MapPin } from "lucide-react";
 
 const Contact = () => {
   return (
-    <section id="contact" style={{ background: "#1e293b", color: "white" }}>
+    <section id="contact" style={{ background: "rgba(30, 59, 32,.8)", color: "white" }}>
       <div className="container">
         <div
           style={{

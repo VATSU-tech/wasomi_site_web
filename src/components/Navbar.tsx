@@ -12,7 +12,7 @@ const Navbar = () => {
         left: 0,
         right: 0,
         height: "var(--nav-height)",
-        backgroundColor: "rgba(255, 255, 255, 0.9)",
+        backgroundColor: "rgba(255, 255, 255, 0.01)",
         backdropFilter: "blur(10px)",
         boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
         zIndex: 1000,
@@ -29,15 +29,16 @@ const Navbar = () => {
           width: "100%",
         }}
       >
-        <div
+        <span
           style={{
             fontSize: "1.5rem",
             fontWeight: "bold",
             color: "var(--primary-color)",
+            textShadow: "0 0 15px var(--text-color)"
           }}
         >
-          Vision Future
-        </div>
+          WASOMI
+        </span>
 
         {/* Desktop Menu */}
         <div className="desktop-menu" style={{ display: "none", gap: "2rem" }}>

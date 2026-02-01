@@ -1,4 +1,3 @@
-import React from "react";
 import { ArrowRight } from "lucide-react";
 
 const Hero = () => {
@@ -9,8 +8,8 @@ const Hero = () => {
         height: "100vh",
         display: "flex",
         alignItems: "center",
-        background: "linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)",
-        paddingTop: "var(--nav-height)",
+        background: "linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0,.7) 50%)",
+        paddingTop: "var(--nav-height)"
       }}
     >
       <div
@@ -25,7 +24,7 @@ const Hero = () => {
         <div style={{ maxWidth: "600px" }}>
           <span
             style={{
-              color: "var(--primary-color)",
+              color: "var(--secondary-color)",
               fontWeight: "600",
               textTransform: "uppercase",
               letterSpacing: "0.05em",
@@ -40,6 +39,8 @@ const Hero = () => {
               fontSize: "3.5rem",
               marginBottom: "1.5rem",
               lineHeight: "1.1",
+              color: "var(--primary-color)",
+              textShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
             }}
           >
             Forger les esprits de demain
@@ -63,6 +64,7 @@ const Hero = () => {
                 alignItems: "center",
                 gap: "0.5rem",
                 textDecoration: "none",
+                borderRadius: "8px",
               }}
             >
               Inscrivez votre enfant <ArrowRight size={20} />
@@ -74,15 +76,16 @@ const Hero = () => {
                 borderRadius: "8px",
                 fontWeight: "600",
                 textDecoration: "none",
-                color: "var(--primary-color)",
-                border: "2px solid var(--primary-color)",
+                textShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
+                color: "var(--secondary-color)",
+                border: "2px solid var(--secondary-color)",
               }}
             >
               Découvrir l'école
             </a>
           </div>
         </div>
-        <div
+        {/* <div
           style={{
             position: "relative",
             height: "400px",
@@ -96,12 +99,10 @@ const Hero = () => {
             color: "#cbd5e1",
           }}
         >
-          {/* Placeholder for School Image */}
-          <div style={{ textAlign: "center" }}>
-            <p>Illustration de l'école</p>
-            <small>(Image path: /assets/school-hero.jpg)</small>
+          <div style={{ textAlign: "center"}}>
+            
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   );

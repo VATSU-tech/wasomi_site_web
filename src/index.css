@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 :root {
-  --primary-color: #2563eb;
-  --primary-hover: #1d4ed8;
+  --primary-color: rgb(53, 235, 37);
+  --primary-hover: #2dd81d;
   --secondary-color: #f8fafc;
   --accent-color: #f59e0b;
-  --text-color: #1e293b;
+  --text-color: #1e3b20;
   --text-light: #64748b;
   --white: #ffffff;
   --font-heading: 'Inter', system-ui, sans-serif;
@@ -18,6 +18,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  transition: all 0.3s ease;
 }
 
 html {
@@ -63,4 +64,12 @@ button {
 .btn-primary:hover {
   background-color: var(--primary-hover);
   transform: translateY(-2px);
+}
+
+.app-container{
+  background-image: url('/src/assets/image_hero.jpeg');
+  background-repeat: no-repeat;
+  background-size: 100% 100vh;
+  background-position: top;
+  background-attachment: fixed;
 }
