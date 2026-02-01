@@ -1,4 +1,4 @@
-import { Star, Heart, Shield } from "lucide-react";
+import { Star, Heart, Shield, Cpu } from "lucide-react";
 
 const reasons = [
   {
@@ -15,7 +15,11 @@ const reasons = [
     icon: <Shield size={32} color="#10b981" />,
     title: "Cadre Sécurisé",
     text: "Un environnement bienveillant et sécurisé où votre enfant peut s'épanouir en toute confiance.",
-  },
+  },{
+    icon: <Cpu size={32} color="#10b9f1" />,
+    title: "Technologie de pointe",
+    text: "Des outils modernes pour accompagner les enfants dans leur apprentissage.",
+  }
 ];
 
 const Motivation = () => {
@@ -29,7 +33,7 @@ const Motivation = () => {
             textAlign: "center",
           }}
         >
-          Pourquoi choisir Vision Future ?
+          Pourquoi choisir <span style={{color: "var(--primary-color)"}}>WASOMI</span> ?
         </h2>
 
         <div
