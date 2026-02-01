@@ -1,4 +1,4 @@
-import { Star, Heart, Shield, Cpu } from "lucide-react";
+import { Star, Heart, Shield, Cpu, Medal,Bus } from "lucide-react";
 
 const reasons = [
   {
@@ -15,16 +15,28 @@ const reasons = [
     icon: <Shield size={32} color="#10b981" />,
     title: "Cadre Sécurisé",
     text: "Un environnement bienveillant et sécurisé où votre enfant peut s'épanouir en toute confiance.",
-  },{
-    icon: <Cpu size={32} color="#10b9f1" />,
+  },
+  {
+    icon: <Cpu size={32} color="#fa0001" />,
     title: "Technologie de pointe",
     text: "Des outils modernes pour accompagner les enfants dans leur apprentissage.",
+  },
+  {
+    icon:<Medal size={32} color="#10b9f1" />,
+    title:"Vie sportive",
+    text:"Des activités sportives pour développer le corps et l'esprit."
+  },
+  {
+    icon:<Bus size={32} color="#10b9f1" />,
+    title:"Transport securiser",
+    text:"Des bus pour le transport securiser de vos enfant en toute cisronstance et en toute intemperie"
   }
+
 ];
 
 const Motivation = () => {
   return (
-    <section id="motivation" style={{ background: "var(--white)" }}>
+    <section id="motivation" style={{ background: "var(--white)", minHeight:'100vh' }}>
       <div className="container">
         <h2
           style={{
@@ -63,45 +75,6 @@ const Motivation = () => {
               <p style={{ color: "var(--text-light)" }}>{item.text}</p>
             </div>
           ))}
-        </div>
-
-        <div
-          style={{
-            marginTop: "4rem",
-            textAlign: "center",
-            background: "var(--primary-color)",
-            color: "white",
-            padding: "3rem",
-            borderRadius: "1rem",
-          }}
-        >
-          <h3 style={{ marginBottom: "1rem", fontSize: "1.75rem" }}>
-            Prêts à nous rejoindre ?
-          </h3>
-          <p
-            style={{
-              marginBottom: "2rem",
-              maxWidth: "600px",
-              margin: "0 auto 2rem auto",
-            }}
-          >
-            Offrez à votre enfant le meilleur départ dans la vie. Les
-            inscriptions pour la prochaine rentrée sont ouvertes.
-          </p>
-          <a
-            href="#contact"
-            className="btn-primary"
-            style={{
-              background: "white",
-              color: "var(--primary-color)",
-              textDecoration: "none",
-              padding: "1rem 2rem",
-              borderRadius: "8px",
-              fontWeight: "bold",
-            }}
-          >
-            Contacter l'administration
-          </a>
         </div>
       </div>
     </section>
