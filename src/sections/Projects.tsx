@@ -14,11 +14,26 @@ const projects = [
     desc: "Rénovation de la bibliothèque avec un espace lecture confortable et plus de 1000 nouveaux ouvrages.",
     status: "À venir",
   },
+  {
+    title:"Bâtiment",
+    desc: "Construction d'un nouveau bâtiment pour accueillir plus d'élèves pour les classes secondaires.",
+    status: "À venir",
+  },
+  {
+    title:"Labo Informatique",
+    status: "Terminé",
+    desc: "Construction d'un d'un labo informatique pour les élèves.",
+  },
+  {
+    title:"Labo scientifique",
+    status: "En cours",
+    desc: "Construction d'un d'un labo scientifique pour les élèves.",
+  }
 ];
 
 const Projects = () => {
   return (
-    <section id="projects" style={{ background: "var(--secondary-color)" }}>
+    <section id="projects" style={{ background: "var(--secondary-color)",minHeight:'100vh' }}>
       <div className="container">
         <h2
           style={{
@@ -29,6 +44,9 @@ const Projects = () => {
         >
           Nos Projets
         </h2>
+        <p style={{textAlign: "center",marginBottom: "2rem"}}>
+          Voici nos projets en cours et à venir <br/>qui vonts rendre l'école plus moderne et plus agréable pour les élèves.
+        </p>
 
         <div
           style={{
