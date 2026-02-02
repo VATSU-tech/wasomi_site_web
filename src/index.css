@@ -126,3 +126,66 @@ a:hover {
 .container:hover .card:not(:hover) {
   filter: grayscale(100%);
 }
+
+.linkContact {
+  animation: fadenLink 5s infinite ease forwards;
+  position: relative;
+}
+
+.linkContact[data-hover]::after {
+  content: attr(data-hover);
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%) scale(0.9);
+  background-color: var(--primary-color);
+  color: var(--white);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.2s ease;
+  z-index: 50;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  visibility: hidden;
+}
+
+.linkContact[data-hover]:hover::after {
+  transform: translateX(-50%) scale(1);
+  opacity: 1;
+  visibility: visible;
+}
+
+.linkContact[data-hover]::before {
+  content: '';
+  position: absolute;
+  bottom: 105%;
+  left: 50%;
+  transform: translateX(-50%) scale(0.9);
+  border: 6px solid transparent;
+  border-top-color: var(--primary-color);
+  opacity: 0;
+  transition: all 0.2s ease;
+  z-index: 50;
+  visibility: hidden;
+}
+
+.linkContact[data-hover]:hover::before {
+  transform: translateX(-50%) scale(1);
+  opacity: 1;
+  visibility: visible;
+}
+
+/* @keyframes fadenLink {
+  30%,70%{
+    color: inherit;
+  }
+
+  50%{
+    color: var(--primary-color);
+  }
+  
+} */

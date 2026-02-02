@@ -5,23 +5,50 @@ const Contact = () => {
     {
       icon: <Mail size={32} color="var(--primary-color)" />,
       content: (
-        <a className="hover:text-[var(--primary-color)]" href="mailto:cswasomi@gmail.com">cswasomi@gmail.com</a>
+        <a
+          className="linkContact hover:text-[var(--primary-color)]"
+          href="mailto:cswasomi@gmail.com"
+          data-hover="Envoyer un email"
+        >
+          cswasomi@gmail.com
+        </a>
       ),
     },
     {
       icon: <Phone size={32} color="var(--primary-color)" />,
       content: (
         <>
-          <a className="hover:text-[var(--primary-color)]" href="tel:+243812227787">+243 812 227 787</a>,
-          <a className="hover:text-[var(--primary-color)]" href="tel:+243998862270">+243 998 862 270</a>
+          <a
+            className="linkContact hover:text-[var(--primary-color)]"
+            href="tel:+243812227787"
+            data-hover="Appeler"
+          >
+            +243 812 227 787
+          </a>
+          ,
+          <a
+            className="linkContact hover:text-[var(--primary-color)]"
+            href="tel:+243998862270"
+            data-hover="Appeler"
+          >
+            +243 998 862 270
+          </a>
         </>
       ),
     },
     {
       icon: <MapPin size={32} color="var(--primary-color)" />,
       content: (
-        <a className="hover:text-[var(--primary-color)]" href="https://maps.app.goo.gl/xqfZnZgjdTyaFeoY6" target="_blank" rel="noopener noreferrer">Complexe scolaire wasomi</a>
-      )
+        <a
+          className="linkContact hover:text-[var(--primary-color)]"
+          href="https://maps.app.goo.gl/xqfZnZgjdTyaFeoY6"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-hover="Voir sur Maps"
+        >
+          Complexe scolaire wasomi
+        </a>
+      ),
     },
     {
       icon: <Calendar size={32} color="var(--primary-color)" />,
@@ -35,7 +62,13 @@ const Contact = () => {
         ></i>
       ),
       content: (
-        <a className="hover:text-[var(--primary-color)]" href="https://api.whatsapp.com/send?phone=+243814694982&text=Bonjour wasomi">+243 814 694 982</a>
+        <a
+          className=" linkContact hover:text-[var(--primary-color)]"
+          href="https://api.whatsapp.com/send?phone=+243814694982&text=Bonjour wasomi"
+          data-hover="Discuter sur WhatsApp"
+        >
+          +243 814 694 982
+        </a>
       ),
     },
     {
