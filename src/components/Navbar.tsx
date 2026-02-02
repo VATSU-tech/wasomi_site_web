@@ -40,6 +40,9 @@ const Navbar = () => {
                 <a href="#projects">Projets</a>
               </li>
               <li>
+                <a href="#partners">Partenaires</a>
+              </li>
+              <li>
                 <a href="#motivation">Pourquoi nous</a>
               </li>
               <li>
@@ -74,6 +77,11 @@ const Navbar = () => {
           <li>
             <a href="#projects" className="">
               Projets
+            </a>
+          </li>
+          <li>
+            <a href="#partners" className="">
+              Partenaires
             </a>
           </li>
           <li>

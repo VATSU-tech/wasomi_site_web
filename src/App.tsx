@@ -4,8 +4,9 @@ import About from "./sections/About";
 import Projects from "./sections/Projects";
 import Motivation from "./sections/Motivation";
 import Contact from "./sections/Contact";
-import './Typescript/events'
+import "./Typescript/events";
 import Galerie from "./sections/Galerie";
+import Partners from "./sections/Partners";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Hero />
         <About />
         <Projects />
+        <Partners />
         <Motivation />
         <Galerie />
         <Contact />
