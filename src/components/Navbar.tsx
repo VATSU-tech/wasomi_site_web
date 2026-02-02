@@ -1,6 +1,6 @@
 const Navbar = () => {
   return (
-    <div className="drawer text-green-100 fixed font-bold text-2xl p-10">
+    <div className="drawer text-green-200 fixed z-10000000000000000000 font-bold text-2xl p-10">
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
         {/* Navbar */}
