@@ -6,8 +6,6 @@ Site vitrine moderne pour le **Complexe Scolaire WASOMI**. Il présente l’éco
 
 ![Héros — Accueil](src/assets/image_hero.jpeg)
 
-![Galerie — Apprentissage interactif](https://images.unsplash.com/photo-1544531586-fde5298cdd40?auto=format&fit=crop&q=80&w=1200)
-
 ![Galerie — Notre campus](https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=1200)
 
 ## À propos du projet
