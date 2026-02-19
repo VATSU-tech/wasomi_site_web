@@ -1,4 +1,12 @@
+import { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 const About = () => {
+
+    useEffect(() => {
+      AOS.init();
+    }, []);
   return (
     <section
       id="about"
@@ -12,10 +20,10 @@ const About = () => {
             margin: "0 auto 4rem auto",
           }}
         >
-          <h2 className="text-4xl mb-1" style={{ marginBottom: "1rem" }}>
+          <h2 className="text-4xl mb-1" style={{ marginBottom: "1rem" }} data-aos="fade-up">
             Notre École, Notre Mission
           </h2>
-          <p className="text-lg text-gray-600 mb-4">
+          <p className="text-lg text-gray-600 mb-4" data-aos="fade-up" data-aos-delay="200">
             Située au cœur de la ville, notre établissement propose un
             environnement d'apprentissage stimulant où chaque élève est
             encouragé à développer son plein potentiel.
@@ -35,6 +43,8 @@ const About = () => {
               background: "var(--secondary-color)",
               borderRadius: "1rem",
             }}
+            data-aos="fade-up-right"
+            data-aos-delay="100"
           >
             <h3 style={{ marginBottom: "1rem", color: "var(--primary-color)" }}>
               Situation Actuelle
@@ -51,6 +61,8 @@ const About = () => {
               background: "var(--secondary-color)",
               borderRadius: "1rem",
             }}
+            data-aos="fade-down"
+            data-aos-delay="200"
           >
             <h3 style={{ marginBottom: "1rem", color: "var(--primary-color)" }}>
               Notre Vision
@@ -67,6 +79,8 @@ const About = () => {
               background: "var(--secondary-color)",
               borderRadius: "1rem",
             }}
+            data-aos="fade-down-right"
+            data-aos-delay="300"
           >
             <h3 style={{ marginBottom: "1rem", color: "var(--primary-color)" }}>
               Notre Vision
@@ -83,6 +97,8 @@ const About = () => {
               background: "var(--secondary-color)",
               borderRadius: "1rem",
             }}
+            data-aos="fade-up-right"
+            data-aos-delay="400"
           >
             <h3 style={{ marginBottom: "1rem", color: "var(--primary-color)" }}>
               Notre Vision
@@ -99,6 +115,8 @@ const About = () => {
               background: "var(--secondary-color)",
               borderRadius: "1rem",
             }}
+            data-aos="fade-down"
+            data-aos-delay="500"
           >
             <h3 style={{ marginBottom: "1rem", color: "var(--primary-color)" }}>
               Philosophie
@@ -114,6 +132,8 @@ const About = () => {
               background: "var(--secondary-color)",
               borderRadius: "1rem",
             }}
+            data-aos="fade-up-left"
+            data-aos-delay="600"
           >
             <h3 style={{ marginBottom: "1rem", color: "var(--primary-color)" }}>
               Valeurs
