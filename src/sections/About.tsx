@@ -35,7 +35,7 @@ const About = () => {
               background: "var(--secondary-color)",
               borderRadius: "1rem",
             }}
-            data-aos="fade-up-right"
+            data-aos="fade-up"
             data-aos-delay="0"
             data-aos-duration="750"
           >
@@ -73,7 +73,7 @@ const About = () => {
               background: "var(--secondary-color)",
               borderRadius: "1rem",
             }}
-            data-aos="fade-down-right"
+            data-aos="fade-up"
             data-aos-delay="240"
             data-aos-duration="750"
           >
@@ -92,7 +92,7 @@ const About = () => {
               background: "var(--secondary-color)",
               borderRadius: "1rem",
             }}
-            data-aos="fade-up-right"
+            data-aos="fade-up"
             data-aos-delay="360"
             data-aos-duration="750"
           >
@@ -111,7 +111,7 @@ const About = () => {
               background: "var(--secondary-color)",
               borderRadius: "1rem",
             }}
-            data-aos="fade-up-left"
+            data-aos="fade-up"
             data-aos-delay="480"
             data-aos-duration="750"
           >
@@ -129,7 +129,7 @@ const About = () => {
               background: "var(--secondary-color)",
               borderRadius: "1rem",
             }}
-            data-aos="fade-up-left"
+            data-aos="fade-up"
             data-aos-delay="600"
             data-aos-duration="750"
           >

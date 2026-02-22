@@ -125,7 +125,7 @@ const Contact = () => {
             gap: "4rem",
           }}
         >
-          <div data-aos="fade-right" data-aos-duration="900">
+          <div data-aos="fade-up" data-aos-duration="900">
             <h2
               data-aos="fade-up"
               data-aos-duration="800"
@@ -158,7 +158,7 @@ const Contact = () => {
                 <div
                   className="flex gap-1 items-center"
                   key={index}
-                  data-aos="fade-right"
+                  data-aos="fade-up"
                   data-aos-delay={index * 80}
                   data-aos-duration="700"
                 >
@@ -188,7 +188,7 @@ const Contact = () => {
           </div>
 
           <form
-            data-aos="fade-left"
+            data-aos="fade-up"
             data-aos-duration="900"
             style={{
               background: "#334155",

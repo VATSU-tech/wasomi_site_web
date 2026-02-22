@@ -75,41 +75,41 @@ const Navbar = () => {
         ></label>
         <ul
           className="menu text-2xl text-white items-center bg-green-900/90 flex-col flex gap-2 min-h-full w-[60%] p-4"
-          data-aos="fade-right"
+          data-aos="fade-up"
           data-aos-duration="700"
         >
           {/* Sidebar content here */}
-          <li data-aos="fade-right" data-aos-delay="120" data-aos-duration="500">
+          <li data-aos="fade-up" data-aos-delay="120" data-aos-duration="500">
             <a href="#hero" className=" sideBar">
               Accueil
             </a>
           </li>
-          <li data-aos="fade-right" data-aos-delay="180" data-aos-duration="500">
+          <li data-aos="fade-up" data-aos-delay="180" data-aos-duration="500">
             <a href="#about" className="">
               À propos
             </a>
           </li>
-          <li data-aos="fade-right" data-aos-delay="240" data-aos-duration="500">
+          <li data-aos="fade-up" data-aos-delay="240" data-aos-duration="500">
             <a href="#projects" className="">
               Projets
             </a>
           </li>
-          <li data-aos="fade-right" data-aos-delay="300" data-aos-duration="500">
+          <li data-aos="fade-up" data-aos-delay="300" data-aos-duration="500">
             <a href="#partners" className="">
               Partenaires
             </a>
           </li>
-          <li data-aos="fade-right" data-aos-delay="360" data-aos-duration="500">
+          <li data-aos="fade-up" data-aos-delay="360" data-aos-duration="500">
             <a href="#motivation" className="">
               Pourquoi nous
             </a>
           </li>
-          <li data-aos="fade-right" data-aos-delay="420" data-aos-duration="500">
+          <li data-aos="fade-up" data-aos-delay="420" data-aos-duration="500">
             <a href="#galerie" className="">
               Galerie
             </a>
           </li>
-          <li data-aos="fade-right" data-aos-delay="480" data-aos-duration="500">
+          <li data-aos="fade-up" data-aos-delay="480" data-aos-duration="500">
             <a href="#contact" className="">
               Contact
             </a>

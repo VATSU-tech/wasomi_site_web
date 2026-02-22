@@ -40,7 +40,7 @@ const Hero = () => {
           >
             <a
               href="#contact"
-              data-aos="fade-right"
+              data-aos="zoom-in"
               data-aos-delay="520"
               data-aos-duration="700"
               className="btn-primary inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all"
@@ -49,7 +49,7 @@ const Hero = () => {
             </a>
             <a
               href="#about"
-              data-aos="fade-left"
+              data-aos="zoom-in"
               data-aos-delay="620"
               data-aos-duration="700"
               className="inline-flex secondary-btn items-center justify-center px-6 py-3 rounded-lg font-semibold text-[var(--secondary-color)] border-2 border-[var(--secondary-color)] hover:bg-white/10 transition-all drop-shadow-lg"
