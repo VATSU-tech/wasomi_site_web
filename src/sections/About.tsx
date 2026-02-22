@@ -1,3 +1,5 @@
+import { about_element } from "../data/content";
+
 const About = () => {
   return (
     <section
@@ -29,6 +31,7 @@ const About = () => {
             gap: "2rem",
           }}
         >
+          {about_element.map((elem)=>(
           <div
             style={{
               padding: "2rem",
@@ -36,112 +39,20 @@ const About = () => {
               borderRadius: "1rem",
             }}
             data-aos="fade-up"
-            data-aos-delay="0"
+            data-aos-delay={elem.delay}
             data-aos-duration="1000"
           >
             <h3 style={{ marginBottom: "1rem", color: "var(--primary-color)" }}>
-              Situation Actuelle
+              {elem.title}
             </h3>
-            <p>
-              Nous accueillons aujourd'hui plus de 100 élèves dans des classes
-              modernes et équipées. Notre équipe pédagogique est composée de
-              professionnels passionnés et dévoués.
-            </p>
-          </div>
-          <div
-            style={{
-              padding: "2rem",
-              background: "var(--secondary-color)",
-              borderRadius: "1rem",
-            }}
-            data-aos="fade-down"
-            data-aos-delay="120"
-            data-aos-duration="1000"
-          >
-            <h3 style={{ marginBottom: "1rem", color: "var(--primary-color)" }}>
-              Notre Vision
-            </h3>
-            <p>
-              Devenir la référence en matière d'éducation innovante, en
-              intégrant les nouvelles technologies et des méthodes
-              d'apprentissage actives.
-            </p>
-          </div>{" "}
-          <div
-            style={{
-              padding: "2rem",
-              background: "var(--secondary-color)",
-              borderRadius: "1rem",
-            }}
-            data-aos="fade-up"
-            data-aos-delay="240"
-            data-aos-duration="1000"
-          >
-            <h3 style={{ marginBottom: "1rem", color: "var(--primary-color)" }}>
-              Notre Vision
-            </h3>
-            <p>
-              Devenir la référence en matière d'éducation innovante, en
-              intégrant les nouvelles technologies et des méthodes
-              d'apprentissage actives.
-            </p>
-          </div>{" "}
-          <div
-            style={{
-              padding: "2rem",
-              background: "var(--secondary-color)",
-              borderRadius: "1rem",
-            }}
-            data-aos="fade-up"
-            data-aos-delay="360"
-            data-aos-duration="1000"
-          >
-            <h3 style={{ marginBottom: "1rem", color: "var(--primary-color)" }}>
-              Notre Vision
-            </h3>
-            <p>
-              Devenir la référence en matière d'éducation innovante, en
-              intégrant les nouvelles technologies et des méthodes
-              d'apprentissage actives.
-            </p>
-          </div>
-          <div
-            style={{
-              padding: "2rem",
-              background: "var(--secondary-color)",
-              borderRadius: "1rem",
-            }}
-            data-aos="fade-up"
-            data-aos-delay="480"
-            data-aos-duration="1000"
-          >
-            <h3 style={{ marginBottom: "1rem", color: "var(--primary-color)" }}>
-              Philosophie
-            </h3>
-            <p>
-              Chaque eleve est unique et nous devons a tout prix trouver la
-              methode d'apprentissage qui lui convient le mieux.
-            </p>
-          </div>
-          <div
-            style={{
-              padding: "2rem",
-              background: "var(--secondary-color)",
-              borderRadius: "1rem",
-            }}
-            data-aos="fade-up"
-            data-aos-delay="600"
-            data-aos-duration="1000"
-          >
-            <h3 style={{ marginBottom: "1rem", color: "var(--primary-color)" }}>
-              Valeurs
-            </h3>
-            <ul style={{ listStylePosition: "inside", lineHeight: "2" }}>
+            <p>{elem.content}</p>
+          </div>))}
+          
+            {/* <ul style={{ listStylePosition: "inside", lineHeight: "2" }}>
               <li>Excellence académique</li>
               <li>Respect et inclusion</li>
               <li>Créativité et innovation</li>
-            </ul>
-          </div>
+            </ul> */}
         </div>
       </div>
     </section>

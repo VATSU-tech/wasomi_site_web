@@ -31,3 +31,36 @@ export const navbar_element:type_element[] = [
         content:"#contact"
     }
 ]
+
+export const about_element:type_element[] = [
+    {
+        title: "Situation Actuelle",
+        content: `Nous accueillons aujourd'hui plus de 100 élèves dans des classes modernes et équipées. Notre équipe pédagogique est composée de professionnels passionnés et dévoués.`,
+        delay: 100
+    },
+    {
+        title: "Notre Vision",
+        content: `Devenir la référence en matière d'éducation innovante, en intégrant les nouvelles technologies et des méthodes d'apprentissage actives.`,
+        delay: 300
+    },
+    {
+        title: "Philosophie",
+        content: `Chaque eleve est unique et nous devons a tout prix trouver la methode d'apprentissage qui lui convient le mieux.`,
+        delay: 500
+    },
+    {
+        title: "Notre Vision",
+        content: `Devenir la référence en matière d'éducation innovante, en intégrant les nouvelles technologies et des méthodes d'apprentissage actives.`,
+        delay: 700
+    },
+    {
+        title: "Valeurs",
+        content: `Devenir la référence en matière d'éducation innovante, en intégrant les nouvelles technologies et des méthodes d'apprentissage actives.`,
+        delay: 900
+    },
+    {
+        title: "Notre Vision",
+        content: `Devenir la référence en matière d'éducation innovante, en intégrant les nouvelles technologies et des méthodes d'apprentissage actives.`,
+        delay: 1100
+    }
+]
