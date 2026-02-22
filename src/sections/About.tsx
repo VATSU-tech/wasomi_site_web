@@ -1,4 +1,16 @@
+import { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 const About = () => {
+  useEffect(() => {
+    AOS.init({
+      duration: 850,
+      easing: "ease-out-cubic",
+      once: false,
+    });
+    AOS.refresh();
+  }, []);
   return (
     <section
       id="about"
@@ -54,7 +66,7 @@ const About = () => {
               borderRadius: "1rem",
             }}
             data-aos="fade-down"
-            data-aos-delay="200"
+            data-aos-delay="250"
           >
             <h3 style={{ marginBottom: "1rem", color: "var(--primary-color)" }}>
               Notre Vision
@@ -72,7 +84,7 @@ const About = () => {
               borderRadius: "1rem",
             }}
             data-aos="fade-down-right"
-            data-aos-delay="300"
+            data-aos-delay="500"
           >
             <h3 style={{ marginBottom: "1rem", color: "var(--primary-color)" }}>
               Notre Vision
@@ -90,7 +102,7 @@ const About = () => {
               borderRadius: "1rem",
             }}
             data-aos="fade-up-right"
-            data-aos-delay="400"
+            data-aos-delay="750"
           >
             <h3 style={{ marginBottom: "1rem", color: "var(--primary-color)" }}>
               Notre Vision
@@ -107,8 +119,8 @@ const About = () => {
               background: "var(--secondary-color)",
               borderRadius: "1rem",
             }}
-            data-aos="fade-down"
-            data-aos-delay="500"
+            data-aos="fade-up-left"
+            data-aos-delay="1000"
           >
             <h3 style={{ marginBottom: "1rem", color: "var(--primary-color)" }}>
               Philosophie
@@ -125,7 +137,7 @@ const About = () => {
               borderRadius: "1rem",
             }}
             data-aos="fade-up-left"
-            data-aos-delay="600"
+            data-aos-delay="1250"
           >
             <h3 style={{ marginBottom: "1rem", color: "var(--primary-color)" }}>
               Valeurs
