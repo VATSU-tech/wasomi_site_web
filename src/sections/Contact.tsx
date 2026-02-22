@@ -253,6 +253,29 @@ const Contact = () => {
             </div>
 
             <div
+              style={{ marginBottom: "1rem" }}
+              data-aos="fade-up"
+              data-aos-delay="250"
+              data-aos-duration="1000"
+            >
+              <label style={{ display: "block", marginBottom: "0.5rem" }}>
+                Numero de telephone
+              </label>
+              <input
+                type="number"
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  borderRadius: "8px",
+                  border: "none",
+                  background: "#475569",
+                  color: "white",
+                }}
+                placeholder="+243 998 862 270"
+              />
+            </div>
+
+            <div
               style={{ marginBottom: "2rem" }}
               data-aos="fade-up"
               data-aos-delay="350"
