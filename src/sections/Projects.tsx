@@ -3,31 +3,37 @@ const projects = [
     title: "Classe Numérique",
     desc: "Équipement de toutes les classes avec des tableaux interactifs et des tablettes pour les élèves.",
     status: "En cours",
+    delay: 100
   },
   {
     title: "Jardin Pédagogique",
     desc: "Création d'un potager pour sensibiliser les enfants à la nature et à l'alimentation saine.",
     status: "Terminé",
+    delay: 300
   },
   {
     title: "Bibliothèque Moderne",
     desc: "Rénovation de la bibliothèque avec un espace lecture confortable et plus de 1000 nouveaux ouvrages.",
     status: "À venir",
+    delay: 500
   },
   {
     title: "Bâtiment",
     desc: "Construction d'un nouveau bâtiment pour accueillir plus d'élèves pour les classes secondaires.",
     status: "À venir",
+    delay: 700
   },
   {
     title: "Labo Informatique",
     status: "Terminé",
     desc: "Construction d'un d'un labo informatique pour les élèves.",
+    delay: 900
   },
   {
     title: "Labo scientifique",
     status: "En cours",
     desc: "Construction d'un d'un labo scientifique pour les élèves.",
+    delay: 1100
   },
 ];
 
@@ -40,7 +46,7 @@ const Projects = () => {
       <div className="container">
         <h2
           data-aos="fade-up"
-          data-aos-duration="800"
+          data-aos-duration="1000"
           style={{
             fontSize: "2.5rem",
             marginBottom: "3rem",
@@ -71,7 +77,7 @@ const Projects = () => {
             <div
               key={index}
               data-aos="fade-up"
-              data-aos-delay={index * 120}
+              data-aos-delay={project.delay}
               data-aos-duration="750"
               style={{
                 background: "white",

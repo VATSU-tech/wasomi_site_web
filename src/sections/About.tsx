@@ -37,7 +37,7 @@ const About = () => {
             }}
             data-aos="fade-up"
             data-aos-delay="0"
-            data-aos-duration="750"
+            data-aos-duration="1000"
           >
             <h3 style={{ marginBottom: "1rem", color: "var(--primary-color)" }}>
               Situation Actuelle
@@ -56,7 +56,7 @@ const About = () => {
             }}
             data-aos="fade-down"
             data-aos-delay="120"
-            data-aos-duration="750"
+            data-aos-duration="1000"
           >
             <h3 style={{ marginBottom: "1rem", color: "var(--primary-color)" }}>
               Notre Vision
@@ -75,7 +75,7 @@ const About = () => {
             }}
             data-aos="fade-up"
             data-aos-delay="240"
-            data-aos-duration="750"
+            data-aos-duration="1000"
           >
             <h3 style={{ marginBottom: "1rem", color: "var(--primary-color)" }}>
               Notre Vision
@@ -94,7 +94,7 @@ const About = () => {
             }}
             data-aos="fade-up"
             data-aos-delay="360"
-            data-aos-duration="750"
+            data-aos-duration="1000"
           >
             <h3 style={{ marginBottom: "1rem", color: "var(--primary-color)" }}>
               Notre Vision
@@ -113,7 +113,7 @@ const About = () => {
             }}
             data-aos="fade-up"
             data-aos-delay="480"
-            data-aos-duration="750"
+            data-aos-duration="1000"
           >
             <h3 style={{ marginBottom: "1rem", color: "var(--primary-color)" }}>
               Philosophie
@@ -131,7 +131,7 @@ const About = () => {
             }}
             data-aos="fade-up"
             data-aos-delay="600"
-            data-aos-duration="750"
+            data-aos-duration="1000"
           >
             <h3 style={{ marginBottom: "1rem", color: "var(--primary-color)" }}>
               Valeurs

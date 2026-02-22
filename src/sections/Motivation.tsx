@@ -1,33 +1,40 @@
 import { Star, Heart, Shield, Cpu, Medal, Bus } from "lucide-react";
+import { motivation } from "../Typescript/types";
 
-const reasons = [
+const reasons : motivation[] = [
   {
     icon: <Star size={32} color="var(--accent-color)" />,
     title: "Excellence Pédagogique",
+    delay:100,
     text: "Un programme enrichi qui dépasse les standards, préparant les enfants aux défis futurs.",
   },
   {
     icon: <Heart size={32} color="var(--primary-color)" />,
+    delay:300,
     title: "Suivi Personnalisé",
     text: "Chaque enfant est unique. Nous adaptons notre approche pour répondre aux besoins de chacun.",
   },
   {
     icon: <Shield size={32} color="#10b981" />,
+    delay:500,
     title: "Cadre Sécurisé",
     text: "Un environnement bienveillant et sécurisé où votre enfant peut s'épanouir en toute confiance.",
   },
   {
     icon: <Cpu size={32} color="#10b9f1" />,
+    delay:700,
     title: "Technologie de pointe",
     text: "Des outils modernes pour accompagner les enfants dans leur apprentissage.",
   },
   {
     icon: <Medal size={32} color="#a9a911" />,
     title: "Vie sportive",
+    delay:900,
     text: "Des activités sportives pour développer le corps et l'esprit.",
   },
   {
     icon: <Bus size={32} color="#6f6f6f" />,
+    delay:1100,
     title: "Transport securiser",
     text: "Des bus pour le transport securiser de vos enfant en toute cisronstance et en toute intemperie",
   },
@@ -42,7 +49,7 @@ const Motivation = () => {
       <div className="container">
         <h2
           data-aos="fade-up"
-          data-aos-duration="800"
+          data-aos-duration="1000"
           style={{
             fontSize: "2.5rem",
             marginBottom: "3rem",
@@ -64,7 +71,7 @@ const Motivation = () => {
             <div
               key={index}
               data-aos="zoom-in-up"
-              data-aos-delay={index * 120}
+              data-aos-delay={item.delay}
               data-aos-duration="700"
               style={{ textAlign: "center", padding: "1rem" }}
             >

@@ -13,9 +13,11 @@ const Contact = () => {
           cswasomi@gmail.com
         </a>
       ),
+    delay:100,
     },
     {
       icon: <Phone size={32} color="var(--primary-color)" />,
+    delay:300,
       content: (
         <>
           <a
@@ -38,6 +40,7 @@ const Contact = () => {
     },
     {
       icon: <MapPin size={32} color="var(--primary-color)" />,
+    delay:500,
       content: (
         <a
           className="linkContact hover:text-[var(--primary-color)]"
@@ -52,9 +55,11 @@ const Contact = () => {
     },
     {
       icon: <Calendar size={32} color="var(--primary-color)" />,
+    delay:700,
       content: "Lundi - Vendredi : 7h30 - 16h00",
     },
     {
+    delay:900,
       icon: (
         <i
           style={{ color: "var(--primary-color)" }}
@@ -72,6 +77,7 @@ const Contact = () => {
       ),
     },
     {
+    delay:1100,
       icon: (
         <i
           style={{ color: "var(--primary-color)" }}
@@ -81,6 +87,7 @@ const Contact = () => {
       content: "complexe scolaire wasomi",
     },
     {
+    delay:1300,
       icon: (
         <i
           style={{ color: "var(--primary-color)" }}
@@ -90,6 +97,7 @@ const Contact = () => {
       content: "@wasomi_edu",
     },
     {
+    delay:1500,
       icon: (
         <i
           style={{ color: "var(--primary-color)" }}
@@ -99,6 +107,7 @@ const Contact = () => {
       content: "@wasomi_edu",
     },
     {
+    delay:1700,
       icon: (
         <i
           style={{ color: "var(--primary-color)" }}
@@ -125,10 +134,10 @@ const Contact = () => {
             gap: "4rem",
           }}
         >
-          <div data-aos="fade-up" data-aos-duration="900">
+          <div data-aos="fade-up" data-aos-duration="1000">
             <h2
               data-aos="fade-up"
-              data-aos-duration="800"
+              data-aos-duration="1000"
               style={{
                 fontSize: "2.5rem",
                 marginBottom: "2rem",
@@ -140,7 +149,7 @@ const Contact = () => {
             <p
               data-aos="fade-up"
               data-aos-delay="150"
-              data-aos-duration="750"
+              data-aos-duration="1000"
               style={{ marginBottom: "2rem", color: "#94a3b8" }}
             >
               Nous sommes à votre écoute pour toute question ou demande
@@ -159,8 +168,8 @@ const Contact = () => {
                   className="flex gap-1 items-center"
                   key={index}
                   data-aos="fade-up"
-                  data-aos-delay={index * 80}
-                  data-aos-duration="700"
+                  data-aos-delay={item.delay}
+                  data-aos-duration="1000"
                 >
                   {item.icon}
                   <span>{item.content}</span>
@@ -189,7 +198,7 @@ const Contact = () => {
 
           <form
             data-aos="fade-up"
-            data-aos-duration="900"
+            data-aos-duration="1000"
             style={{
               background: "#334155",
               padding: "2rem",
@@ -201,7 +210,7 @@ const Contact = () => {
               style={{ marginBottom: "1rem" }}
               data-aos="fade-up"
               data-aos-delay="150"
-              data-aos-duration="700"
+              data-aos-duration="1000"
             >
               <label style={{ display: "block", marginBottom: "0.5rem" }}>
                 Nom Complet
@@ -224,7 +233,7 @@ const Contact = () => {
               style={{ marginBottom: "1rem" }}
               data-aos="fade-up"
               data-aos-delay="250"
-              data-aos-duration="700"
+              data-aos-duration="1000"
             >
               <label style={{ display: "block", marginBottom: "0.5rem" }}>
                 Email
@@ -247,7 +256,7 @@ const Contact = () => {
               style={{ marginBottom: "2rem" }}
               data-aos="fade-up"
               data-aos-delay="350"
-              data-aos-duration="700"
+              data-aos-duration="1000"
             >
               <label style={{ display: "block", marginBottom: "0.5rem" }}>
                 Message
@@ -269,7 +278,7 @@ const Contact = () => {
             <button
               data-aos="zoom-in"
               data-aos-delay="450"
-              data-aos-duration="650"
+              data-aos-duration="1000"
               type="submit"
               className="btn-primary"
               style={{ width: "100%" }}
@@ -282,7 +291,7 @@ const Contact = () => {
         <footer
           data-aos="fade-up"
           data-aos-delay="200"
-          data-aos-duration="800"
+          data-aos-duration="1000"
           style={{
             marginTop: "4rem",
             paddingTop: "2rem",

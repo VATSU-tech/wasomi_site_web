@@ -7,7 +7,7 @@ const Navbar = () => {
         <div
           className="navbar navbar-st bg-black/40 shadow-xl w-full"
           data-aos="fade-down"
-          data-aos-duration="700"
+          data-aos-duration="1000"
         >
           <div className="flex-none lg:hidden">
             <label
@@ -34,32 +34,32 @@ const Navbar = () => {
             className="mx-2 flex-1 ml-10 px-2"
             data-aos="zoom-in"
             data-aos-delay="120"
-            data-aos-duration="600"
+            data-aos-duration="1000"
           >
             WASOMI
           </div>
           <div className="hidden flex-none lg:block mr-10">
             <ul className="menu menu-horizontal flex-1 gap-4 p-10">
               {/* Navbar menu content here */}
-              <li data-aos="fade-down" data-aos-delay="200" data-aos-duration="500">
+              <li data-aos="fade-down" data-aos-delay="200" data-aos-duration="1000">
                 <a href="#hero">Accueil</a>
               </li>
-              <li data-aos="fade-down" data-aos-delay="260" data-aos-duration="500">
+              <li data-aos="fade-down" data-aos-delay="400" data-aos-duration="1000">
                 <a href="#about">À propos</a>
               </li>
-              <li data-aos="fade-down" data-aos-delay="320" data-aos-duration="500">
+              <li data-aos="fade-down" data-aos-delay="600" data-aos-duration="1000">
                 <a href="#projects">Projets</a>
               </li>
-              <li data-aos="fade-down" data-aos-delay="380" data-aos-duration="500">
+              <li data-aos="fade-down" data-aos-delay="800" data-aos-duration="1000">
                 <a href="#partners">Partenaires</a>
               </li>
-              <li data-aos="fade-down" data-aos-delay="440" data-aos-duration="500">
+              <li data-aos="fade-down" data-aos-delay="1000" data-aos-duration="1000">
                 <a href="#motivation">Pourquoi nous</a>
               </li>
-              <li data-aos="fade-down" data-aos-delay="500" data-aos-duration="500">
+              <li data-aos="fade-down" data-aos-delay="1200" data-aos-duration="1000">
                 <a href="#galerie">Galerie</a>
               </li>
-              <li data-aos="fade-down" data-aos-delay="560" data-aos-duration="500">
+              <li data-aos="fade-down" data-aos-delay="1400" data-aos-duration="1000">
                 <a href="#contact">Contact</a>
               </li>
             </ul>
@@ -76,40 +76,40 @@ const Navbar = () => {
         <ul
           className="menu text-2xl text-white items-center bg-green-900/90 flex-col flex gap-2 min-h-full w-[60%] p-4"
           data-aos="fade-up"
-          data-aos-duration="700"
+          data-aos-duration="1000"
         >
           {/* Sidebar content here */}
-          <li data-aos="fade-up" data-aos-delay="120" data-aos-duration="500">
+          <li data-aos="fade-up" data-aos-delay="120" data-aos-duration="1000">
             <a href="#hero" className=" sideBar">
               Accueil
             </a>
           </li>
-          <li data-aos="fade-up" data-aos-delay="180" data-aos-duration="500">
+          <li data-aos="fade-up" data-aos-delay="180" data-aos-duration="1000">
             <a href="#about" className="">
               À propos
             </a>
           </li>
-          <li data-aos="fade-up" data-aos-delay="240" data-aos-duration="500">
+          <li data-aos="fade-up" data-aos-delay="240" data-aos-duration="1000">
             <a href="#projects" className="">
               Projets
             </a>
           </li>
-          <li data-aos="fade-up" data-aos-delay="300" data-aos-duration="500">
+          <li data-aos="fade-up" data-aos-delay="300" data-aos-duration="1000">
             <a href="#partners" className="">
               Partenaires
             </a>
           </li>
-          <li data-aos="fade-up" data-aos-delay="360" data-aos-duration="500">
+          <li data-aos="fade-up" data-aos-delay="360" data-aos-duration="1000">
             <a href="#motivation" className="">
               Pourquoi nous
             </a>
           </li>
-          <li data-aos="fade-up" data-aos-delay="420" data-aos-duration="500">
+          <li data-aos="fade-up" data-aos-delay="420" data-aos-duration="1000">
             <a href="#galerie" className="">
               Galerie
             </a>
           </li>
-          <li data-aos="fade-up" data-aos-delay="480" data-aos-duration="500">
+          <li data-aos="fade-up" data-aos-delay="480" data-aos-duration="1000">
             <a href="#contact" className="">
               Contact
             </a>
