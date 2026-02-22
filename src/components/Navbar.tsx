@@ -49,7 +49,7 @@ const Navbar = () => {
                   data-aos-delay={elem.delay}
                   data-aos-duration="1000"
                 >
-                  <a href={elem.link}>{elem.title}</a>
+                  <a href={elem.content}>{elem.title}</a>
                 </li>
               ))}
             </ul>
@@ -75,7 +75,7 @@ const Navbar = () => {
               data-aos-delay={elem.delay}
               data-aos-duration="1000"
             >
-              <a href={elem.link}>{elem.title}</a>
+              <a href={elem.content}>{elem.title}</a>
             </li>
           ))}
         </ul>

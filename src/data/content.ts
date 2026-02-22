@@ -1,33 +1,33 @@
-import { nav_elem } from "../Typescript/types";
+import { type_element } from "../Typescript/types";
 
-export const navbar_element:nav_elem[] = [
+export const navbar_element:type_element[] = [
     {   title : "Acceuil",
-        link : "#hero",
+        content : "#hero",
         delay: 100,
     },
     {   title : "À propos",
         delay: 300,
-        link : "#about"
+        content : "#about"
     },
     {   title : "Projets",
         delay: 500,
-        link : "#projects"
+        content : "#projects"
     },
     {   title : "Partenaires",
         delay: 700,
-        link : "#partners"
+        content : "#partners"
     },
     {   title : "Pourquoi nous",
         delay: 900,
-        link : "#motivation"
+        content : "#motivation"
     },
     {   title : "Galerie",
         delay: 1100,
-        link : "#galerie"
+        content : "#galerie"
     },
     {
         title: "Contact",
         delay: 1300,
-        link:"#contact"
+        content:"#contact"
     }
 ]

@@ -1,6 +1,6 @@
-export interface nav_elem{
+export interface type_element{
     title: string
-    link: string
+    content: string
     delay: number
 }
 export interface motivation {
