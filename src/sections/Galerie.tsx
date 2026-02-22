@@ -91,7 +91,7 @@ export default function Galerie() {
                 <img
                   src={image.src}
                   alt={image.title}
-                  className="w-full h-full object-cover transition-transform duration-700 p-5 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:p-2 p-5 group-hover:scale-110"
                 />
               </div>
 
