@@ -125,8 +125,10 @@ const Contact = () => {
             gap: "4rem",
           }}
         >
-          <div>
+          <div data-aos="fade-right" data-aos-duration="900">
             <h2
+              data-aos="fade-up"
+              data-aos-duration="800"
               style={{
                 fontSize: "2.5rem",
                 marginBottom: "2rem",
@@ -135,7 +137,12 @@ const Contact = () => {
             >
               Contactez-nous
             </h2>
-            <p style={{ marginBottom: "2rem", color: "#94a3b8" }}>
+            <p
+              data-aos="fade-up"
+              data-aos-delay="150"
+              data-aos-duration="750"
+              style={{ marginBottom: "2rem", color: "#94a3b8" }}
+            >
               Nous sommes à votre écoute pour toute question ou demande
               d'information. N'hésitez pas à venir nous visiter.
             </p>
@@ -148,7 +155,13 @@ const Contact = () => {
               }}
             >
               {contact.map((item, index) => (
-                <div className="flex gap-1 items-center" key={index}>
+                <div
+                  className="flex gap-1 items-center"
+                  key={index}
+                  data-aos="fade-right"
+                  data-aos-delay={index * 80}
+                  data-aos-duration="700"
+                >
                   {item.icon}
                   <span>{item.content}</span>
                 </div>
@@ -175,6 +188,8 @@ const Contact = () => {
           </div>
 
           <form
+            data-aos="fade-left"
+            data-aos-duration="900"
             style={{
               background: "#334155",
               padding: "2rem",
@@ -182,7 +197,12 @@ const Contact = () => {
             }}
             onSubmit={(e) => e.preventDefault()}
           >
-            <div style={{ marginBottom: "1rem" }}>
+            <div
+              style={{ marginBottom: "1rem" }}
+              data-aos="fade-up"
+              data-aos-delay="150"
+              data-aos-duration="700"
+            >
               <label style={{ display: "block", marginBottom: "0.5rem" }}>
                 Nom Complet
               </label>
@@ -200,7 +220,12 @@ const Contact = () => {
               />
             </div>
 
-            <div style={{ marginBottom: "1rem" }}>
+            <div
+              style={{ marginBottom: "1rem" }}
+              data-aos="fade-up"
+              data-aos-delay="250"
+              data-aos-duration="700"
+            >
               <label style={{ display: "block", marginBottom: "0.5rem" }}>
                 Email
               </label>
@@ -218,7 +243,12 @@ const Contact = () => {
               />
             </div>
 
-            <div style={{ marginBottom: "2rem" }}>
+            <div
+              style={{ marginBottom: "2rem" }}
+              data-aos="fade-up"
+              data-aos-delay="350"
+              data-aos-duration="700"
+            >
               <label style={{ display: "block", marginBottom: "0.5rem" }}>
                 Message
               </label>
@@ -237,6 +267,9 @@ const Contact = () => {
             </div>
 
             <button
+              data-aos="zoom-in"
+              data-aos-delay="450"
+              data-aos-duration="650"
               type="submit"
               className="btn-primary"
               style={{ width: "100%" }}
@@ -247,6 +280,9 @@ const Contact = () => {
         </div>
 
         <footer
+          data-aos="fade-up"
+          data-aos-delay="200"
+          data-aos-duration="800"
           style={{
             marginTop: "4rem",
             paddingTop: "2rem",

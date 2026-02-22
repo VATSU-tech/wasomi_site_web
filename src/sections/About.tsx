@@ -1,16 +1,4 @@
-import { useEffect } from "react";
-import AOS from "aos";
-import "aos/dist/aos.css";
-
 const About = () => {
-  useEffect(() => {
-    AOS.init({
-      duration: 850,
-      easing: "ease-out-cubic",
-      once: false,
-    });
-    AOS.refresh();
-  }, []);
   return (
     <section
       id="about"
@@ -48,7 +36,8 @@ const About = () => {
               borderRadius: "1rem",
             }}
             data-aos="fade-up-right"
-            data-aos-delay="100"
+            data-aos-delay="0"
+            data-aos-duration="750"
           >
             <h3 style={{ marginBottom: "1rem", color: "var(--primary-color)" }}>
               Situation Actuelle
@@ -66,7 +55,8 @@ const About = () => {
               borderRadius: "1rem",
             }}
             data-aos="fade-down"
-            data-aos-delay="250"
+            data-aos-delay="120"
+            data-aos-duration="750"
           >
             <h3 style={{ marginBottom: "1rem", color: "var(--primary-color)" }}>
               Notre Vision
@@ -84,7 +74,8 @@ const About = () => {
               borderRadius: "1rem",
             }}
             data-aos="fade-down-right"
-            data-aos-delay="500"
+            data-aos-delay="240"
+            data-aos-duration="750"
           >
             <h3 style={{ marginBottom: "1rem", color: "var(--primary-color)" }}>
               Notre Vision
@@ -102,7 +93,8 @@ const About = () => {
               borderRadius: "1rem",
             }}
             data-aos="fade-up-right"
-            data-aos-delay="750"
+            data-aos-delay="360"
+            data-aos-duration="750"
           >
             <h3 style={{ marginBottom: "1rem", color: "var(--primary-color)" }}>
               Notre Vision
@@ -120,7 +112,8 @@ const About = () => {
               borderRadius: "1rem",
             }}
             data-aos="fade-up-left"
-            data-aos-delay="1000"
+            data-aos-delay="480"
+            data-aos-duration="750"
           >
             <h3 style={{ marginBottom: "1rem", color: "var(--primary-color)" }}>
               Philosophie
@@ -137,7 +130,8 @@ const About = () => {
               borderRadius: "1rem",
             }}
             data-aos="fade-up-left"
-            data-aos-delay="1250"
+            data-aos-delay="600"
+            data-aos-duration="750"
           >
             <h3 style={{ marginBottom: "1rem", color: "var(--primary-color)" }}>
               Valeurs

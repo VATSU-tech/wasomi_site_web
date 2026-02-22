@@ -41,6 +41,8 @@ const Motivation = () => {
     >
       <div className="container">
         <h2
+          data-aos="fade-up"
+          data-aos-duration="800"
           style={{
             fontSize: "2.5rem",
             marginBottom: "3rem",
@@ -59,7 +61,13 @@ const Motivation = () => {
           }}
         >
           {reasons.map((item, index) => (
-            <div key={index} style={{ textAlign: "center", padding: "1rem" }}>
+            <div
+              key={index}
+              data-aos="zoom-in-up"
+              data-aos-delay={index * 120}
+              data-aos-duration="700"
+              style={{ textAlign: "center", padding: "1rem" }}
+            >
               <div
                 style={{
                   background: "var(--secondary-color)",

@@ -39,6 +39,8 @@ const Projects = () => {
     >
       <div className="container">
         <h2
+          data-aos="fade-up"
+          data-aos-duration="800"
           style={{
             fontSize: "2.5rem",
             marginBottom: "3rem",
@@ -47,7 +49,12 @@ const Projects = () => {
         >
           Nos Projets
         </h2>
-        <p style={{ textAlign: "center", marginBottom: "2rem" }}>
+        <p
+          data-aos="fade-up"
+          data-aos-delay="150"
+          data-aos-duration="750"
+          style={{ textAlign: "center", marginBottom: "2rem" }}
+        >
           Voici nos projets en cours et à venir <br />
           qui vonts rendre l'école plus moderne et plus agréable pour les
           élèves.
@@ -63,6 +70,9 @@ const Projects = () => {
           {projects.map((project, index) => (
             <div
               key={index}
+              data-aos="fade-up"
+              data-aos-delay={index * 120}
+              data-aos-duration="750"
               style={{
                 background: "white",
                 padding: "2rem",
