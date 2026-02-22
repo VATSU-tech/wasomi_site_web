@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Plus } from "lucide-react";
 
 const images = [
@@ -46,40 +45,38 @@ export default function Galerie() {
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-16">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 5 }}
+          <h2
+            data-aos="fade-up"
+            data-aos-duration="850"
             className="text-4xl font-bold text-[var(--text-color)] mb-4"
           >
             Notre Galerie
-          </motion.h2>
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+          </h2>
+          <div
+            data-aos="zoom-in"
+            data-aos-delay="150"
+            data-aos-duration="650"
             className="h-1 w-20 bg-[var(--primary-color)] mx-auto rounded-full"
           />
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
+          <p
+            data-aos="fade-up"
+            data-aos-delay="240"
+            data-aos-duration="800"
             className="text-[var(--text-light)] mt-4 max-w-2xl mx-auto"
           >
             Découvrez en images la vie quotidienne, les événements marquants et
             l'atmosphère unique de notre établissement.
-          </motion.p>
+          </p>
         </div>
 
         {/* Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {images.map((image, index) => (
-            <motion.div
+            <div
               key={image.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
+              data-aos="fade-up"
+              data-aos-delay={index * 80}
+              data-aos-duration="750"
               className="group relative overflow-hidden rounded-2xl shadow-lg cursor-pointer bg-white"
             >
               {/* Image Container */}
@@ -105,21 +102,21 @@ export default function Galerie() {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
 
         {/* Footer Button */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
+        <div
+          data-aos="fade-up"
+          data-aos-delay="500"
+          data-aos-duration="700"
           className="text-center mt-12"
         >
           {/* <button className="btn-primary rounded-full m-4 px-8 py-3 text-lg shadow-lg hover:shadow-xl transition-all">
             Voir plus de photos
           </button> */}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

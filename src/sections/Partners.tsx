@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 
 interface Partner {
@@ -59,11 +58,9 @@ const Partners = () => {
   return (
     <section id="partners" className="min-h-screen bg-slate-50 py-20">
       <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
+        <div
+          data-aos="fade-up"
+          data-aos-duration="800"
           className="text-center mb-16"
         >
           <h2 className="text-4xl font-bold text-slate-800 mb-4">
@@ -73,17 +70,16 @@ const Partners = () => {
             Nous collaborons avec des organisations leaders pour offrir le
             meilleur de la technologie et de l'éducation à nos élèves.
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {partners.map((partner, index) => (
-            <motion.div
-                style={{border:`2px solid ${partner.color}` }}
+            <div
+              style={{ border: `2px solid ${partner.color}` }}
               key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
+              data-aos="zoom-in-up"
+              data-aos-delay={index * 80}
+              data-aos-duration="750"
               className="group bg-white rounded-2xl shadow-lg overflow-hidden border border-slate-100 hover:shadow-xl transition-all duration-300"
             >
               {/* Image Area Placeholder */}
@@ -117,7 +113,7 @@ const Partners = () => {
                 </h4>
                 <p className="text-slate-600 text-sm">{partner.description}</p>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
