@@ -74,7 +74,7 @@ const Navbar = () => {
           className="drawer-overlay"
         ></label>
         <ul
-          className="menu text-2xl text-white items-center bg-green-900/60 flex-col flex gap-2 min-h-full w-80 p-4"
+          className="menu text-2xl text-white items-center bg-green-900/90 flex-col flex gap-2 min-h-full w-[60%] p-4"
           data-aos="fade-right"
           data-aos-duration="700"
         >

@@ -17,7 +17,7 @@ function App() {
       duration: 850,
       easing: "ease-out-cubic",
       offset: 90,
-      once: true,
+      once: false,
     });
     AOS.refresh();
   }, []);
