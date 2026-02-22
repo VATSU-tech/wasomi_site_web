@@ -15,3 +15,11 @@ export interface type_projects {
     delay: number
     status: "En cours" | "Terminé" | "À venir"
 }
+export interface type_partner {
+  name: string;
+  description: string;
+  website: string;
+  color: string;
+  image: string;
+  delay: number;
+}
