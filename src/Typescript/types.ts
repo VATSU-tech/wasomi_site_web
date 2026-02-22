@@ -9,3 +9,9 @@ export interface motivation {
     delay : number;
     text : string;
 }
+export interface type_projects {
+    title: string
+    desc: string
+    delay: number
+    status: "En cours" | "Terminé" | "À venir"
+}
