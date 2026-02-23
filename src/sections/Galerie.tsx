@@ -1,50 +1,5 @@
 import { Plus } from "lucide-react";
-
-const images = [
-  {
-    id: 1,
-    src: "https://images.unsplash.com/photo-1544531586-fde5298cdd40?auto=format&fit=crop&q=80&w=800",
-    category: "Classe",
-    delay:100,
-    title: "Apprentissage Interactif",
-    
-  },
-  {
-    id: 2,
-    src: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=800",
-    category: "Environnement",
-    delay:300,
-    title: "Notre Campus",
-  },
-  {
-    id: 3,
-    src: "https://imgs.search.brave.com/FETcMZeglQLQ5T5Ls-aPFKD4Ws7InL1cPxCQyCz-ak0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90aHVt/YnMuZHJlYW1zdGlt/ZS5jb20vYi9vcmRp/bmF0ZXVyLWQtZW5z/ZWlnbmVtZW50LTQt/ODE5OTg0Ny5qcGc",
-    category: "Technologie",
-    delay:500,
-    title: "Salle Informatique",
-  },
-  {
-    id: 4,
-    src: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=800",
-    delay:700,
-    category: "Activités",
-    title: "Sport & Loisirs",
-  },
-  {
-    id: 5,
-    delay:900,
-    src: "https://imgs.search.brave.com/kVP-w4Bd2_JgG5c_158btmiBS6RieuwuE6leX_v9QaQ/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly91cy4x/MjNyZi5jb20vNDUw/d20vc3RvY2ticm9r/ZXIvc3RvY2ticm9r/ZXIxNzA5L3N0b2Nr/YnJva2VyMTcwOTAw/Mjk0Lzg1MjgwMzQx/LWVuZmFudHMtbGV2/YW50LWxlcy1tYWlu/cy1hdS1jb3Vycy1k/ZS1sYS1sZSVDMyVB/N29uLWRlLWwtJUMz/JUE5Y29sZS1wcmlt/YWlyZS1ncm9zLXBs/YW4uanBnP3Zlcj02",
-    category: "Diplômes",
-    title: "Réussite Scolaire",
-  },
-  {
-    id: 6,
-    src: "https://images.unsplash.com/photo-1536337005238-94b997371b40?auto=format&fit=crop&q=80&w=800",
-    delay:1100,
-    category: "Ateliers",
-    title: "Créativité",
-  },
-];
+import { gallery_images } from "../data/content";
 
 export default function Galerie() {
   return (
@@ -78,7 +33,7 @@ export default function Galerie() {
 
         {/* Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {images.map((image, index) => (
+          {gallery_images.map((image) => (
             <div
               key={image.id}
               data-aos="fade-up"

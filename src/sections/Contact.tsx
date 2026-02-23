@@ -1,122 +1,74 @@
+import type { ReactNode } from "react";
 import { Mail, Phone, MapPin, Calendar } from "lucide-react";
+import { contact_items, contact_form_fields } from "../data/content";
+import { contact_icon, contact_content } from "../Typescript/types";
 
 const Contact = () => {
-  const contact = [
-    {
-      icon: <Mail size={32} color="var(--primary-color)" />,
-      content: (
-        <a
-          className="linkContact hover:text-[var(--primary-color)]"
-          href="mailto:cswasomi@gmail.com"
-          data-hover="Envoyer un email"
-        >
-          cswasomi@gmail.com
-        </a>
-      ),
-    delay:100,
-    },
-    {
-      icon: <Phone size={32} color="var(--primary-color)" />,
-    delay:300,
-      content: (
-        <>
-          <a
-            className="linkContact hover:text-[var(--primary-color)]"
-            href="tel:+243812227787"
-            data-hover="Appeler"
-          >
-            +243 812 227 787
-          </a>
-          ,
-          <a
-            className="linkContact hover:text-[var(--primary-color)]"
-            href="tel:+243998862270"
-            data-hover="Appeler"
-          >
-            +243 998 862 270
-          </a>
-        </>
-      ),
-    },
-    {
-      icon: <MapPin size={32} color="var(--primary-color)" />,
-    delay:500,
-      content: (
-        <a
-          className="linkContact hover:text-[var(--primary-color)]"
-          href="https://maps.app.goo.gl/xqfZnZgjdTyaFeoY6"
-          target="_blank"
-          rel="noopener noreferrer"
-          data-hover="Voir sur Maps"
-        >
-          Complexe scolaire wasomi
-        </a>
-      ),
-    },
-    {
-      icon: <Calendar size={32} color="var(--primary-color)" />,
-    delay:700,
-      content: "Lundi - Vendredi : 7h30 - 16h00",
-    },
-    {
-    delay:900,
-      icon: (
-        <i
-          style={{ color: "var(--primary-color)" }}
-          className="fa-brands fa-whatsapp text-3xl"
-        ></i>
-      ),
-      content: (
-        <a
-          className=" linkContact hover:text-[var(--primary-color)]"
-          href="https://api.whatsapp.com/send?phone=+243814694982&text=Bonjour wasomi"
-          data-hover="Discuter sur WhatsApp"
-        >
-          +243 814 694 982
-        </a>
-      ),
-    },
-    {
-    delay:1100,
-      icon: (
-        <i
-          style={{ color: "var(--primary-color)" }}
-          className="fa-brands fa-facebook text-3xl"
-        ></i>
-      ),
-      content: "complexe scolaire wasomi",
-    },
-    {
-    delay:1300,
-      icon: (
-        <i
-          style={{ color: "var(--primary-color)" }}
-          className="fa-brands fa-x-twitter text-3xl"
-        ></i>
-      ),
-      content: "@wasomi_edu",
-    },
-    {
-    delay:1500,
-      icon: (
-        <i
-          style={{ color: "var(--primary-color)" }}
-          className="fa-brands fa-instagram text-3xl"
-        ></i>
-      ),
-      content: "@wasomi_edu",
-    },
-    {
-    delay:1700,
-      icon: (
-        <i
-          style={{ color: "var(--primary-color)" }}
-          className="fa-brands fa-tiktok text-3xl"
-        ></i>
-      ),
-      content: "cs_wasomi",
-    },
-  ];
+  const iconMap: Record<contact_icon, ReactNode> = {
+    Mail: <Mail size={32} color="var(--primary-color)" />,
+    Phone: <Phone size={32} color="var(--primary-color)" />,
+    MapPin: <MapPin size={32} color="var(--primary-color)" />,
+    Calendar: <Calendar size={32} color="var(--primary-color)" />,
+    Whatsapp: (
+      <i
+        style={{ color: "var(--primary-color)" }}
+        className="fa-brands fa-whatsapp text-3xl"
+      ></i>
+    ),
+    Facebook: (
+      <i
+        style={{ color: "var(--primary-color)" }}
+        className="fa-brands fa-facebook text-3xl"
+      ></i>
+    ),
+    XTwitter: (
+      <i
+        style={{ color: "var(--primary-color)" }}
+        className="fa-brands fa-x-twitter text-3xl"
+      ></i>
+    ),
+    Instagram: (
+      <i
+        style={{ color: "var(--primary-color)" }}
+        className="fa-brands fa-instagram text-3xl"
+      ></i>
+    ),
+    Tiktok: (
+      <i
+        style={{ color: "var(--primary-color)" }}
+        className="fa-brands fa-tiktok text-3xl"
+      ></i>
+    ),
+  };
+
+  const renderContent = (content: contact_content[]) =>
+    content.map((item, index) => {
+      const isLast = index === content.length - 1;
+      if (item.type === "link") {
+        return (
+          <span key={`${item.href}-${index}`}>
+            <a
+              className="linkContact hover:text-[var(--primary-color)]"
+              href={item.href}
+              data-hover={item.hover}
+              target={item.newTab ? "_blank" : undefined}
+              rel={item.newTab ? "noopener noreferrer" : undefined}
+            >
+              {item.label}
+            </a>
+            {!isLast && ", "}
+          </span>
+        );
+      }
+
+      return (
+        <span key={`${item.label}-${index}`}>
+          {item.label}
+          {!isLast && ", "}
+        </span>
+      );
+    });
+
   return (
     <section
       id="contact"
@@ -163,16 +115,16 @@ const Contact = () => {
                 gap: "1.5rem",
               }}
             >
-              {contact.map((item, index) => (
+              {contact_items.map((item, index) => (
                 <div
                   className="flex gap-1 items-center"
                   key={index}
-                  data-aos="fade-up"
+                  data-aos="fade-up-right"
                   data-aos-delay={item.delay}
                   data-aos-duration="1000"
                 >
-                  {item.icon}
-                  <span>{item.content}</span>
+                  {iconMap[item.icon]}
+                  <span>{renderContent(item.content)}</span>
                 </div>
               ))}
               {/* <div
@@ -206,97 +158,48 @@ const Contact = () => {
             }}
             onSubmit={(e) => e.preventDefault()}
           >
-            <div
-              style={{ marginBottom: "1rem" }}
-              data-aos="fade-up"
-              data-aos-delay="150"
-              data-aos-duration="1000"
-            >
-              <label style={{ display: "block", marginBottom: "0.5rem" }}>
-                Nom Complet
-              </label>
-              <input
-                type="text"
-                style={{
-                  width: "100%",
-                  padding: "0.75rem",
-                  borderRadius: "8px",
-                  border: "none",
-                  background: "#475569",
-                  color: "white",
-                }}
-                placeholder="Votre nom"
-              />
-            </div>
-
-            <div
-              style={{ marginBottom: "1rem" }}
-              data-aos="fade-up"
-              data-aos-delay="250"
-              data-aos-duration="1000"
-            >
-              <label style={{ display: "block", marginBottom: "0.5rem" }}>
-                Email
-              </label>
-              <input
-                type="email"
-                style={{
-                  width: "100%",
-                  padding: "0.75rem",
-                  borderRadius: "8px",
-                  border: "none",
-                  background: "#475569",
-                  color: "white",
-                }}
-                placeholder="votre@email.com"
-              />
-            </div>
-
-            <div
-              style={{ marginBottom: "1rem" }}
-              data-aos="fade-up"
-              data-aos-delay="250"
-              data-aos-duration="1000"
-            >
-              <label style={{ display: "block", marginBottom: "0.5rem" }}>
-                Numero de telephone
-              </label>
-              <input
-                type="number"
-                style={{
-                  width: "100%",
-                  padding: "0.75rem",
-                  borderRadius: "8px",
-                  border: "none",
-                  background: "#475569",
-                  color: "white",
-                }}
-                placeholder="+243 998 862 270"
-              />
-            </div>
-
-            <div
-              style={{ marginBottom: "2rem" }}
-              data-aos="fade-up"
-              data-aos-delay="350"
-              data-aos-duration="1000"
-            >
-              <label style={{ display: "block", marginBottom: "0.5rem" }}>
-                Message
-              </label>
-              <textarea
-                rows={4}
-                style={{
-                  width: "100%",
-                  padding: "0.75rem",
-                  borderRadius: "8px",
-                  border: "none",
-                  background: "#475569",
-                  color: "white",
-                }}
-                placeholder="Comment pouvons-nous vous aider ?"
-              />
-            </div>
+            {contact_form_fields.map((field) => (
+              <div
+                key={field.name}
+                style={{ marginBottom: field.type === "textarea" ? "2rem" : "1rem" }}
+                data-aos="fade-up"
+                data-aos-delay={field.delay}
+                data-aos-duration="1000"
+              >
+                <label style={{ display: "block", marginBottom: "0.5rem" }}>
+                  {field.label}
+                </label>
+                {field.type === "textarea" ? (
+                  <textarea
+                    name={field.name}
+                    rows={field.rows ?? 4}
+                    style={{
+                      width: "100%",
+                      padding: "0.75rem",
+                      borderRadius: "8px",
+                      border: "none",
+                      background: "#475569",
+                      color: "white",
+                    }}
+                    placeholder={field.placeholder}
+                  />
+                ) : (
+                  <input
+                    name={field.name}
+                    type={field.type}
+                    style={{
+                      width: "100%",
+                      padding: "0.75rem",
+                      borderRadius: "8px",
+                      border: "none",
+                      background: "#475569",
+                      color: "white",
+                    }}
+                    placeholder={field.placeholder}
+                  />
+                )}
+              </div>
+            ))}
 
             <button
               data-aos="zoom-in"
