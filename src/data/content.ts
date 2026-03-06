@@ -284,7 +284,7 @@ export const partners_element: type_partner[] = [
     delay:1100,
     website: "https://innovlab.fr",
     color: "#252E0B", // Amber
-    image: "https://search.brave.com/images?q=innov+lab+logo&context=W3sic3JjIjoiaHR0cHM6Ly9pbWcuZnJlZXBpay5jb20vcHJlbWl1bS12ZWN0b3IvaW5ub3ZhdGlvbi1sb2dvLWxhYi1jcmVhdGl2ZS1kZXNpZ24tcm9ja2V0LXNjaWVuY2UtZGVzaWduLXRlbXBsYXRlXzY2OTc5NC0zNTYuanBnP3NlbXQ9YWlzX2h5YnJpZCZ3PTc0MCZxPTgwIiwidGV4dCI6IlZlY3RvciBpbm5vdmF0aW9uIGxvZ28gbGFiIGNyZWF0aXZlIGRlc2lnbiByb2NrZXQgc2NpZW5jZSBkZXNpZ24gdGVtcGxhdGUiLCJwYWdlX3VybCI6Imh0dHBzOi8vd3d3LmZyZWVwaWsuY29tL3ZlY3RvcnMvaW5ub3ZhdGlvbi1sYWItbG9nbyJ9XQ%3D%3D&sig=caade06a2d094a9dc42fa0a6719da33f3fd1f61bce285321cb7450b8b77dbfe7&nonce=11e04c7629273e7464c8d89f31f0bfd4",
+    image: "https://imgs.search.brave.com/-gpDLlDhCAkXg1k_OlKoSTAWDww7wpgVhO_HSk2upFg/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly91cy4x/MjNyZi5jb20vNDUw/d20vbm9uY2hhbm9u/L25vbmNoYW5vbjIw/MTEvbm9uY2hhbm9u/MjAxMTAwMzU0LzE1/OTM4MjkwMC1yZWNo/ZXJjaGUtZW4tbGFi/b3JhdG9pcmUtdmVy/cmVyaWUtc2NpZW50/aWZpcXVlLWF2ZWMt/YXJyaSVDMyVBOHJl/LXBsYW4tZGUtcmVj/aGVyY2hlLXNjaWVu/dGlmaXF1ZS1mbG91/LmpwZz92ZXI9Ng",
   },
 ];
 
@@ -423,7 +423,7 @@ export const contact_form_fields: type_contact_form_field[] = [
     label: "Message",
     placeholder: "Comment pouvons-nous vous aider ?",
     type: "textarea",
-    rows: 4,
+    rows: 6,
     delay: 350,
   },
 ];

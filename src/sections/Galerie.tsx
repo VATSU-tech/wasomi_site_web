@@ -39,7 +39,7 @@ export default function Galerie() {
               data-aos="fade-up"
               data-aos-delay={image.delay}
               data-aos-duration="750"
-              className="group relative overflow-hidden rounded-2xl shadow-lg cursor-pointer bg-white"
+              className="group relative overflow-hidden rounded-2xl shadow-lg cursor-pointer bg-white transition-transform duration-300 hover:-translate-y-1"
             >
               {/* Image Container */}
               <div className="aspect-[4/3] overflow-hidden">
@@ -48,6 +48,13 @@ export default function Galerie() {
                   alt={image.title}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:p-2 p-5 group-hover:scale-110"
                 />
+              </div>
+
+              {/* Hover Badge */}
+              <div className="absolute top-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <span className="bg-white/90 text-slate-900 text-xs font-semibold px-3 py-1 rounded-full shadow">
+                  Voir la photo
+                </span>
               </div>
 
               {/* Overlay */}

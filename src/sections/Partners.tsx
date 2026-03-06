@@ -34,8 +34,13 @@ const Partners = () => {
                 className={`h-48 relative overflow-hidden border-b border-[${partner.color}]`}
                 style={{ backgroundImage: `url(${partner.image})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat",borderBottomColor:partner.color }}
               >
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
-                  <h3 className={`text-3xl font-bold text-white tracking-wider`} style={{textShadow: `2px 2px 4px ${partner.color}, 2px 2px 4px rgba(0,0,0,.4)`}}>
+                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center p-3">
+                  <h3
+                    className="text-3xl font-bold text-white tracking-wider text-center leading-tight px-3"
+                    style={{
+                      textShadow: `2px 2px 4px ${partner.color}, 2px 2px 4px rgba(0,0,0,.4)`,
+                    }}
+                  >
                     {partner.name}
                   </h3>
                 </div>
@@ -54,8 +59,8 @@ const Partners = () => {
               </div>
 
               {/* Description Content */}
-              <div className="p-6">
-                <h4 className="text-xl font-bold text-slate-800 mb-2">
+              <div className="p-8 ">
+                <h4 className="text-xl font-bold text-slate-800">
                   {partner.name}
                 </h4>
                 <p className="text-slate-600 text-sm">{partner.description}</p>

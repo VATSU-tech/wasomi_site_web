@@ -180,6 +180,8 @@ const Contact = () => {
                       border: "none",
                       background: "#475569",
                       color: "white",
+                      minHeight: "180px",
+                      resize: "none",
                     }}
                     placeholder={field.placeholder}
                   />
