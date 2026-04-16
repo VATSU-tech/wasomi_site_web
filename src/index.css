@@ -2,14 +2,22 @@
 @plugin "daisyui";
 
 :root {
-  --primary-color: #35eb25;
+  /* --primary-color: #35eb25;
   --primary-hover: #2dd81d;
   --secondary-color: #f8fafc;
   --accent-color: #f59e0b;
   --text-color: #1e3b20;
   --text-light: #64748b;
   --white: #ffffff;
-  --none: rgba(0, 0, 0, 0);
+  --none: rgba(0, 0, 0, 0); */
+  --primary-color: #35eb25;
+  --primary-hover: #2dd81d;
+  --secondary-color: #0a160b;
+  --accent-color: #f59e0b;
+  --text-color: #7aeb82;
+  --text-light: #303337;
+  --white: #000000;
+  --none: rgba(255, 255, 255, 0);
   --font-heading: 'Inter', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, sans-serif;
   --max-width: 1280px;

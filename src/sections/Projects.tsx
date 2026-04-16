@@ -4,7 +4,7 @@ const Projects = () => {
   return (
     <section
       id="projects"
-      style={{ background: "var(--secondary-color)", minHeight: "100vh" }}
+      style={{ background: "var(--white)", minHeight: "100vh" }}
     >
       <div className="container">
         <h2
@@ -43,7 +43,7 @@ const Projects = () => {
               data-aos-delay={project.delay}
               data-aos-duration="750"
               style={{
-                background: "white",
+                background: "var(--secondary-color)",
                 padding: "2rem",
                 borderRadius: "1rem",
                 boxShadow: "0 4px 6px -1px rgba(0,0,0,0.1)",
