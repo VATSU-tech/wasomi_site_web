@@ -45,10 +45,10 @@ function FormationsPage() {
               key={f.title}
               data-aos="fade-up"
               data-aos-delay={(i % 3) * 80}
-              className="group relative p-6 rounded-2xl glass hover:shadow-glow transition-spring hover:-translate-y-2 overflow-hidden"
+              className="group relative p-6 rounded-2xl glass hover:shadow-glow transition-smooth hover:-translate-y-2 overflow-hidden"
             >
               <div className={`absolute -top-20 -right-20 size-48 rounded-full bg-gradient-to-br ${f.color} opacity-20 group-hover:opacity-40 blur-2xl transition-smooth`} />
-              <div className="relative">
+              <div className="relative transition-smooth">
                 <div className={`size-14 rounded-xl bg-gradient-to-br ${f.color} flex items-center justify-center shadow-glow mb-5 group-hover:scale-110 group-hover:rotate-3 transition-spring`}>
                   <f.icon className="size-7 text-white" />
                 </div>
