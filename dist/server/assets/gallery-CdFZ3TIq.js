@@ -1,6 +1,6 @@
-import { r as reactExports, T as jsxRuntimeExports } from "./worker-entry-DA7_1Qcz.js";
-import { c as createLucideIcon, d as cn, X } from "./router-DuuWK76I.js";
-import { H as Heart } from "./heart-unko6K67.js";
+import { r as reactExports, T as jsxRuntimeExports } from "./worker-entry-DNQl5kYH.js";
+import { c as createLucideIcon, d as cn, X } from "./router-GPoNx6IW.js";
+import { H as Heart } from "./heart-CwnydupT.js";
 const __iconNode$3 = [["path", { d: "m15 18-6-6 6-6", key: "1wnfg3" }]];
 const ChevronLeft = createLucideIcon("chevron-left", __iconNode$3);
 const __iconNode$2 = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
@@ -214,7 +214,7 @@ const galleryCategories = [
   "Événements"
 ];
 const galleryItems = [
-  { id: "1", src: u("photo-1523050854058-8df90110c9f1"), title: "Campus principal", category: "Campus", description: "Notre bâtiment historique au cœur de la ville.", featured: true },
+  { id: "1", src: u("photo-1551434678-e076c223a692"), title: "Campus principal", category: "Campus", description: "Notre bâtiment historique au cœur de la ville.", featured: true },
   { id: "2", src: u("photo-1581091226825-a6a2a5aee158"), title: "Projet IA d'étudiants", category: "Réalisations", description: "Hackathon 2024 — équipe primée." },
   { id: "3", src: u("photo-1518770660439-4636190af475"), title: "Laboratoire électronique", category: "Équipement", description: "Stations de prototypage dernière génération." },
   { id: "4", src: u("photo-1522202176988-66273c2fd55f"), title: "Travaux de groupe", category: "Vie étudiante", description: "Espaces collaboratifs ouverts 24/7." },

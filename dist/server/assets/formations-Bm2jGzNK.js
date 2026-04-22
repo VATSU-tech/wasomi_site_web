@@ -1,7 +1,7 @@
-import { T as jsxRuntimeExports } from "./worker-entry-DA7_1Qcz.js";
-import { c as createLucideIcon, L as Link } from "./router-DuuWK76I.js";
-import { U as Users } from "./users-CVryytXl.js";
-import { A as ArrowRight } from "./arrow-right-BTbHG-ae.js";
+import { T as jsxRuntimeExports } from "./worker-entry-DNQl5kYH.js";
+import { c as createLucideIcon, L as Link } from "./router-GPoNx6IW.js";
+import { U as Users } from "./users-CFnAXDAo.js";
+import { A as ArrowRight } from "./arrow-right-DPxqsJ8l.js";
 import "node:events";
 import "node:async_hooks";
 import "node:stream/web";
@@ -127,9 +127,9 @@ function FormationsPage() {
         /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-4 text-muted-foreground max-w-2xl mx-auto", "data-aos": "fade-up", "data-aos-delay": "100", children: "Des cursus pensés pour les métiers d'aujourd'hui et de demain." })
       ] })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "py-20 container mx-auto px-4 max-w-7xl", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid md:grid-cols-2 lg:grid-cols-3 gap-6", children: formations.map((f, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs("article", { "data-aos": "fade-up", "data-aos-delay": i % 3 * 80, className: "group relative p-6 rounded-2xl glass hover:shadow-glow transition-spring hover:-translate-y-2 overflow-hidden", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "py-20 container mx-auto px-4 max-w-7xl", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid md:grid-cols-2 lg:grid-cols-3 gap-6", children: formations.map((f, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs("article", { "data-aos": "fade-up", "data-aos-delay": i % 3 * 80, className: "group relative p-6 rounded-2xl glass hover:shadow-glow transition-smooth hover:-translate-y-2 overflow-hidden", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `absolute -top-20 -right-20 size-48 rounded-full bg-gradient-to-br ${f.color} opacity-20 group-hover:opacity-40 blur-2xl transition-smooth` }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative transition-smooth", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `size-14 rounded-xl bg-gradient-to-br ${f.color} flex items-center justify-center shadow-glow mb-5 group-hover:scale-110 group-hover:rotate-3 transition-spring`, children: /* @__PURE__ */ jsxRuntimeExports.jsx(f.icon, { className: "size-7 text-white" }) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-display text-xl font-bold mb-2", children: f.title }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-muted-foreground mb-4 leading-relaxed", children: f.desc }),

@@ -1,11 +1,11 @@
-import { T as jsxRuntimeExports } from "./worker-entry-DA7_1Qcz.js";
-import { G as Gallery, g as galleryCategories, a as galleryItems } from "./gallery-CtKmpf1R.js";
+import { T as jsxRuntimeExports } from "./worker-entry-DNQl5kYH.js";
+import { G as Gallery, g as galleryCategories, a as galleryItems } from "./gallery-CdFZ3TIq.js";
 import "node:events";
 import "node:async_hooks";
 import "node:stream/web";
 import "node:stream";
-import "./router-DuuWK76I.js";
-import "./heart-unko6K67.js";
+import "./router-GPoNx6IW.js";
+import "./heart-CwnydupT.js";
 function GaleriePage() {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "relative overflow-hidden bg-hero", children: [

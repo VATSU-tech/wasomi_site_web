@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Sparkles, Users, BookOpen, Trophy, Rocket, GraduationCap, Star } from "lucide-react";
+import { ArrowRight, Sparkles, Users, BookOpen, Trophy, Rocket, GraduationCap, Star,StarHalf } from "lucide-react";
 import { SectionHeading } from "@/components/site/section-heading";
 import { Gallery } from "@/components/site/gallery";
 import { galleryItems, galleryCategories } from "@/data/gallery";
@@ -33,7 +33,7 @@ function Home() {
                 data-aos="fade-down"
               >
                 <Sparkles className="size-3.5" />
-                Rentrée 2025 — inscriptions ouvertes
+                Annee Scolaire 2025 - 2026
               </span>
               <h1
                 className="font-display text-5xl md:text-7xl font-bold tracking-tight leading-[1.05]"
@@ -77,7 +77,7 @@ function Home() {
                 data-aos-delay="300"
               >
                 {[
-                  { v: "1500+", l: "Étudiants" },
+                  { v: "150+", l: "Étudiants" },
                   { v: "98%", l: "Insertion" },
                   { v: "25+", l: "Formations" },
                 ].map((s) => (
@@ -172,7 +172,7 @@ function Home() {
         <div className="container mx-auto px-4 max-w-7xl">
           <SectionHeading
             eyebrow="Témoignages"
-            title="Ils ont fait Wasomi"
+            title="ILs ont confiance en nous !"
           />
           <div className="grid md:grid-cols-3 gap-6">
             {[
