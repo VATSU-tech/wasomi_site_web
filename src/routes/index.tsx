@@ -176,9 +176,9 @@ function Home() {
           />
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              { name: "Aline K.", role: "Promo 2023 — Designer", text: "L'accompagnement est exceptionnel. J'ai trouvé un poste avant même la fin de mon cursus." },
-              { name: "Joseph M.", role: "Promo 2022 — Dev Full-Stack", text: "Les projets concrets m'ont préparé au monde réel mieux que n'importe quel cours théorique." },
-              { name: "Sarah L.", role: "Promo 2024 — Data Scientist", text: "Une communauté soudée, des profs passionnés. Une vraie famille." },
+              { name: "Aline K.", role: "Ir en Reseau Informatique", text: "L'accompagnement est exceptionnel. Les eleves apprenes les bases necessaires pour mieux evoluer." },
+              { name: "Joseph M.", role: "Dev Full-Stack", text: "Les projets concrets m'ont préparé au monde réel mieux que n'importe quel cours théorique." },
+              { name: "Sarah L.", role: "Couturier Professionel", text: "Une communauté soudée, des profs passionnés. Une vraie famille." },
             ].map((t, i) => (
               <div
                 key={t.name}
