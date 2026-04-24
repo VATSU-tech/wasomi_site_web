@@ -95,18 +95,18 @@ function Home() {
               <div className="relative grid grid-cols-2 gap-4">
                 <div className="space-y-4">
                   <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-elegant animate-float">
-                    <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=600&q=80" alt="" className="size-full object-cover" />
+                    <img src="/gallerie/labo_1.jpg" alt="" className="size-full object-cover" />
                   </div>
                   <div className="aspect-square rounded-2xl overflow-hidden shadow-elegant animate-float" style={{ animationDelay: "1.5s" }}>
-                    <img src="https://images.unsplash.com/photo-1497486751825-1233686d5d80?auto=format&fit=crop&w=600&q=80" alt="" className="size-full object-cover" />
+                    <img src="/gallerie/realisation.jpg" alt="" className="size-full object-cover" />
                   </div>
                 </div>
                 <div className="space-y-4 pt-12">
                   <div className="aspect-square rounded-2xl overflow-hidden shadow-elegant animate-float" style={{ animationDelay: "0.7s" }}>
-                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=600&q=80" alt="" className="size-full object-cover" />
+                    <img src="/gallerie/campus_1.jpg" alt="" className="size-full object-cover" />
                   </div>
                   <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-elegant animate-float" style={{ animationDelay: "2.2s" }}>
-                    <img src="https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?auto=format&fit=crop&w=600&q=80" alt="" className="size-full object-cover" />
+                    <img src="/gallerie/labo_3.jpg" alt="" className="size-full object-cover" />
                   </div>
                 </div>
               </div>
