@@ -35,7 +35,7 @@ function AboutPage() {
         <div className="grid lg:grid-cols-2 gap-12 items-center mb-24">
           <div data-aos="fade-right">
             <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-glow">
-              <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80" alt="" className="size-full object-cover" />
+              <img src="/gallerie/realisation.jpg" alt="" className="size-full object-cover" />
             </div>
           </div>
           <div data-aos="fade-left">
