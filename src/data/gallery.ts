@@ -37,7 +37,7 @@ export const galleryItems: GalleryItem[] = [
     title: "Salle numérique",
     category: "Équipement",
     description: "Postes informatiques et connexion pour les travaux pratiques.",
-    featured: true,
+    // featured: true,
   },
   {
     id: "4",
@@ -73,6 +73,7 @@ export const galleryItems: GalleryItem[] = [
     title: "Étudiante en exercice",
     category: "Vie étudiante",
     description: "Pratique individuelle sur ordinateur portable.",
+    featured: true,
   },
   {
     id: "9",
@@ -96,19 +97,19 @@ export const galleryItems: GalleryItem[] = [
     description: "Échange autour des projets développés en formation.",
   },
   {
+    id: "13",
+    src: s("evenement_1.jpg"),
+    title: "Cérémonie sur le campus",
+    category: "Événements",
+    description: "Activité scolaire organisée en plein air.",
+  },
+  {
     id: "12",
     src: s("IMG-20260419-WA0016.jpg"),
     title: "Remise des distinctions",
     category: "Réalisations",
     description: "Photo de groupe après la valorisation des meilleurs travaux.",
     featured: true,
-  },
-  {
-    id: "13",
-    src: s("evenement_1.jpg"),
-    title: "Cérémonie sur le campus",
-    category: "Événements",
-    description: "Activité scolaire organisée en plein air.",
   },
   {
     id: "14",
