@@ -33,7 +33,7 @@ function Home() {
                 data-aos="fade-down"
               >
                 <Sparkles className="size-3.5" />
-                Annee Scolaire 2025 - 2026
+                Annee Scolaire {new Date().getFullYear() - 1} - {new Date().getFullYear()}
               </span>
               <h1
                 className="font-display text-5xl md:text-7xl font-bold tracking-tight leading-[1.05]"
