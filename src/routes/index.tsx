@@ -95,7 +95,7 @@ function Home() {
               <div className="relative grid grid-cols-2 gap-4">
                 <div className="space-y-4">
                   <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-elegant animate-float">
-                    <img src="/gallerie/labo_1.jpg" alt="" className="size-full object-cover" />
+                    <img src="/gallerie/equipement_1.jpg" alt="" className="size-full object-cover" />
                   </div>
                   <div className="aspect-square rounded-2xl overflow-hidden shadow-elegant animate-float" style={{ animationDelay: "1.5s" }}>
                     <img src="/gallerie/realisation.jpg" alt="" className="size-full object-cover" />
