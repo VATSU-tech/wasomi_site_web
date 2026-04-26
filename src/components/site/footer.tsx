@@ -58,7 +58,7 @@ export function Footer() {
             <ul className="space-y-3 text-sm text-muted-foreground">
               <li className="flex items-start gap-2">
                 <MapPin className="size-4 mt-0.5 text-primary shrink-0" />
-                <span>123 Avenue de l'Éducation, Kinshasa</span>
+                <span>123 Rue Sivirwa, Q.redidenciel C.Bungulu V.beni</span>
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="size-4 text-primary shrink-0" />
