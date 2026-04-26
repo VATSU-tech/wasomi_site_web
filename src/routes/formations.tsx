@@ -15,11 +15,11 @@ export const Route = createFileRoute("/formations")({
 });
 
 const formations = [
-  { icon: Code2, title: "Développement Web", duration: "2 ans", students: "120+", desc: "Maîtrisez le full-stack moderne : React, Node, Cloud.", color: "from-indigo-500 to-purple-500" },
-  { icon: Palette, title: "Design UX/UI", duration: "2 ans", students: "80+", desc: "Concevez des produits désirables avec Figma et la recherche utilisateur.", color: "from-pink-500 to-rose-500" },
-  { icon: BarChart3, title: "Data Science", duration: "3 ans", students: "60+", desc: "Python, ML, Deep Learning. Devenez expert de la donnée.", color: "from-blue-500 to-cyan-500" },
-  { icon: Cpu, title: "Cybersécurité", duration: "2 ans", students: "45+", desc: "Pentest, défense, conformité. Protégez les systèmes critiques.", color: "from-emerald-500 to-teal-500" },
-  { icon: Megaphone, title: "Marketing Digital", duration: "1 an", students: "100+", desc: "SEO, Ads, Content, Growth. Maîtrisez tous les leviers digitaux.", color: "from-orange-500 to-red-500" },
+  { icon: Code2, title: "Domotique", duration: "4 ans", students: "20+", desc: "Maîtrisez la domotique, et automatiser vos maison", color: "from-indigo-500 to-purple-500" },
+  { icon: Palette, title: "Art plastique", duration: "2 ans", students: "30+", desc: "Concevez des produits désirables et attrayant de vos mains.", color: "from-pink-500 to-rose-500" },
+  { icon: BarChart3, title: "Gerer vos economie", duration: "3 ans", students: "60+", desc: "Apprenez a bien gerer vos economie, et diminuer vos depense.", color: "from-blue-500 to-cyan-500" },
+  { icon: Cpu, title: "Informatique embarqué", duration: "2 ans", students: "45+", desc: "Programmer des micro controlleur, et automatiser des taches.", color: "from-emerald-500 to-teal-500" },
+  { icon: Megaphone, title: "Ecole de l'eloquance", duration: "3 ans", students: "100+", desc: "Apprenner a manier la langue de moliere comme un pro.", color: "from-orange-500 to-red-500" },
   { icon: Briefcase, title: "Entrepreneuriat", duration: "1 an", students: "55+", desc: "De l'idée au marché : business model, levée de fonds, scale.", color: "from-amber-500 to-yellow-500" },
 ];
 
