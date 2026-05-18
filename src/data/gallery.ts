@@ -3,6 +3,7 @@ export type GalleryItem = {
   src: string;
   title: string;
   likes?: number;
+  comment?: number;
   category: string;
   description?: string;
   featured?: boolean;
@@ -24,7 +25,7 @@ export const galleryItems: GalleryItem[] = [
     category: "Campus",
     description: "Pelouse centrale et bâtiments pédagogiques.",
     featured: true,
-    likes: 2,
+    likes: 18,
   },
   {
     id: "2",
