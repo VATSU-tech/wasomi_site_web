@@ -2,7 +2,7 @@ export type GalleryItem = {
   id: string;
   src: string;
   title: string;
-  liked: boolean;
+  liked?: boolean;
   category: string;
   description?: string;
   featured?: boolean;
