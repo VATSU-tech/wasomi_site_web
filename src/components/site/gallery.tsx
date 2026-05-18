@@ -101,13 +101,13 @@ export function Gallery({ items, categories }: Props) {
                 >
                   <Heart className="size-4" /> <span >{item.likes !== undefined ? item.likes : 0}</span>
                 </button>
-                <button
+                {/* <button
                   onClick={(e) => { e.stopPropagation(); }}
                   aria-label="Aimer"
                   className="gap-1 px-1 rounded-full glass flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-smooth"
                 >
                   <Heart className="size-4" /> <span >{item.comment !== undefined ? item.comment : 0}</span>
-                </button>
+                </button> */}
                 <button
                   onClick={(e) => { e.stopPropagation(); }}
                   aria-label="Partager"

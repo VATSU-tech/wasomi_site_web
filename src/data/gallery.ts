@@ -33,7 +33,7 @@ export const galleryItems: GalleryItem[] = [
     title: "Espace extérieur",
     category: "Campus",
     description: "Cour verte utilisée pour les rassemblements scolaires.",
-    likes: 2,
+    likes: 5,
   },
   {
     id: "3",
@@ -41,7 +41,7 @@ export const galleryItems: GalleryItem[] = [
     title: "Salle numérique",
     category: "Équipement",
     description: "Postes informatiques et connexion pour les travaux pratiques.",
-    likes: 2,
+    likes: 28,
     // featured: true,
   },
   {
@@ -50,7 +50,7 @@ export const galleryItems: GalleryItem[] = [
     title: "Laboratoire informatique",
     category: "Équipement",
     description: "Salle équipée pour les cours de codage et de robotique.",
-    likes: 2,
+    likes: 23,
   },
   {
     id: "5",
@@ -58,7 +58,7 @@ export const galleryItems: GalleryItem[] = [
     title: "Séance de programmation",
     category: "Vie étudiante",
     description: "Atelier en groupe avec accompagnement du formateur.",
-    likes: 2,
+    likes: 65,
   },
   {
     id: "6",
@@ -66,7 +66,7 @@ export const galleryItems: GalleryItem[] = [
     title: "Cours interactif en labo",
     category: "Vie étudiante",
     description: "Apprentissage visuel projeté pendant les exercices.",
-    likes: 2,
+    likes: 21,
   },
   {
     id: "7",
@@ -74,7 +74,7 @@ export const galleryItems: GalleryItem[] = [
     title: "Étudiante en exercice",
     category: "Vie étudiante",
     description: "Pratique individuelle sur ordinateur portable.",
-    likes: 2,
+    likes: 15,
   },
   {
     id: "8",
@@ -82,7 +82,7 @@ export const galleryItems: GalleryItem[] = [
     title: "Travaux pratiques",
     category: "Vie étudiante",
     description: "Les élèves appliquent directement les notions apprises.",
-    likes: 2,
+    likes: 78,
     featured: true,
   },
   {
@@ -91,7 +91,7 @@ export const galleryItems: GalleryItem[] = [
     title: "Découverte du code",
     category: "Vie étudiante",
     description: "Initiation à la programmation pour les plus jeunes.",
-    likes: 2,
+    likes: 23,
   },
   {
     id: "10",
@@ -99,7 +99,7 @@ export const galleryItems: GalleryItem[] = [
     title: "Présentation des projets",
     category: "Réalisations",
     description: "Élèves récompensés pour leurs réalisations techniques.",
-    likes: 2,
+    likes: 54,
   },
   {
     id: "11",
@@ -107,7 +107,7 @@ export const galleryItems: GalleryItem[] = [
     title: "Entretien avec le jury",
     category: "Réalisations",
     description: "Échange autour des projets développés en formation.",
-    likes: 2,
+    likes: 21,
   },
   {
     id: "13",
@@ -115,7 +115,7 @@ export const galleryItems: GalleryItem[] = [
     title: "Cérémonie sur le campus",
     category: "Événements",
     description: "Activité scolaire organisée en plein air.",
-    likes: 2,
+    likes: 23,
   },
   {
     id: "12",
@@ -124,7 +124,7 @@ export const galleryItems: GalleryItem[] = [
     category: "Réalisations",
     description: "Photo de groupe après la valorisation des meilleurs travaux.",
     featured: true,
-    likes: 2,
+    likes: 29,
   },
   {
     id: "14",
@@ -132,7 +132,7 @@ export const galleryItems: GalleryItem[] = [
     title: "Initiation radio",
     category: "Événements",
     description: "Atelier média avec microphones et enregistrement.",
-    likes: 2,
+    likes: 25,
   },
   {
     id: "15",
@@ -140,7 +140,7 @@ export const galleryItems: GalleryItem[] = [
     title: "Atelier podcast",
     category: "Événements",
     description: "Production de contenu audio en équipe.",
-    likes: 2,
+    likes: 20,
   },
   {
     id: "16",
@@ -148,6 +148,6 @@ export const galleryItems: GalleryItem[] = [
     title: "Studio pédagogique",
     category: "Événements",
     description: "Encadrement pratique dans un mini-studio radio.",
-    likes: 2,
+    likes: 26,
   },
 ];
