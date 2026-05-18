@@ -1,15 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { X, ChevronLeft, ChevronRight, Maximize2, Heart, Share2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-export type GalleryItem = {
-  id: string;
-  src: string;
-  title: string;
-  category: string;
-  description?: string;
-  featured?: boolean;
-};
+import { GalleryItem } from "@/data/gallery";
 
 interface Props {
   items: GalleryItem[];
@@ -105,9 +97,16 @@ export function Gallery({ items, categories }: Props) {
                 <button
                   onClick={(e) => { e.stopPropagation(); }}
                   aria-label="Aimer"
-                  className="size-9 rounded-full glass flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-smooth"
+                  className="gap-1 px-1 rounded-full glass flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-smooth"
                 >
-                  <Heart className="size-4" />
+                  <Heart className="size-4" /> <span >{item.likes !== undefined ? item.likes : 0}</span>
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); }}
+                  aria-label="Aimer"
+                  className="gap-1 px-1 rounded-full glass flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-smooth"
+                >
+                  <Heart className="size-4" /> <span >{item.comment !== undefined ? item.comment : 0}</span>
                 </button>
                 <button
                   onClick={(e) => { e.stopPropagation(); }}
