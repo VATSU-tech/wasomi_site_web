@@ -24,9 +24,9 @@ function AboutPage() {
             À propos de <span className="text-gradient">Wasomi</span>
           </h1>
           <p className="mt-6 text-lg text-muted-foreground leading-relaxed" data-aos="fade-up" data-aos-delay="100">
-            Fondée en 2010, Wasomi est née d'une conviction simple : chaque étudiant
+            Fondée en 2021, Wasomi est née d'une conviction simple : chaque étudiant
             mérite une éducation qui révèle son potentiel unique. Aujourd'hui, c'est
-            plus de 1500 étudiants formés et 98% d'insertion professionnelle.
+            plusieurs étudiants formés chez nous.
           </p>
         </div>
       </section>

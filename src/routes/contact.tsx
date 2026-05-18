@@ -26,7 +26,7 @@ function ContactPage() {
             Parlons <span className="text-gradient">ensemble</span>
           </h1>
           <p className="mt-4 text-muted-foreground max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="100">
-            Une question, un projet, une candidature ? On vous répond sous 24h.
+            Une question, un projet, une candidature ? On vous répond au plus vite.
           </p>
         </div>
       </section>

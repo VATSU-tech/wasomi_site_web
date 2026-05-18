@@ -6,10 +6,10 @@ import { cn } from "@/lib/utils";
 
 const links = [
   { to: "/", label: "Accueil" },
+  { to: "/blog", label: "Blog" },
   { to: "/formations", label: "Formations" },
   { to: "/galerie", label: "Galerie" },
   { to: "/equipe", label: "Équipe" },
-  { to: "/blog", label: "Blog" },
   { to: "/about", label: "À propos" },
   { to: "/contact", label: "Contact" },
 ] as const;
