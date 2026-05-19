@@ -95,7 +95,8 @@
 
 .dark {
   /* Indigo Midnight — deep navy with electric indigo */
-  --background: oklch(13.619% 0.036 146.305);          /* #0a0a1a */
+ /* --background: oklch(13.619% 0.036 146.305);          /* #0a0a1a */
+ --background:rgb(117, 0, 0);
   --foreground: oklch(97.216% 0.01581 148.747);
   --surface: oklch(18.825% 0.05168 144.305);            /* #141432 */
   --surface-elevated: oklch(24.16% 0.06599 142.159);
