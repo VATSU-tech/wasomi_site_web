@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Linkedin, Twitter, Mail } from "lucide-react";
+import { staffCategoryOrder, staffMembers, type StaffMember } from "@/data/staff";
 
 export const Route = createFileRoute("/equipe")({
   head: () => ({
@@ -13,14 +14,11 @@ export const Route = createFileRoute("/equipe")({
   component: EquipePage,
 });
 
-const team = [
-  { name: "Dr. Patrick Mwamba", role: "Directeur pédagogique", img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80", bio: "20 ans d'expérience en sciences de l'éducation." },
-  { name: "Sarah Tshibanda", role: "Responsable Design", img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80", bio: "Ex-Lead Designer chez Google." },
-  { name: "Jean-Luc Kabongo", role: "Lead Dev & Mentor", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80", bio: "15 ans d'engineering, 3 startups." },
-  { name: "Aisha Mbumba", role: "Coach carrière", img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80", bio: "Accompagne 200+ étudiants/an vers l'emploi." },
-  { name: "Eric Lumbala", role: "Data Lead", img: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?auto=format&fit=crop&w=400&q=80", bio: "PhD en IA, ex-chercheur INRIA." },
-  { name: "Marie Nzuzi", role: "Responsable Vie étudiante", img: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80", bio: "Crée du lien et de la cohésion." },
-];
+const sortedStaff = [...staffMembers].sort((a, b) => {
+  const byCategory = staffCategoryOrder.indexOf(a.category) - staffCategoryOrder.indexOf(b.category);
+  if (byCategory !== 0) return byCategory;
+  return a.order - b.order;
+});
 
 function EquipePage() {
   return (
@@ -39,35 +37,45 @@ function EquipePage() {
 
       <section className="py-20 container mx-auto px-4 max-w-7xl">
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {team.map((m, i) => (
-            <article
-              key={m.name}
-              data-aos="fade-up"
-              data-aos-delay={(i % 3) * 80}
-              className="group relative rounded-2xl overflow-hidden bg-card shadow-elegant hover:shadow-glow transition-spring hover:-translate-y-2"
-            >
-              <div className="relative aspect-[4/5] overflow-hidden">
-                <img src={m.img} alt={m.name} loading="lazy" className="size-full object-cover transition-spring group-hover:scale-110" />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-6">
-                  <h3 className="font-display text-xl font-bold">{m.name}</h3>
-                  <p className="text-sm text-primary font-semibold mt-1">{m.role}</p>
-                  <p className="text-sm text-muted-foreground mt-2 opacity-0 group-hover:opacity-100 max-h-0 group-hover:max-h-20 transition-all duration-500">
-                    {m.bio}
-                  </p>
-                  <div className="flex gap-2 mt-4 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-spring">
-                    {[Linkedin, Twitter, Mail].map((Icon, j) => (
-                      <a key={j} href="#" aria-label="Social" className="size-9 rounded-full glass flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-smooth">
-                        <Icon className="size-4" />
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </article>
+          {sortedStaff.map((member, i) => (
+            <StaffCard key={member.id} member={member} delay={i} />
           ))}
         </div>
       </section>
     </>
+  );
+}
+
+function StaffCard({ member, delay }: { member: StaffMember; delay: number }) {
+  return (
+    <article
+      data-aos="fade-up"
+      data-aos-delay={(delay % 3) * 80}
+      className="group relative rounded-2xl overflow-hidden bg-card shadow-elegant hover:shadow-glow transition-spring hover:-translate-y-2"
+    >
+      <div className="relative aspect-[4/5] overflow-hidden">
+        <img src={member.image} alt={member.name} loading="lazy" className="size-full object-cover transition-spring group-hover:scale-110" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 p-6">
+          <h3 className="font-display text-xl font-bold">{member.name}</h3>
+          <p className="text-sm text-primary font-semibold mt-1">{member.role}</p>
+          <p className="text-xs text-muted-foreground/90 mt-1">{member.qualification}</p>
+          <p className="text-sm text-muted-foreground mt-2 opacity-0 group-hover:opacity-100 max-h-0 group-hover:max-h-20 transition-all duration-500">
+            {member.bio}
+          </p>
+          <div className="flex gap-2 mt-4 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-spring">
+            {[
+              { icon: Linkedin, href: member.linkedin, label: `LinkedIn de ${member.name}` },
+              { icon: Twitter, href: member.facebook, label: `Facebook de ${member.name}` },
+              { icon: Mail, href: member.email, label: `Email de ${member.name}` },
+            ].map(({ icon: Icon, href, label }) => (
+              <a key={label} href={href || "#"} aria-label={label} className="size-9 rounded-full glass flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-smooth">
+                <Icon className="size-4" />
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </article>
   );
 }
