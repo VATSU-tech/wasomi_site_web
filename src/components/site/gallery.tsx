@@ -12,8 +12,13 @@ export function Gallery({ items, categories }: Props) {
   const [filter, setFilter] = useState<string>("Tous");
   const [lightbox, setLightbox] = useState<number | null>(null);
 
-  const filtered =
-    filter === "Tous" ? items : items.filter((i) => i.category === filter);
+  const filtered = (filter === "Tous" ? items : items.filter((i) => i.category === filter))
+    .slice()
+    .sort((a, b) => {
+      const featuredScore = Number(Boolean(b.featured)) - Number(Boolean(a.featured));
+      if (featuredScore !== 0) return featuredScore;
+      return (b.visualPriority ?? 0) - (a.visualPriority ?? 0);
+    });
 
   const close = useCallback(() => setLightbox(null), []);
   const next = useCallback(
