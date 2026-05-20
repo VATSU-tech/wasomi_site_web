@@ -46,7 +46,8 @@ export const galleryItems: GalleryItem[] = [
     src: s("equipement_1.jpg"),
     title: "Salle numérique",
     category: "Équipement",
-    description: "Postes informatiques et connexion pour les travaux pratiques.",
+    description:
+      "Postes informatiques et connexion pour les travaux pratiques.",
     likes: 28,
     // featured: true,
   },
@@ -161,7 +162,8 @@ export const galleryItems: GalleryItem[] = [
     src: s("1ere primaire (copie 1).jpg"),
     title: "1Ere Primaire (Copie 1)",
     category: "Vie étudiante",
-    description: "Participation active des élèves à des activités pédagogiques.",
+    description:
+      "Participation active des élèves à des activités pédagogiques.",
     contentType: "Vie scolaire",
     visualPriority: 88,
     featured: false,
@@ -173,7 +175,8 @@ export const galleryItems: GalleryItem[] = [
     src: s("1ere primaire.jpg"),
     title: "1Ere Primaire",
     category: "Vie étudiante",
-    description: "Participation active des élèves à des activités pédagogiques.",
+    description:
+      "Participation active des élèves à des activités pédagogiques.",
     contentType: "Vie scolaire",
     visualPriority: 88,
     featured: false,
@@ -809,7 +812,8 @@ export const galleryItems: GalleryItem[] = [
     src: s("collonie des vaccances 5.jpg"),
     title: "Collonie Des Vaccances 5",
     category: "Vie étudiante",
-    description: "Participation active des élèves à des activités pédagogiques.",
+    description:
+      "Participation active des élèves à des activités pédagogiques.",
     contentType: "Vie scolaire",
     visualPriority: 88,
     featured: false,
@@ -821,7 +825,8 @@ export const galleryItems: GalleryItem[] = [
     src: s("colonie de vaccances 3.jpg"),
     title: "Colonie De Vaccances 3",
     category: "Vie étudiante",
-    description: "Participation active des élèves à des activités pédagogiques.",
+    description:
+      "Participation active des élèves à des activités pédagogiques.",
     contentType: "Vie scolaire",
     visualPriority: 88,
     featured: false,
@@ -833,7 +838,8 @@ export const galleryItems: GalleryItem[] = [
     src: s("colonie de vaccances 4.jpg"),
     title: "Colonie De Vaccances 4",
     category: "Vie étudiante",
-    description: "Participation active des élèves à des activités pédagogiques.",
+    description:
+      "Participation active des élèves à des activités pédagogiques.",
     contentType: "Vie scolaire",
     visualPriority: 88,
     featured: false,
@@ -845,7 +851,8 @@ export const galleryItems: GalleryItem[] = [
     src: s("colonie de vaccances.jpg"),
     title: "Colonie De Vaccances",
     category: "Vie étudiante",
-    description: "Participation active des élèves à des activités pédagogiques.",
+    description:
+      "Participation active des élèves à des activités pédagogiques.",
     contentType: "Vie scolaire",
     visualPriority: 88,
     featured: false,
@@ -857,7 +864,8 @@ export const galleryItems: GalleryItem[] = [
     src: s("colonie de vaxxances 2.jpg"),
     title: "Colonie De Vaxxances 2",
     category: "Vie étudiante",
-    description: "Participation active des élèves à des activités pédagogiques.",
+    description:
+      "Participation active des élèves à des activités pédagogiques.",
     contentType: "Vie scolaire",
     visualPriority: 88,
     featured: false,
@@ -869,7 +877,8 @@ export const galleryItems: GalleryItem[] = [
     src: s("colonie des vaccance 6.jpg"),
     title: "Colonie Des Vaccance 6",
     category: "Vie étudiante",
-    description: "Participation active des élèves à des activités pédagogiques.",
+    description:
+      "Participation active des élèves à des activités pédagogiques.",
     contentType: "Vie scolaire",
     visualPriority: 88,
     featured: false,
@@ -881,7 +890,8 @@ export const galleryItems: GalleryItem[] = [
     src: s("colonievaccances.jpg"),
     title: "Colonievaccances",
     category: "Vie étudiante",
-    description: "Participation active des élèves à des activités pédagogiques.",
+    description:
+      "Participation active des élèves à des activités pédagogiques.",
     contentType: "Vie scolaire",
     visualPriority: 88,
     featured: false,
@@ -941,7 +951,8 @@ export const galleryItems: GalleryItem[] = [
     src: s("maternelle.jpg"),
     title: "Maternelle",
     category: "Vie étudiante",
-    description: "Participation active des élèves à des activités pédagogiques.",
+    description:
+      "Participation active des élèves à des activités pédagogiques.",
     contentType: "Vie scolaire",
     visualPriority: 88,
     featured: false,
