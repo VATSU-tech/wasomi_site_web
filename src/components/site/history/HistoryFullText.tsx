@@ -93,7 +93,7 @@ export function HistoryFullText({
       {/* Content */}
       <div className="relative container mx-auto px-4 max-w-4xl">
         {/* Progress Indicator */}
-        <div className="mb-12">
+        {/* <div className="mb-12">
           <div className="flex items-center justify-between mb-3">
             <h3 className="font-display font-semibold text-white">
               {audioState.currentCue
@@ -112,7 +112,7 @@ export function HistoryFullText({
               }}
             />
           </div>
-        </div>
+        </div> */}
 
         {/* Text Content */}
         <article className="prose prose-invert max-w-none">
