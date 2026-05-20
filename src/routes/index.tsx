@@ -1,5 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Sparkles, Users, BookOpen, Trophy, Rocket, GraduationCap, Star,StarHalf } from "lucide-react";
+import {
+  ArrowRight,
+  Sparkles,
+  Users,
+  BookOpen,
+  Trophy,
+  Rocket,
+  GraduationCap,
+  Star,
+  StarHalf,
+} from "lucide-react";
 import { SectionHeading } from "@/components/site/section-heading";
 import { Gallery } from "@/components/site/gallery";
 import { galleryItems, galleryCategories } from "@/data/gallery";
@@ -8,7 +18,11 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Wasomi — École d'excellence pour les talents de demain" },
-      { name: "description", content: "Découvrez Wasomi : programmes innovants, équipe d'experts et accompagnement personnalisé pour révéler votre potentiel." },
+      {
+        name: "description",
+        content:
+          "Découvrez Wasomi : programmes innovants, équipe d'experts et accompagnement personnalisé pour révéler votre potentiel.",
+      },
       { property: "og:title", content: "Wasomi — École d'excellence" },
       { property: "og:description", content: "Forme les talents de demain." },
     ],
@@ -23,7 +37,10 @@ function Home() {
       <section className="relative overflow-hidden bg-hero">
         <div className="absolute inset-0 bg-mesh pointer-events-none" />
         <div className="absolute top-1/4 -left-32 size-96 rounded-full bg-primary/20 blur-3xl animate-float pointer-events-none" />
-        <div className="absolute bottom-1/4 -right-32 size-96 rounded-full bg-accent/20 blur-3xl animate-float pointer-events-none" style={{ animationDelay: "2s" }} />
+        <div
+          className="absolute bottom-1/4 -right-32 size-96 rounded-full bg-accent/20 blur-3xl animate-float pointer-events-none"
+          style={{ animationDelay: "2s" }}
+        />
 
         <div className="container mx-auto px-4 max-w-7xl relative py-20 md:py-32">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -33,14 +50,17 @@ function Home() {
                 data-aos="fade-down"
               >
                 <Sparkles className="size-3.5" />
-                Annee Scolaire {new Date().getFullYear() - 1} - {new Date().getFullYear()}
+                Annee Scolaire {new Date().getFullYear() - 1} -{" "}
+                {new Date().getFullYear()}
               </span>
               <h1
                 className="font-display text-5xl md:text-7xl font-bold tracking-tight leading-[1.05]"
                 data-aos="fade-up"
               >
                 L'école qui révèle{" "}
-                <span className="text-gradient animate-gradient-shift">les talents</span>{" "}
+                <span className="text-gradient animate-gradient-shift">
+                  les talents
+                </span>{" "}
                 de demain.
               </h1>
               <p
@@ -48,8 +68,9 @@ function Home() {
                 data-aos="fade-up"
                 data-aos-delay="100"
               >
-                Wasomi propose des formations innovantes, un encadrement de pointe
-                et un environnement immersif pour transformer la curiosité en expertise.
+                Wasomi propose des formations innovantes, un encadrement de
+                pointe et un environnement immersif pour transformer la
+                curiosité en expertise.
               </p>
               <div
                 className="mt-8 flex flex-wrap gap-3"
@@ -82,8 +103,12 @@ function Home() {
                   { v: "25+", l: "Formations" },
                 ].map((s) => (
                   <div key={s.l}>
-                    <div className="font-display text-3xl font-bold text-gradient">{s.v}</div>
-                    <div className="text-xs text-muted-foreground mt-1">{s.l}</div>
+                    <div className="font-display text-3xl font-bold text-gradient">
+                      {s.v}
+                    </div>
+                    <div className="text-xs text-muted-foreground mt-1">
+                      {s.l}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -95,18 +120,43 @@ function Home() {
               <div className="relative grid grid-cols-2 gap-4">
                 <div className="space-y-4">
                   <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-elegant animate-float">
-                    <img src="/gallerie/equipement_1.jpg" alt="" className="size-full object-cover" />
+                    <img
+                      src="/gallerie/equipement_1.jpg"
+                      alt=""
+                      className="size-full object-cover"
+                    />
                   </div>
-                  <div className="aspect-square rounded-2xl overflow-hidden shadow-elegant animate-float" style={{ animationDelay: "1.5s" }}>
-                    <img src="/gallerie/realisation.jpg" alt="" className="size-full object-cover" />
+                  <div
+                    className="aspect-square rounded-2xl overflow-hidden shadow-elegant animate-float"
+                    style={{ animationDelay: "1.5s" }}
+                  >
+                    <img
+                      src="/gallerie/realisation.jpg"
+                      alt=""
+                      className="size-full object-cover"
+                    />
                   </div>
                 </div>
                 <div className="space-y-4 pt-12">
-                  <div className="aspect-square rounded-2xl overflow-hidden shadow-elegant animate-float" style={{ animationDelay: "0.7s" }}>
-                    <img src="/gallerie/campus_1.jpg" alt="" className="size-full object-cover" />
+                  <div
+                    className="aspect-square rounded-2xl overflow-hidden shadow-elegant animate-float"
+                    style={{ animationDelay: "0.7s" }}
+                  >
+                    <img
+                      src="/gallerie/campus_1.jpg"
+                      alt=""
+                      className="size-full object-cover"
+                    />
                   </div>
-                  <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-elegant animate-float" style={{ animationDelay: "2.2s" }}>
-                    <img src="/gallerie/labo_3.jpg" alt="" className="size-full object-cover" />
+                  <div
+                    className="aspect-[3/4] rounded-2xl overflow-hidden shadow-elegant animate-float"
+                    style={{ animationDelay: "2.2s" }}
+                  >
+                    <img
+                      src="/gallerie/labo_3.jpg"
+                      alt=""
+                      className="size-full object-cover"
+                    />
                   </div>
                 </div>
               </div>
@@ -124,10 +174,26 @@ function Home() {
         />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
-            { icon: BookOpen, title: "Programmes innovants", desc: "Cursus actualisés en continu avec les pros du secteur." },
-            { icon: Users, title: "Encadrement humain", desc: "Un mentor dédié pour chaque parcours étudiant." },
-            { icon: Rocket, title: "Projets concrets", desc: "Apprendre par la pratique sur des cas réels." },
-            { icon: Trophy, title: "Excellence reconnue", desc: "Diplôme certifié et alumni partout dans le monde." },
+            {
+              icon: BookOpen,
+              title: "Programmes innovants",
+              desc: "Cursus actualisés en continu avec les pros du secteur.",
+            },
+            {
+              icon: Users,
+              title: "Encadrement humain",
+              desc: "Un mentor dédié pour chaque parcours étudiant.",
+            },
+            {
+              icon: Rocket,
+              title: "Projets concrets",
+              desc: "Apprendre par la pratique sur des cas réels.",
+            },
+            {
+              icon: Trophy,
+              title: "Excellence reconnue",
+              desc: "Diplôme certifié et alumni partout dans le monde.",
+            },
           ].map((f, i) => (
             <div
               key={f.title}
@@ -140,8 +206,12 @@ function Home() {
                 <div className="size-12 rounded-xl bg-gradient-primary flex items-center justify-center shadow-glow mb-4 group-hover:scale-110 transition-spring">
                   <f.icon className="size-6 text-primary-foreground" />
                 </div>
-                <h3 className="font-display font-semibold text-lg mb-2">{f.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
+                <h3 className="font-display font-semibold text-lg mb-2">
+                  {f.title}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {f.desc}
+                </p>
               </div>
             </div>
           ))}
@@ -155,7 +225,10 @@ function Home() {
           title="La vie au campus Wasomi"
           description="Découvrez nos espaces, nos événements et les réalisations de nos étudiants."
         />
-        <Gallery items={galleryItems.slice(0, 6)} categories={galleryCategories} />
+        <Gallery
+          items={galleryItems.slice(0, 6)}
+          categories={galleryCategories}
+        />
         <div className="mt-12 text-center" data-aos="fade-up">
           <Link
             to="/galerie"
@@ -176,9 +249,21 @@ function Home() {
           />
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              { name: "Aline K.", role: "Ir en Reseau Informatique", text: "L'accompagnement est exceptionnel. Les eleves apprenes les bases necessaires pour mieux evoluer." },
-              { name: "Joseph M.", role: "Dev Full-Stack", text: "Les projets concrets m'ont préparé au monde réel mieux que n'importe quel cours théorique." },
-              { name: "Sarah L.", role: "Couturier Professionel", text: "Une communauté soudée, des profs passionnés. Une vraie famille." },
+              {
+                name: "Aline K.",
+                role: "Ir en Reseau Informatique",
+                text: "L'accompagnement est exceptionnel. Les eleves apprenes les bases necessaires pour mieux evoluer.",
+              },
+              {
+                name: "Joseph M.",
+                role: "Dev Full-Stack",
+                text: "Les projets concrets m'ont préparé au monde réel mieux que n'importe quel cours théorique.",
+              },
+              {
+                name: "Sarah L.",
+                role: "Couturier Professionel",
+                text: "Une communauté soudée, des profs passionnés. Une vraie famille.",
+              },
             ].map((t, i) => (
               <div
                 key={t.name}
@@ -188,7 +273,10 @@ function Home() {
               >
                 <div className="flex gap-0.5 mb-4">
                   {Array.from({ length: 5 }).map((_, j) => (
-                    <Star key={j} className="size-4 fill-primary text-primary" />
+                    <Star
+                      key={j}
+                      className="size-4 fill-primary text-primary"
+                    />
                   ))}
                 </div>
                 <p className="text-sm leading-relaxed mb-6">"{t.text}"</p>
@@ -198,7 +286,9 @@ function Home() {
                   </div>
                   <div>
                     <div className="font-semibold text-sm">{t.name}</div>
-                    <div className="text-xs text-muted-foreground">{t.role}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {t.role}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -220,7 +310,8 @@ function Home() {
               Prêt à rejoindre l'aventure ?
             </h2>
             <p className="mt-4 text-primary-foreground/90 max-w-xl mx-auto">
-              Candidatez en quelques minutes et donnez un nouvel élan à votre avenir.
+              Candidatez en quelques minutes et donnez un nouvel élan à votre
+              avenir.
             </p>
             <Link
               to="/contact"
