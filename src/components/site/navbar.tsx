@@ -127,13 +127,17 @@ export function Navbar() {
                 style={{ transitionDelay: open ? `${i * 40}ms` : "0ms" }}
                 className={cn(
                   "transition-smooth",
-                  open ? "translate-x-0 opacity-100" : "-translate-x-4 opacity-0",
+                  open
+                    ? "translate-x-0 opacity-100"
+                    : "-translate-x-4 opacity-0",
                 )}
               >
                 <Link
                   to={l.to}
                   className="block px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-surface-elevated transition-smooth"
-                  activeProps={{ className: "!text-foreground bg-surface-elevated" }}
+                  activeProps={{
+                    className: "!text-foreground bg-surface-elevated",
+                  }}
                   activeOptions={{ exact: l.to === "/" }}
                 >
                   {l.label}

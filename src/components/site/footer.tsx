@@ -1,5 +1,14 @@
 import { Link } from "@tanstack/react-router";
-import { GraduationCap, Mail, Phone, MapPin, Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
+import {
+  GraduationCap,
+  Mail,
+  Phone,
+  MapPin,
+  Facebook,
+  Instagram,
+  Linkedin,
+  Twitter,
+} from "lucide-react";
 
 export function Footer() {
   return (
@@ -95,8 +104,12 @@ export function Footer() {
         <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
           <p>© {new Date().getFullYear()} Wasomi. Tous droits réservés.</p>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-foreground transition-smooth">Mentions légales</a>
-            <a href="#" className="hover:text-foreground transition-smooth">Confidentialité</a>
+            <a href="#" className="hover:text-foreground transition-smooth">
+              Mentions légales
+            </a>
+            <a href="#" className="hover:text-foreground transition-smooth">
+              Confidentialité
+            </a>
           </div>
         </div>
       </div>

@@ -1,5 +1,12 @@
 import { useEffect, useState, useCallback } from "react";
-import { X, ChevronLeft, ChevronRight, Maximize2, Heart, Share2 } from "lucide-react";
+import {
+  X,
+  ChevronLeft,
+  ChevronRight,
+  Maximize2,
+  Heart,
+  Share2,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { GalleryItem } from "@/data/gallery";
 
@@ -12,10 +19,13 @@ export function Gallery({ items, categories }: Props) {
   const [filter, setFilter] = useState<string>("Tous");
   const [lightbox, setLightbox] = useState<number | null>(null);
 
-  const filtered = (filter === "Tous" ? items : items.filter((i) => i.category === filter))
+  const filtered = (
+    filter === "Tous" ? items : items.filter((i) => i.category === filter)
+  )
     .slice()
     .sort((a, b) => {
-      const featuredScore = Number(Boolean(b.featured)) - Number(Boolean(a.featured));
+      const featuredScore =
+        Number(Boolean(b.featured)) - Number(Boolean(a.featured));
       if (featuredScore !== 0) return featuredScore;
       return (b.visualPriority ?? 0) - (a.visualPriority ?? 0);
     });
@@ -85,7 +95,14 @@ export function Gallery({ items, categories }: Props) {
             )}
             onClick={() => setLightbox(idx)}
           >
-            <div className={cn("relative overflow-hidden", item.featured ? "aspect-[16/10] lg:aspect-auto lg:h-full" : "aspect-[4/3]")}>
+            <div
+              className={cn(
+                "relative overflow-hidden",
+                item.featured
+                  ? "aspect-[16/10] lg:aspect-auto lg:h-full"
+                  : "aspect-[4/3]",
+              )}
+            >
               <img
                 src={item.src}
                 alt={item.title}
@@ -100,11 +117,14 @@ export function Gallery({ items, categories }: Props) {
               {/* Top actions */}
               <div className="absolute top-4 right-4 flex gap-2 opacity-0 -translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-spring">
                 <button
-                  onClick={(e) => { e.stopPropagation(); }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
                   aria-label="Aimer"
                   className="gap-1 px-1 rounded-full glass flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-smooth"
                 >
-                  <Heart className="size-4" /> <span >{item.likes !== undefined ? item.likes : 0}</span>
+                  <Heart className="size-4" />{" "}
+                  <span>{item.likes !== undefined ? item.likes : 0}</span>
                 </button>
                 {/* <button
                   onClick={(e) => { e.stopPropagation(); }}
@@ -114,7 +134,9 @@ export function Gallery({ items, categories }: Props) {
                   <Heart className="size-4" /> <span >{item.comment !== undefined ? item.comment : 0}</span>
                 </button> */}
                 <button
-                  onClick={(e) => { e.stopPropagation(); }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
                   aria-label="Partager"
                   className="size-9 rounded-full glass flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-smooth"
                 >
@@ -165,14 +187,20 @@ export function Gallery({ items, categories }: Props) {
           </button>
           <button
             aria-label="Précédent"
-            onClick={(e) => { e.stopPropagation(); prev(); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              prev();
+            }}
             className="absolute left-4 md:left-8 size-12 rounded-full glass flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-smooth z-10"
           >
             <ChevronLeft className="size-5" />
           </button>
           <button
             aria-label="Suivant"
-            onClick={(e) => { e.stopPropagation(); next(); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              next();
+            }}
             className="absolute right-4 md:right-8 size-12 rounded-full glass flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-smooth z-10"
           >
             <ChevronRight className="size-5" />
