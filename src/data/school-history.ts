@@ -1,3 +1,5 @@
+import GradiationCap, { Library, LucideIcon, Microscope, Trees } from 'lucide-react'
+import { GraduationCap } from 'lucide-react';
 /**
  * School history configuration
  * Centralized metadata for the history section
@@ -17,7 +19,7 @@ export interface SchoolHistoryConfig {
     details?: string;
   }[];
   keyAchievements: {
-    icon: string;
+    icon: LucideIcon;
     title: string;
     description: string;
     stats?: string;
@@ -71,27 +73,27 @@ export const schoolHistoryConfig: SchoolHistoryConfig = {
   ],
   keyAchievements: [
     {
-      icon: "🎓",
+      icon: GraduationCap,
       title: "Excellence académique",
       description:
         "Tous nos finalistes ont réussi à l'examen nationale de fin d'étude primaire",
       stats: "100%",
     },
     {
-      icon: "📚",
+      icon: Library,
       title: "Approche bilingue",
       description: "Enseignement en français et anglais dès la maternelle",
       stats: "2 langues",
     },
     {
-      icon: "🌱",
+      icon: Trees,
       title: "Environnement naturel",
       description:
         "Bâtiment dans un milieu naturel favorisant l'épanouissement",
       stats: "Premium",
     },
     {
-      icon: "🔬",
+      icon: Microscope,
       title: "Infrastructure complète",
       description: "Bibliothèque, laboratoire, salle informatique",
       stats: "3 espaces",

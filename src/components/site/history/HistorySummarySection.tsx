@@ -8,7 +8,16 @@ interface HistorySummarySectionProps {
   config: SchoolHistoryConfig;
 }
 
+const colorPalette = [
+  { bg: "from-blue-500 to-cyan-500", text: "text-blue-600 dark:text-blue-400" },
+  { bg: "from-purple-500 to-pink-500", text: "text-purple-600 dark:text-purple-400" },
+  { bg: "from-green-500 to-emerald-500", text: "text-green-600 dark:text-green-400" },
+  { bg: "from-orange-500 to-red-500", text: "text-orange-600 dark:text-orange-400" },
+];
+
 export function HistorySummarySection({ config }: HistorySummarySectionProps) {
+  const getColorForIndex = (index: number) => colorPalette[index % colorPalette.length];
+
   return (
     <section className="py-20 container mx-auto px-4 max-w-7xl">
       {/* Section Title */}
@@ -51,36 +60,39 @@ export function HistorySummarySection({ config }: HistorySummarySectionProps) {
           ))}
         </div>
       </div>
-
       {/* Key Achievements */}
       <div>
         <h3 className="font-display text-2xl font-bold mb-8 text-center">
           Nos réalisations
         </h3>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {config.keyAchievements.map((achievement, i) => (
-            <div
-              key={achievement.title}
-              data-aos="zoom-in"
-              data-aos-delay={i * 100}
-              className="p-6 rounded-2xl glass border border-gradient/20 hover:shadow-glow transition-all hover:scale-105 group text-center"
-            >
-              <div className="text-4xl mb-4 group-hover:scale-125 transition-transform origin-center">
-                {achievement.icon}
-              </div>
-              <h4 className="font-display font-semibold mb-2 group-hover:text-gradient transition-colors">
-                {achievement.title}
-              </h4>
-              <p className="text-muted-foreground text-sm mb-3">
-                {achievement.description}
-              </p>
-              {achievement.stats && (
-                <div className="text-2xl font-bold text-gradient">
-                  {achievement.stats}
+          {config.keyAchievements.map((achievement, i) => {
+            const color = getColorForIndex(i);
+            const IconComponent = achievement.icon;
+            return (
+              <div
+                key={achievement.title}
+                data-aos="zoom-in"
+                data-aos-delay={i * 100}
+                className="p-6 rounded-2xl glass border border-gradient/20 hover:shadow-glow transition-all hover:scale-105 group text-center"
+              >
+                <div className={`size-16 mx-auto rounded-xl bg-gradient-to-br ${color.bg} flex items-center justify-center shadow-glow mb-4 group-hover:scale-125 transition-transform`}>
+                  <IconComponent className="size-8 text-white" />
                 </div>
-              )}
-            </div>
-          ))}
+                <h4 className="font-display font-semibold mb-2 group-hover:text-gradient transition-colors">
+                  {achievement.title}
+                </h4>
+                <p className="text-muted-foreground text-sm mb-3">
+                  {achievement.description}
+                </p>
+                {achievement.stats && (
+                  <div className="text-2xl font-bold text-gradient">
+                    {achievement.stats}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
