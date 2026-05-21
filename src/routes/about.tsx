@@ -84,7 +84,7 @@ function AboutPage() {
             </p>
           </div>
         </div>
-
+{/* 
         <SectionHeading eyebrow="Nos valeurs" title="Ce qui nous anime" />
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
@@ -124,7 +124,7 @@ function AboutPage() {
               <p className="text-sm text-muted-foreground">{v.desc}</p>
             </div>
           ))}
-        </div>
+        </div> */}
       </section>
 
       {/* History Summary Section */}
