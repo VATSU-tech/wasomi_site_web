@@ -131,7 +131,7 @@ function Home() {
                     style={{ animationDelay: "1.5s" }}
                   >
                     <img
-                      src="/gallerie/realisation.jpg"
+                      src="/gallerie/IMG-20260519-WA0069.jpg"
                       alt=""
                       className="size-full object-cover"
                     />
@@ -143,7 +143,7 @@ function Home() {
                     style={{ animationDelay: "0.7s" }}
                   >
                     <img
-                      src="/gallerie/campus_1.jpg"
+                      src="/gallerie/IMG-20260519-WA0028.jpg"
                       alt=""
                       className="size-full object-cover"
                     />
@@ -153,7 +153,7 @@ function Home() {
                     style={{ animationDelay: "2.2s" }}
                   >
                     <img
-                      src="/gallerie/labo_3.jpg"
+                      src="/gallerie/laureat lipanda fiesta.jpg"
                       alt=""
                       className="size-full object-cover"
                     />
