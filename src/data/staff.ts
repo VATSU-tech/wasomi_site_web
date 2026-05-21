@@ -1,6 +1,6 @@
 export type StaffCategory =
-  | "Direction générale"
   | "Administration"
+  | "Direction générale"
   | "Enseignants principaux"
   | "Assistants"
   | "Personnel technique"
@@ -23,8 +23,8 @@ export interface StaffMember {
 }
 
 export const staffCategoryOrder: StaffCategory[] = [
-  "Direction générale",
   "Administration",
+  "Direction générale",
   "Enseignants principaux",
   "Assistants",
   "Personnel technique",
@@ -45,10 +45,25 @@ export const staffMembers: StaffMember[] = [
     facebook: "#",
     linkedin: "#",
     whatsapp: "#",
-    order: 1,
+    order: 0,
   },
   {
     id: 2,
+    name: "Joachim Mbayahi",
+    role: "Directeur primaire",
+    category: "Direction générale",
+    qualification: "Direction pédagogique - Primaire",
+    bio: "Encadre l'organisation et la qualité pédagogique de la section primaire.",
+    image: "/personnel/Joachim mbayahi directeur_primaire.jpeg",
+    email: "mailto:contact@wasomi.cd",
+    phone: "tel:+243000000002",
+    facebook: "#",
+    linkedin: "#",
+    whatsapp: "#",
+    order: 1,
+  },
+  {
+    id: 3,
     name: "Fazila Muhima",
     role: "Directrice maternelle",
     category: "Direction générale",
@@ -63,7 +78,7 @@ export const staffMembers: StaffMember[] = [
     order: 1,
   },
   {
-    id: 3,
+    id: 4,
     name: "Christine Vayunda",
     role: "Enseignante 1ère maternelle",
     category: "Enseignants principaux",
@@ -78,7 +93,7 @@ export const staffMembers: StaffMember[] = [
     order: 1,
   },
   {
-    id: 4,
+    id: 5,
     name: "Divine",
     role: "Encadreuse crèche",
     category: "Assistants",
@@ -93,7 +108,7 @@ export const staffMembers: StaffMember[] = [
     order: 1,
   },
   {
-    id: 5,
+    id: 6,
     name: "Roger",
     role: "Enseignant 4ème primaire",
     category: "Enseignants principaux",
@@ -108,7 +123,7 @@ export const staffMembers: StaffMember[] = [
     order: 2,
   },
   {
-    id: 6,
+    id: 7,
     name: "Lydie Carol",
     role: "Enseignante 1ère primaire",
     category: "Enseignants principaux",
@@ -123,7 +138,7 @@ export const staffMembers: StaffMember[] = [
     order: 3,
   },
   {
-    id: 7,
+    id: 8,
     name: "Fidele Mahitiko",
     role: "Enseignant 3ème primaire",
     category: "Enseignants principaux",
@@ -138,7 +153,7 @@ export const staffMembers: StaffMember[] = [
     order: 4,
   },
   {
-    id: 8,
+    id: 9,
     name: "Jean Baptiste Kapikani",
     role: "Enseignant 5ème primaire",
     category: "Enseignants principaux",
@@ -153,7 +168,7 @@ export const staffMembers: StaffMember[] = [
     order: 5,
   },
   {
-    id: 9,
+    id: 10,
     name: "Moise Kiberiti",
     role: "Enseignant 6ème primaire",
     category: "Enseignants principaux",

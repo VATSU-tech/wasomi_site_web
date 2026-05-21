@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Linkedin, Twitter, Mail } from "lucide-react";
+import { Linkedin, Twitter, Mail, MessageCircleCheck } from "lucide-react";
 import {
   staffCategoryOrder,
   staffMembers,
@@ -93,7 +93,7 @@ function StaffCard({ member, delay }: { member: StaffMember; delay: number }) {
           <div className="flex gap-2 mt-4 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-spring">
             {[
               {
-                icon: Linkedin,
+                icon: MessageCircleCheck,
                 href: member.linkedin,
                 label: `LinkedIn de ${member.name}`,
               },
