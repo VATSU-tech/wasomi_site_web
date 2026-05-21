@@ -51,20 +51,20 @@ function ContactPage() {
               {
                 icon: MapPin,
                 title: "Adresse",
-                value: "123 Avenue de l'Éducation, Kinshasa",
+                value: "5 Rue Sivirwa Q.Residentiel, C.Bungulu, Beni",
                 link: "https://maps.app.goo.gl/B5W7Stfqe8WuNYVF9",
               },
               {
                 icon: Phone,
                 title: "Téléphone",
-                value: "+243 000 000 000",
-                link: "tel:+243000000000",
+                value: "+243 997 742 651",
+                link: "tel:+243997742651",
               },
               {
                 icon: Mail,
                 title: "Email",
-                value: "contact@wasomi.school",
-                link: "mailto:contact@wasomi.school",
+                value: "cswasomi@gmail.com",
+                link: "mailto:cswasomi@gmail.com",
               },
             ].map((c) => (
               <a

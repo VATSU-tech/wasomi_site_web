@@ -67,15 +67,31 @@ export function Footer() {
             <ul className="space-y-3 text-sm text-muted-foreground">
               <li className="flex items-start gap-2">
                 <MapPin className="size-4 mt-0.5 text-primary shrink-0" />
-                <span>123 Rue Sivirwa, Q.redidenciel C.Bungulu V.beni</span>
+                <a
+                  href="https://maps.app.goo.gl/B5W7Stfqe8WuNYVF9"
+                  target="_blank"
+                  className="hover:text-foreground transition-smooth"
+                >
+                  5 Rue Sivirwa Q.Residentiel, C.Bungulu, Beni
+                </a>
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="size-4 text-primary shrink-0" />
-                <span>+243 000 000 000</span>
+                <a
+                  href="tel:+243997742651"
+                  className="hover:text-foreground transition-smooth"
+                >
+                  +243 997 742 651
+                </a>
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="size-4 text-primary shrink-0" />
-                <span>contact@wasomi.school</span>
+                <a
+                  href="mailto:cswasomi@gmail.com"
+                  className="hover:text-foreground transition-smooth"
+                >
+                  cswasomi@gmail.com
+                </a>
               </li>
             </ul>
           </div>
