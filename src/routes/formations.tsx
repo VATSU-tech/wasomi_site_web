@@ -39,6 +39,7 @@ export const Route = createFileRoute("/formations")({
 const formations = [
   {
     icon: Baby,
+    image: "/gallerie/IMG-20260519-WA0016.jpg",
     title: "Creche",
     duration: "4 ans",
     students: "10+",
@@ -47,6 +48,7 @@ const formations = [
   },
   {
     icon: Blocks,
+    image: "/gallerie/formation_maternelle.jpg",
     title: "Maternelle",
     duration: "3 ans",
     students: "20+",
@@ -55,6 +57,7 @@ const formations = [
   },
   {
     icon: BookOpen,
+    image: "/gallerie/IMG-20260519-WA0021.jpg",
     title: "Primaire",
     duration: "6 ans",
     students: "60+",
@@ -63,6 +66,7 @@ const formations = [
   },
   {
     icon: GraduationCap,
+    image: "/gallerie/realisation.jpg",
     title: "Education de base",
     duration: "2 ans",
     students: "35+",
@@ -71,6 +75,7 @@ const formations = [
   },
   {
     icon: Code2,
+    image: "/gallerie/labo_3.jpg",
     title: "Bases de la domotique",
     duration: "2 ans",
     students: "20+",
@@ -79,6 +84,7 @@ const formations = [
   },
   {
     icon: Microscope,
+    image: "/gallerie/IMG-20260519-WA0068.jpg",
     title: "Bases de la chimie",
     duration: "2 ans",
     students: "20+",
@@ -116,39 +122,50 @@ function FormationsPage() {
               key={f.title}
               data-aos="fade-up"
               data-aos-delay={(i % 3) * 80}
-              className="group relative p-6 rounded-2xl glass hover:shadow-glow transition-smooth hover:-translate-y-2 overflow-hidden"
+              className="group relative overflow-hidden rounded-2xl bg-card shadow-elegant transition-spring hover:-translate-y-2 hover:shadow-glow"
             >
-              <div
-                className={`absolute -top-20 -right-20 size-48 rounded-full bg-gradient-to-br ${f.color} opacity-20 group-hover:opacity-40 blur-2xl transition-smooth`}
-              />
-              <div className="relative transition-smooth">
+              <div className="relative h-[420px] overflow-hidden">
                 <div
-                  className={`size-14 rounded-xl bg-gradient-to-br ${f.color} flex items-center justify-center shadow-glow mb-5 group-hover:scale-110 group-hover:rotate-3 transition-spring`}
-                >
-                  <f.icon className="size-7 text-white" />
+                  className="absolute inset-0 bg-cover bg-center transition-spring group-hover:scale-110"
+                  style={{
+                    backgroundImage: `url(${f.image})`,
+                  }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+                <div className="absolute inset-0 bg-black/20" />
+                <div
+                  className={`absolute -right-20 -top-20 size-52 rounded-full bg-gradient-to-br ${f.color} opacity-20 blur-3xl transition-smooth group-hover:opacity-40`}
+                />
+                <div className="absolute inset-x-0 bottom-0 z-10 p-6">
+                  <div
+                    className={`mb-5 flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br ${f.color} shadow-glow transition-spring group-hover:scale-110 group-hover:rotate-3`}
+                  >
+                    <f.icon className="size-7 text-white" />
+                  </div>
+                  <h3 className="font-display text-2xl font-bold text-white">
+                    {f.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-white/80">
+                    {f.desc}
+                  </p>
+                  <div className="mt-4 flex items-center gap-4 text-xs text-white/70">
+                    <span className="inline-flex items-center gap-1">
+                      <Clock className="size-3.5" />
+                      {f.duration}
+                    </span>
+                    <span className="inline-flex items-center gap-1">
+                      <Users className="size-3.5" />
+                      {f.students}
+                    </span>
+                  </div>
+                  <Link
+                    to="/contact"
+                    className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary transition-all duration-300 group-hover:gap-3"
+                  >
+                    En savoir plus
+                    <ArrowRight className="size-4" />
+                  </Link>
                 </div>
-                <h3 className="font-display text-xl font-bold mb-2">
-                  {f.title}
-                </h3>
-                <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
-                  {f.desc}
-                </p>
-                <div className="flex items-center gap-4 text-xs text-muted-foreground mb-5">
-                  <span className="inline-flex items-center gap-1">
-                    <Clock className="size-3.5" />
-                    {f.duration}
-                  </span>
-                  <span className="inline-flex items-center gap-1">
-                    <Users className="size-3.5" />
-                    {f.students}
-                  </span>
-                </div>
-                <Link
-                  to="/contact"
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-primary group-hover:gap-3 transition-smooth"
-                >
-                  En savoir plus <ArrowRight className="size-4" />
-                </Link>
               </div>
             </article>
           ))}
