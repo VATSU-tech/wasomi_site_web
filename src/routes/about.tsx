@@ -54,7 +54,7 @@ function AboutPage() {
         </div>
       </section>
 
-      <section className="py-20 container mx-auto px-4 max-w-7xl">
+      <section className="py-5 container mx-auto px-4 max-w-7xl">
         <div className="grid lg:grid-cols-2 gap-12 items-center mb-24">
           <div data-aos="fade-right">
             <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-glow">

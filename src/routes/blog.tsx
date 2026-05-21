@@ -20,45 +20,49 @@ export const Route = createFileRoute("/blog")({
 const posts = [
   {
     title: "Rentrée 2025 : ce qui change",
-    date: "12 avr. 2025",
+    date: "12 Septembre 2025",
     category: "Actualités",
     excerpt: "Nouveaux programmes, nouveaux espaces, nouvelle énergie.",
-    img: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80",
+    img: "/gallerie/IMG-20260519-WA0002.jpg",
   },
   {
-    title: "5 conseils pour réussir son projet de fin d'année",
+    title: "5 conseils pour réussir ses examens scolaire",
     date: "28 mars 2025",
     category: "Conseils",
     excerpt: "Méthode, outils, état d'esprit : nos meilleures pratiques.",
-    img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80",
+    img: "/gallerie/IMG-20260519-WA0021.jpg",
   },
   {
-    title: "Hackathon Wasomi : retour sur l'édition 2024",
-    date: "15 mars 2025",
+    title: "Independance: lipanda fiesta chez wasomi",
+    date: "30 juin 2025",
     category: "Événement",
-    excerpt: "48h, 30 équipes, des projets incroyables.",
-    img: "https://images.unsplash.com/photo-1591115765373-5207764f72e7?auto=format&fit=crop&w=800&q=80",
+    excerpt:
+      "Competition, Jeux, Culture, a l'occasion de la fete d'indépendance.",
+    img: "/gallerie/festival lipanda fiesta.jpg",
   },
   {
-    title: "Témoignage : de stagiaire à Lead Designer",
+    title: "Labo science : inauguration de notre nouvel espace",
     date: "2 mars 2025",
-    category: "Alumni",
-    excerpt: "Le parcours inspirant de Sarah, promo 2021.",
-    img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80",
+    category: "Événement",
+    excerpt:
+      "inauguration de notre nouvel espace de laboratoire scientifique équipé des dernières technologies pour les expériences pratiques.",
+    img: "/gallerie/IMG-20260519-WA0067.jpg",
   },
   {
-    title: "L'IA dans nos cursus : notre approche",
+    title: "Visite a l'aeroport de mavivi : une experience inoubliable",
     date: "20 fév. 2025",
-    category: "Pédagogie",
-    excerpt: "Comment nous intégrons l'IA dans toutes nos formations.",
-    img: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800&q=80",
+    category: "Visite",
+    excerpt:
+      "Nos élèves ont eu la chance de visiter l'aéroport de Mavivi, découvrant les coulisses de l'aviation et les métiers passionnants du secteur.",
+    img: "/gallerie/sortie visite aeroport mavivi.jpg",
   },
   {
-    title: "Portes ouvertes : venez nous rencontrer",
-    date: "10 fév. 2025",
-    category: "Actualités",
-    excerpt: "Samedi 22 février, toute la journée.",
-    img: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80",
+    title: "Colonie de vacances : s'amuser et apprendre pendant les vacances",
+    date: "10 Aout 2025",
+    category: "Vaccances",
+    excerpt:
+      "Notre colonie de vacances offre une expérience enrichissante où les enfants peuvent s'amuser tout en développant de nouvelles compétences à travers des activités ludiques et éducatives.",
+    img: "gallerie/colonie de vaccances.jpg",
   },
 ];
 
