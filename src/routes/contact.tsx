@@ -52,13 +52,26 @@ function ContactPage() {
                 icon: MapPin,
                 title: "Adresse",
                 value: "123 Avenue de l'Éducation, Kinshasa",
+                link: "https://maps.app.goo.gl/B5W7Stfqe8WuNYVF9",
               },
-              { icon: Phone, title: "Téléphone", value: "+243 000 000 000" },
-              { icon: Mail, title: "Email", value: "contact@wasomi.school" },
+              {
+                icon: Phone,
+                title: "Téléphone",
+                value: "+243 000 000 000",
+                link: "tel:+243000000000",
+              },
+              {
+                icon: Mail,
+                title: "Email",
+                value: "contact@wasomi.school",
+                link: "mailto:contact@wasomi.school",
+              },
             ].map((c) => (
-              <div
+              <a
                 key={c.title}
-                className="p-5 rounded-2xl glass hover:shadow-glow transition-spring flex items-start gap-4"
+                href={c.link}
+                target="_blank"
+                className="p-5 rounded-2xl glass hover:shadow-glow hover:border-primary transition-spring flex items-start gap-4"
               >
                 <div className="size-11 rounded-xl bg-gradient-primary flex items-center justify-center shadow-glow shrink-0">
                   <c.icon className="size-5 text-primary-foreground" />
@@ -69,7 +82,7 @@ function ContactPage() {
                   </div>
                   <div className="font-medium mt-1">{c.value}</div>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
 
