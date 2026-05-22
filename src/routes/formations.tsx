@@ -62,8 +62,8 @@ type FormationDetail = {
     secondInstallment: string;
     thirdInstallment: string;
   };
-  options: string[];
-  usefulInfos: string[];
+  // options: string[];
+  // usefulInfos: string[];
   schedule: {
     arrivalTime: string;
     classStart: string;
@@ -101,12 +101,12 @@ const formations: FormationDetail[] = [
       ...sharedFees,
       cycle: "Cycle complet",
     },
-    options: ["Éveil sensoriel", "Premières notions de langage", "Activités motrices"],
-    usefulInfos: [
-      "Suivi pédagogique individualisé",
-      "Encadrement rapproché et sécurisé",
-      "Communication régulière avec les parents",
-    ],
+    // options: ["Éveil sensoriel", "Premières notions de langage", "Activités motrices"],
+    // usefulInfos: [
+    //   "Suivi pédagogique individualisé",
+    //   "Encadrement rapproché et sécurisé",
+    //   "Communication régulière avec les parents",
+    // ],
     schedule: {
       arrivalTime: "07h00 - 07h30",
       classStart: "07h30",
@@ -132,12 +132,12 @@ const formations: FormationDetail[] = [
       ...sharedFees,
       cycle: "Cycle complet",
     },
-    options: ["Expression orale et artistique", "Initiation au calcul", "Jeux éducatifs"],
-    usefulInfos: [
-      "Classes adaptées à l'âge des enfants",
-      "Progression pédagogique par compétence",
-      "Activités d'éveil culturel et citoyen",
-    ],
+    // options: ["Expression orale et artistique", "Initiation au calcul", "Jeux éducatifs"],
+    // usefulInfos: [
+    //   "Classes adaptées à l'âge des enfants",
+    //   "Progression pédagogique par compétence",
+    //   "Activités d'éveil culturel et citoyen",
+    // ],
     schedule: {
       arrivalTime: "07h00 - 07h30",
       classStart: "07h30",
@@ -163,12 +163,12 @@ const formations: FormationDetail[] = [
       ...sharedFees,
       cycle: "1ère en 6ème année",
     },
-    options: ["Français et mathématiques renforcés", "Sciences et découverte", "Activités sportives"],
-    usefulInfos: [
-      "Évaluations continues pendant l'année",
-      "Suivi des performances par trimestre",
-      "Accompagnement à la méthode de travail",
-    ],
+    // options: ["Français et mathématiques renforcés", "Sciences et découverte", "Activités sportives"],
+    // usefulInfos: [
+    //   "Évaluations continues pendant l'année",
+    //   "Suivi des performances par trimestre",
+    //   "Accompagnement à la méthode de travail",
+    // ],
     schedule: {
       arrivalTime: "06h45 - 07h20",
       classStart: "07h30",
@@ -194,12 +194,12 @@ const formations: FormationDetail[] = [
       ...sharedFees,
       cycle: "7ème et 8ème année",
     },
-    options: ["Renforcement des compétences fondamentales", "Projet d'orientation", "Initiation numérique"],
-    usefulInfos: [
-      "Préparation à la transition vers le secondaire",
-      "Soutien académique en modules ciblés",
-      "Activités de responsabilisation et leadership",
-    ],
+    // options: ["Renforcement des compétences fondamentales", "Projet d'orientation", "Initiation numérique"],
+    // usefulInfos: [
+    //   "Préparation à la transition vers le secondaire",
+    //   "Soutien académique en modules ciblés",
+    //   "Activités de responsabilisation et leadership",
+    // ],
     schedule: {
       arrivalTime: "06h45 - 07h20",
       classStart: "07h30",
@@ -225,12 +225,12 @@ const formations: FormationDetail[] = [
       ...sharedFees,
       cycle: "Atelier complémentaire",
     },
-    options: ["Capteurs et automatismes", "Programmation embarquée", "Mini-projets pratiques"],
-    usefulInfos: [
-      "Accès au laboratoire selon planning",
-      "Travaux pratiques encadrés",
-      "Présentation de projet en fin de module",
-    ],
+    // options: ["Capteurs et automatismes", "Programmation embarquée", "Mini-projets pratiques"],
+    // usefulInfos: [
+    //   "Accès au laboratoire selon planning",
+    //   "Travaux pratiques encadrés",
+    //   "Présentation de projet en fin de module",
+    // ],
     schedule: {
       arrivalTime: "13h15 - 13h30",
       classStart: "13h30",
@@ -256,12 +256,12 @@ const formations: FormationDetail[] = [
       ...sharedFees,
       cycle: "Atelier complémentaire",
     },
-    options: ["Manipulations en laboratoire", "Sécurité expérimentale", "Méthodologie scientifique"],
-    usefulInfos: [
-      "Kit de laboratoire requis",
-      "Séances démonstratives encadrées",
-      "Rapports d'expérience évalués",
-    ],
+    // options: ["Manipulations en laboratoire", "Sécurité expérimentale", "Méthodologie scientifique"],
+    // usefulInfos: [
+    //   "Kit de laboratoire requis",
+    //   "Séances démonstratives encadrées",
+    //   "Rapports d'expérience évalués",
+    // ],
     schedule: {
       arrivalTime: "13h15 - 13h30",
       classStart: "13h30",
@@ -370,7 +370,7 @@ function FormationsPage() {
                           <p>3ème tranche: {f.fees.thirdInstallment}</p>
                         </div>
 
-                        <div className="grid gap-2 rounded-lg border p-4">
+                  {/*      <div className="grid gap-2 rounded-lg border p-4">
                           <p className="inline-flex items-center gap-2 font-semibold">
                             <CircleDot className="size-4 text-primary" /> Options disponibles
                           </p>
@@ -386,7 +386,7 @@ function FormationsPage() {
                           {f.usefulInfos.map((info) => (
                             <p key={info}>• {info}</p>
                           ))}
-                        </div>
+                        </div>*/}
 
                         <div className="grid gap-2 rounded-lg border p-4">
                           <p className="inline-flex items-center gap-2 font-semibold">
