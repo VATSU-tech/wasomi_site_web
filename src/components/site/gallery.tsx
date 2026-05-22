@@ -8,8 +8,6 @@ import {
   Share2,
   Download,
   Copy,
-  ZoomIn,
-  ZoomOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { GalleryItem } from "@/data/gallery";
@@ -34,8 +32,6 @@ export function Gallery({ items, categories }: Props) {
     () => (filter === "Tous" ? items : items.filter((i) => i.category === filter)),
     [filter, items],
   );
-
-  const currentItem = lightbox !== null ? filtered[lightbox] : null;
 
   const close = useCallback(() => {
     setLightbox(null);
@@ -101,7 +97,7 @@ export function Gallery({ items, categories }: Props) {
 
   const onShare = async (item: GalleryItem) => {
     const shareUrl = getShareUrl(item);
-    if (navigator.share) {
+    if (navigator.share && isMobile) {
       try {
         await navigator.share({ title: item.title, text: item.description, url: shareUrl });
         return;
@@ -179,88 +175,29 @@ export function Gallery({ items, categories }: Props) {
         })}
       </div>
 
-      {currentItem && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label={currentItem.title}
-          className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex items-center justify-center overflow-hidden animate-in fade-in duration-300"
-          onClick={close}
-        >
-          <button aria-label="Fermer" onClick={close} className="absolute top-4 right-4 size-12 rounded-full glass flex items-center justify-center z-20">
-            <X className="size-5" />
-          </button>
-          <button aria-label="Précédent" onClick={(e) => { e.stopPropagation(); prev(); }} className="absolute left-4 md:left-8 size-12 rounded-full glass flex items-center justify-center z-20">
-            <ChevronLeft className="size-5" />
-          </button>
-          <button aria-label="Suivant" onClick={(e) => { e.stopPropagation(); next(); }} className="absolute right-4 md:right-8 size-12 rounded-full glass flex items-center justify-center z-20">
-            <ChevronRight className="size-5" />
-          </button>
+      {lightbox !== null && filtered[lightbox] && (
+        <div role="dialog" aria-modal="true" aria-label={filtered[lightbox].title} className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-xl flex items-center justify-center p-4 animate-in fade-in duration-300" onClick={close}>
+          <button aria-label="Fermer" onClick={close} className="absolute top-4 right-4 size-12 rounded-full glass flex items-center justify-center z-10"><X className="size-5" /></button>
+          <button aria-label="Précédent" onClick={(e) => { e.stopPropagation(); prev(); }} className="absolute left-4 md:left-8 size-12 rounded-full glass flex items-center justify-center z-10"><ChevronLeft className="size-5" /></button>
+          <button aria-label="Suivant" onClick={(e) => { e.stopPropagation(); next(); }} className="absolute right-4 md:right-8 size-12 rounded-full glass flex items-center justify-center z-10"><ChevronRight className="size-5" /></button>
 
-          <div
-            className="relative h-dvh w-screen max-h-dvh max-w-screen overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
-            onTouchStart={(e) => (touchStartX.current = e.changedTouches[0].clientX)}
-            onTouchEnd={(e) => {
-              const sx = touchStartX.current;
-              if (sx === null) return;
-              const dx = e.changedTouches[0].clientX - sx;
-              if (dx > 60) prev();
-              if (dx < -60) next();
-              touchStartX.current = null;
-            }}
-          >
-            <div className="absolute inset-0 flex items-center justify-center p-4 md:p-10 lg:p-14">
-              <img
-                src={currentItem.src}
-                alt={currentItem.title}
-                className={cn(
-                  "max-h-full max-w-full object-contain select-none transition-transform duration-300",
-                  zoomed ? "scale-105 cursor-zoom-out" : "scale-100 cursor-zoom-in",
-                )}
-                onClick={() => setZoomed((z) => !z)}
-              />
+          <div className="max-w-7xl w-full max-h-[92vh] flex flex-col gap-4" onClick={(e) => e.stopPropagation()}>
+            <div className="relative rounded-2xl overflow-auto shadow-glow flex-1 min-h-0 bg-black" onTouchStart={(e) => (touchStartX.current = e.changedTouches[0].clientX)} onTouchEnd={(e) => { const sx = touchStartX.current; if (sx === null) return; const dx = e.changedTouches[0].clientX - sx; if (dx > 60) prev(); if (dx < -60) next(); touchStartX.current = null; }}>
+              <img src={filtered[lightbox].src} alt={filtered[lightbox].title} className={cn("mx-auto h-full w-full object-contain transition-transform duration-300", zoomed && "scale-125 cursor-zoom-out")} onClick={() => setZoomed((z) => !z)} />
             </div>
+          </div>
+        </div>
+      )}
 
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-black/80 via-black/35 to-transparent" />
-
-            <div className="absolute inset-x-3 bottom-3 md:inset-x-6 md:bottom-6 z-10">
-              <div className="pointer-events-auto rounded-2xl border border-white/15 bg-black/35 backdrop-blur-xl p-4 md:p-5 text-white shadow-elegant">
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div className="min-w-0">
-                    <span className="text-[11px] md:text-xs font-semibold uppercase tracking-widest text-primary-foreground/85">
-                      {currentItem.category}
-                    </span>
-                    <h3 className="font-display text-lg md:text-2xl font-bold mt-1 leading-tight">
-                      {currentItem.title}
-                    </h3>
-                    {currentItem.description && (
-                      <p className="text-sm text-white/85 mt-1 max-w-3xl line-clamp-2 md:line-clamp-none">
-                        {currentItem.description}
-                      </p>
-                    )}
-                    {!!currentItem.tags?.length && (
-                      <div className="mt-2 flex flex-wrap gap-1.5">
-                        {currentItem.tags.map((tag) => (
-                          <span key={tag} className="text-[11px] px-2 py-1 rounded-full bg-white/15 text-white/90">
-                            #{tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <button className="size-10 rounded-full bg-white/15 hover:bg-white/25 transition" onClick={() => setZoomed((z) => !z)} aria-label="Zoom">
-                      {zoomed ? <ZoomOut className="size-4 mx-auto" /> : <ZoomIn className="size-4 mx-auto" />}
-                    </button>
-                    <button className="size-10 rounded-full bg-white/15 hover:bg-white/25 transition" onClick={() => onShare(currentItem)} aria-label="Partager">
-                      <Share2 className="size-4 mx-auto" />
-                    </button>
-                  </div>
-                </div>
-                <div className="mt-2 text-xs text-white/70">{lightbox! + 1} / {filtered.length}</div>
-              </div>
+      {shareItem && (
+        <div className="fixed inset-0 z-[120] bg-black/70 flex items-center justify-center p-4" onClick={() => setShareItem(null)}>
+          <div className="w-full max-w-md glass rounded-2xl p-5" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-4"><h3 className="font-semibold">Partager l'image</h3><button onClick={() => setShareItem(null)}><X className="size-5" /></button></div>
+            <div className="flex gap-3 items-center mb-4"><img src={shareItem.src} alt={shareItem.title} className="size-16 rounded-lg object-cover" /><div><p className="font-medium text-sm">{shareItem.title}</p><p className="text-xs text-muted-foreground">{shareItem.category}</p></div></div>
+            <div className="text-xs break-all bg-muted rounded-lg p-2 mb-3">{getShareUrl(shareItem)}</div>
+            <div className="grid grid-cols-2 gap-2">
+              <button className="glass rounded-lg py-2 text-sm" onClick={async () => { await navigator.clipboard.writeText(getShareUrl(shareItem)); setCopied(true); setTimeout(() => setCopied(false), 1500); }}><Copy className="size-4 inline mr-1" />{copied ? "Copié" : "Copier"}</button>
+              <a className="glass rounded-lg py-2 text-sm text-center" href={shareItem.src} download><Download className="size-4 inline mr-1" />Télécharger</a>
             </div>
           </div>
         </div>
