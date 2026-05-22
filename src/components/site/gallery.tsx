@@ -57,11 +57,39 @@ export function Gallery({ items, categories }: Props) {
       if (e.key === "ArrowRight") next();
       if (e.key === "ArrowLeft") prev();
     };
+
+    const scrollY = window.scrollY;
+    const html = document.documentElement;
+    const body = document.body;
+
+    const previousHtmlOverflow = html.style.overflow;
+    const previousBodyOverflow = body.style.overflow;
+    const previousBodyPosition = body.style.position;
+    const previousBodyTop = body.style.top;
+    const previousBodyWidth = body.style.width;
+    const previousBodyTouchAction = body.style.touchAction;
+    const previousBodyOverscroll = body.style.overscrollBehavior;
+
+    html.style.overflow = "hidden";
+    body.style.overflow = "hidden";
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.width = "100%";
+    body.style.touchAction = "none";
+    body.style.overscrollBehavior = "none";
+
     window.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
+
     return () => {
       window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = "";
+      html.style.overflow = previousHtmlOverflow;
+      body.style.overflow = previousBodyOverflow;
+      body.style.position = previousBodyPosition;
+      body.style.top = previousBodyTop;
+      body.style.width = previousBodyWidth;
+      body.style.touchAction = previousBodyTouchAction;
+      body.style.overscrollBehavior = previousBodyOverscroll;
+      window.scrollTo(0, scrollY);
     };
   }, [lightbox, close, next, prev, shareItem]);
 
@@ -156,6 +184,20 @@ export function Gallery({ items, categories }: Props) {
           <div className="max-w-7xl w-full max-h-[92vh] flex flex-col gap-4" onClick={(e) => e.stopPropagation()}>
             <div className="relative rounded-2xl overflow-auto shadow-glow flex-1 min-h-0 bg-black" onTouchStart={(e) => (touchStartX.current = e.changedTouches[0].clientX)} onTouchEnd={(e) => { const sx = touchStartX.current; if (sx === null) return; const dx = e.changedTouches[0].clientX - sx; if (dx > 60) prev(); if (dx < -60) next(); touchStartX.current = null; }}>
               <img src={filtered[lightbox].src} alt={filtered[lightbox].title} className={cn("mx-auto h-full w-full object-contain transition-transform duration-300", zoomed && "scale-125 cursor-zoom-out")} onClick={() => setZoomed((z) => !z)} />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {shareItem && (
+        <div className="fixed inset-0 z-[120] bg-black/70 flex items-center justify-center p-4" onClick={() => setShareItem(null)}>
+          <div className="w-full max-w-md glass rounded-2xl p-5" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-4"><h3 className="font-semibold">Partager l'image</h3><button onClick={() => setShareItem(null)}><X className="size-5" /></button></div>
+            <div className="flex gap-3 items-center mb-4"><img src={shareItem.src} alt={shareItem.title} className="size-16 rounded-lg object-cover" /><div><p className="font-medium text-sm">{shareItem.title}</p><p className="text-xs text-muted-foreground">{shareItem.category}</p></div></div>
+            <div className="text-xs break-all bg-muted rounded-lg p-2 mb-3">{getShareUrl(shareItem)}</div>
+            <div className="grid grid-cols-2 gap-2">
+              <button className="glass rounded-lg py-2 text-sm" onClick={async () => { await navigator.clipboard.writeText(getShareUrl(shareItem)); setCopied(true); setTimeout(() => setCopied(false), 1500); }}><Copy className="size-4 inline mr-1" />{copied ? "Copié" : "Copier"}</button>
+              <a className="glass rounded-lg py-2 text-sm text-center" href={shareItem.src} download><Download className="size-4 inline mr-1" />Télécharger</a>
             </div>
           </div>
         </div>
