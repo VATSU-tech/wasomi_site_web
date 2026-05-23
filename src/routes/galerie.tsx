@@ -10,10 +10,10 @@ export const Route = createFileRoute("/galerie")({
       {
         name: "description",
         content:
-          "Explorez la vie du campus Wasomi : événements, réalisations étudiantes, équipements et espaces.",
+          "Explorez la vie chez Wasomi : événements, réalisations étudiantes, équipements et espaces.",
       },
       { property: "og:title", content: "Galerie — Wasomi" },
-      { property: "og:description", content: "La vie au campus en images." },
+      { property: "og:description", content: "La vie chez Wasomi en images." },
     ],
   }),
   component: GaleriePage,
@@ -42,7 +42,7 @@ function GaleriePage() {
             data-aos="fade-up"
             data-aos-delay="100"
           >
-            Plongez dans l'univers de notre école : campus, équipements,
+            Plongez dans l'univers de notre école : site scolaire, équipements,
             événements et réalisations.
           </p>
         </div>

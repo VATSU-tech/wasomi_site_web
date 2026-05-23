@@ -88,7 +88,7 @@ function Home() {
                   to="/galerie"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-xl glass font-semibold hover:shadow-glow transition-spring"
                 >
-                  Visiter le campus
+                  Visiter l'ecole
                 </Link>
               </div>
 
@@ -98,7 +98,7 @@ function Home() {
                 data-aos-delay="300"
               >
                 {[
-                  { v: "150+", l: "Étudiants" },
+                  { v: "150+", l: "Apprenants" },
                   { v: "98%", l: "Insertion" },
                   { v: "25+", l: "Formations" },
                 ].map((s) => (
@@ -132,7 +132,7 @@ function Home() {
                   >
                     <img
                       src="/gallerie/IMG-20260519-WA0069.jpg"
-                      alt=""
+                      alt=""aspect
                       className="size-full object-cover"
                     />
                   </div>
@@ -170,7 +170,7 @@ function Home() {
         <SectionHeading
           eyebrow="Pourquoi Wasomi"
           title="Une expérience d'apprentissage repensée"
-          description="Tout ce qu'il faut pour libérer le potentiel de chaque étudiant."
+          description="Tout ce qu'il faut pour libérer le potentiel de chaque apprenant."
         />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
@@ -182,7 +182,7 @@ function Home() {
             {
               icon: Users,
               title: "Encadrement humain",
-              desc: "Un mentor dédié pour chaque parcours étudiant.",
+              desc: "Un mentor dédié pour chaque parcours.",
             },
             {
               icon: Rocket,
@@ -222,8 +222,8 @@ function Home() {
       <section className="py-24 container mx-auto px-4 max-w-7xl">
         <SectionHeading
           eyebrow="En images"
-          title="La vie au campus Wasomi"
-          description="Découvrez nos espaces, nos événements et les réalisations de nos étudiants."
+          title="La vie au cs Wasomi"
+          description="Découvrez nos espaces, nos événements et les réalisations de nos apprenants."
         />
         <Gallery
           items={galleryItems.slice(0, 6)}

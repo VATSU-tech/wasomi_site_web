@@ -16,7 +16,7 @@ export type GalleryItem = {
 };
 
 export const galleryCategories = [
-  "Campus",
+  "Site scolaire",
   "Réalisations",
   "Équipement",
   "Vie scolaire",
@@ -27,8 +27,8 @@ export const galleryItems: GalleryItem[] = [
   {
     id: "1",
     src: s("vue-generale-campus-wasomi.jpg"),
-    title: "Vue du campus",
-    category: "Campus",
+    title: "Vue du Site scolaire",
+    category: "Site scolaire",
     description: "Pelouse centrale et bâtiments pédagogiques.",
     featured: true,
     likes: 18,
@@ -37,7 +37,7 @@ export const galleryItems: GalleryItem[] = [
     id: "2",
     src: s("cour-verte-rassemblement-eleves.jpg"),
     title: "Espace extérieur",
-    category: "Campus",
+    category: "Site scolaire",
     description: "Cour verte utilisée pour les rassemblements scolaires.",
     likes: 5,
   },
@@ -78,7 +78,7 @@ export const galleryItems: GalleryItem[] = [
   {
     id: "7",
     src: s("labo_eleve_1.jpg"),
-    title: "Étudiante en exercice",
+    title: "Élève en exercice",
     category: "Vie scolaire",
     description: "Pratique individuelle sur ordinateur portable.",
     likes: 15,
@@ -119,7 +119,7 @@ export const galleryItems: GalleryItem[] = [
   {
     id: "13",
     src: s("evenement_1.jpg"),
-    title: "Cérémonie sur le campus",
+    title: "Cérémonie sur le Site scolaire",
     category: "Événements",
     description: "Activité scolaire organisée en plein air.",
     likes: 23,

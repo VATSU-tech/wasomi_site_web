@@ -48,8 +48,8 @@ function AboutPage() {
             data-aos-delay="100"
           >
             Fondée en 2021, Wasomi est née d'une conviction simple : chaque
-            étudiant mérite une éducation qui révèle son potentiel unique.
-            Aujourd'hui, c'est plusieurs étudiants formés chez nous.
+            élève mérite une éducation qui révèle son potentiel unique.
+            Aujourd'hui, c'est plusieurs élèves formés chez nous.
           </p>
         </div>
       </section>
@@ -74,7 +74,7 @@ function AboutPage() {
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-4">
               Nous croyons en une pédagogie où l'humain est au centre. Chaque
-              étudiant est accompagné individuellement par un mentor, et nos
+              élève est accompagné individuellement par un mentor, et nos
               programmes sont conçus avec les entreprises pour garantir une
               employabilité maximale.
             </p>
