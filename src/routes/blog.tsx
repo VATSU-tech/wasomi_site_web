@@ -119,12 +119,12 @@ function BlogPage() {
                 <p className="text-sm text-muted-foreground leading-relaxed mb-4">
                   {p.excerpt}
                 </p>
-                <Link
+                {/* <Link
                   to="/blog"
                   className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary group-hover:gap-2.5 transition-smooth"
                 >
                   Lire l'article <ArrowRight className="size-4" />
-                </Link>
+                </Link> */}
               </div>
             </article>
           ))}
