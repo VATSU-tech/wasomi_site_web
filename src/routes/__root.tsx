@@ -8,6 +8,8 @@ import {
 
 import appCss from "../styles.css?url";
 import { ThemeProvider } from "@/components/theme-provider";
+import { AppQueryProvider } from '@/providers/query-provider';
+import { Toaster } from '@/components/ui/sonner';
 import { AosProvider } from "@/components/aos-provider";
 import { Navbar } from "@/components/site/navbar";
 import { Footer } from "@/components/site/footer";
@@ -96,6 +98,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
 function RootComponent() {
   return (
     <ThemeProvider>
+      <AppQueryProvider>
       <AosProvider>
         <div className="min-h-screen flex flex-col">
           <Navbar />
@@ -103,8 +106,10 @@ function RootComponent() {
             <Outlet />
           </main>
           <Footer />
+          <Toaster position='top-right' />
         </div>
       </AosProvider>
+      </AppQueryProvider>
     </ThemeProvider>
   );
 }
