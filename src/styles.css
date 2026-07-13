@@ -319,6 +319,35 @@
     background-position: 100% 50%;
   }
 }
+@keyframes scroll-dot {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(10px);
+    opacity: 0.2;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+@keyframes fade-in-delayed {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 15px);
+  }
+  50% {
+    opacity: 0;
+    transform: translate(-50%, 15px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
 .animate-float {
   animation: float 6s ease-in-out infinite;
 }
@@ -329,6 +358,141 @@
   background-size: 200% 200%;
   animation: gradient-shift 8s ease infinite;
 }
+.animate-scroll-dot {
+  animation: scroll-dot 1.8s ease-in-out infinite;
+}
+.animate-fade-in-delayed {
+  animation: fade-in-delayed 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Scroll Progress Bar */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-primary);
+  transform-origin: 0% 50%;
+  z-index: 100;
+  transform: scaleX(0);
+}
+
+@supports ((animation-timeline: scroll()) and (animation-range: 0% 100%)) {
+  .scroll-progress {
+    animation: scale-progress auto linear both;
+    animation-timeline: scroll(block root);
+  }
+}
+@keyframes scale-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Native Scroll-Driven Parallax and Animations */
+@supports ((animation-timeline: view()) and (animation-range: entry)) {
+  .parallax-blur-1 {
+    animation: parallax-blur-1-anim linear both;
+    animation-timeline: view();
+    animation-range: entry 100% exit 0%;
+  }
+  .parallax-blur-2 {
+    animation: parallax-blur-2-anim linear both;
+    animation-timeline: view();
+    animation-range: entry 100% exit 0%;
+  }
+  .parallax-grid-col-1 {
+    animation: parallax-col-1 linear both;
+    animation-timeline: view();
+    animation-range: entry 100% exit 0%;
+  }
+  .parallax-grid-col-2 {
+    animation: parallax-col-2 linear both;
+    animation-timeline: view();
+    animation-range: entry 100% exit 0%;
+  }
+}
+
+@keyframes parallax-blur-1-anim {
+  from {
+    transform: translateY(-40px) scale(0.95);
+  }
+  to {
+    transform: translateY(120px) scale(1.15);
+  }
+}
+@keyframes parallax-blur-2-anim {
+  from {
+    transform: translateY(60px) scale(1.1);
+  }
+  to {
+    transform: translateY(-100px) scale(0.9);
+  }
+}
+@keyframes parallax-col-1 {
+  from {
+    transform: translateY(40px);
+  }
+  to {
+    transform: translateY(-40px);
+  }
+}
+@keyframes parallax-col-2 {
+  from {
+    transform: translateY(-45px);
+  }
+  to {
+    transform: translateY(45px);
+  }
+}
+
+/* Premium Card Interactions */
+.card-premium {
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--transition-spring), border-color var(--transition-smooth), box-shadow var(--transition-smooth);
+  border: 1px solid color-mix(in oklab, var(--border) 60%, transparent);
+}
+.card-premium:hover {
+  transform: translateY(-6px) scale(1.02);
+  border-color: color-mix(in oklab, var(--primary) 40%, transparent);
+  box-shadow: var(--shadow-glow), var(--shadow-elegant);
+}
+.card-premium::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    color-mix(in oklab, var(--primary) 12%, transparent) 50%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  transition: transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1;
+  pointer-events: none;
+}
+.card-premium:hover::after {
+  transform: translateX(100%);
+}
+
+/* Smooth zoom on images */
+.image-zoom-container {
+  overflow: hidden;
+  position: relative;
+}
+.image-zoom-container img {
+  transition: transform 800ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.image-zoom-container:hover img {
+  transform: scale(1.08);
+}
+
 
 /* Skeleton loading */
 .skeleton-shimmer {
