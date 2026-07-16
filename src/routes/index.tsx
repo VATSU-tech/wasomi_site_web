@@ -13,6 +13,7 @@ import {
 import { SectionHeading } from "@/components/site/section-heading";
 import { Gallery } from "@/components/site/gallery";
 import { galleryItems, galleryCategories } from "@/data/gallery";
+import { CountUp } from "@/components/site/count-up";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -34,11 +35,11 @@ function Home() {
   return (
     <>
       {/* HERO */}
-      <section className="relative overflow-hidden bg-hero">
+      <section className="relative overflow-hidden bg-hero min-h-[90vh] flex items-center">
         <div className="absolute inset-0 bg-mesh pointer-events-none" />
-        <div className="absolute top-1/4 -left-32 size-96 rounded-full bg-primary/20 blur-3xl animate-float pointer-events-none" />
+        <div className="absolute top-1/4 -left-32 size-96 rounded-full bg-primary/20 blur-3xl animate-float parallax-blur-1 pointer-events-none" />
         <div
-          className="absolute bottom-1/4 -right-32 size-96 rounded-full bg-accent/20 blur-3xl animate-float pointer-events-none"
+          className="absolute bottom-1/4 -right-32 size-96 rounded-full bg-accent/20 blur-3xl animate-float parallax-blur-2 pointer-events-none"
           style={{ animationDelay: "2s" }}
         />
 
@@ -49,8 +50,8 @@ function Home() {
                 className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs font-semibold tracking-widest uppercase text-primary mb-6"
                 data-aos="fade-down"
               >
-                <Sparkles className="size-3.5" />
-                Annee Scolaire {new Date().getFullYear() - 1} -{" "}
+                <Sparkles className="size-3.5 animate-pulse" />
+                Année Scolaire {new Date().getFullYear() - 1} -{" "}
                 {new Date().getFullYear()}
               </span>
               <h1
@@ -86,9 +87,9 @@ function Home() {
                 </Link>
                 <Link
                   to="/galerie"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl glass font-semibold hover:shadow-glow transition-spring"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl glass font-semibold hover:shadow-glow hover:-translate-y-0.5 transition-spring"
                 >
-                  Visiter l'ecole
+                  Visiter l'école
                 </Link>
               </div>
 
@@ -98,15 +99,17 @@ function Home() {
                 data-aos-delay="300"
               >
                 {[
-                  { v: "150+", l: "Apprenants" },
-                  { v: "98%", l: "Insertion" },
-                  { v: "25+", l: "Formations" },
+                  { val: 150, suf: "+", l: "Apprenants" },
+                  { val: 98, suf: "%", l: "Insertion" },
+                  { val: 25, suf: "+", l: "Formations" },
                 ].map((s) => (
                   <div key={s.l}>
-                    <div className="font-display text-3xl font-bold text-gradient">
-                      {s.v}
-                    </div>
-                    <div className="text-xs text-muted-foreground mt-1">
+                    <CountUp
+                      end={s.val}
+                      suffix={s.suf}
+                      className="font-display text-3xl md:text-4xl font-bold text-gradient"
+                    />
+                    <div className="text-xs text-muted-foreground mt-1 font-medium">
                       {s.l}
                     </div>
                   </div>
@@ -118,49 +121,59 @@ function Home() {
             <div className="relative" data-aos="fade-left" data-aos-delay="200">
               <div className="absolute -inset-4 bg-gradient-primary rounded-3xl blur-2xl opacity-30 animate-glow-pulse" />
               <div className="relative grid grid-cols-2 gap-4">
-                <div className="space-y-4">
-                  <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-elegant animate-float">
+                <div className="space-y-4 parallax-grid-col-1">
+                  <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-elegant animate-float image-zoom-container">
                     <img
                       src="/gallerie/equipement_1.jpg"
-                      alt=""
+                      alt="Équipement"
                       className="size-full object-cover"
                     />
                   </div>
                   <div
-                    className="aspect-square rounded-2xl overflow-hidden shadow-elegant animate-float"
+                    className="aspect-square rounded-2xl overflow-hidden shadow-elegant animate-float image-zoom-container"
                     style={{ animationDelay: "1.5s" }}
                   >
                     <img
                       src="/gallerie/IMG-20260519-WA0069.jpg"
-                      alt=""aspect
+                      alt="Wasomi"
                       className="size-full object-cover"
                     />
                   </div>
                 </div>
-                <div className="space-y-4 pt-12">
+                <div className="space-y-4 pt-12 parallax-grid-col-2">
                   <div
-                    className="aspect-square rounded-2xl overflow-hidden shadow-elegant animate-float"
+                    className="aspect-square rounded-2xl overflow-hidden shadow-elegant animate-float image-zoom-container"
                     style={{ animationDelay: "0.7s" }}
                   >
                     <img
                       src="/gallerie/IMG-20260519-WA0028.jpg"
-                      alt=""
+                      alt="Cours"
                       className="size-full object-cover"
                     />
                   </div>
                   <div
-                    className="aspect-[3/4] rounded-2xl overflow-hidden shadow-elegant animate-float"
+                    className="aspect-[3/4] rounded-2xl overflow-hidden shadow-elegant animate-float image-zoom-container"
                     style={{ animationDelay: "2.2s" }}
                   >
                     <img
                       src="/gallerie/laureat lipanda fiesta.jpg"
-                      alt=""
+                      alt="Célébration"
                       className="size-full object-cover"
                     />
                   </div>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground pointer-events-none select-none z-10 animate-fade-in-delayed">
+          <span className="text-[10px] uppercase tracking-widest font-semibold opacity-60">
+            Défiler pour explorer
+          </span>
+          <div className="w-6 h-10 border-2 border-muted-foreground/30 rounded-full flex justify-center p-1.5 backdrop-blur-sm">
+            <div className="w-1.5 h-2 bg-gradient-primary rounded-full animate-scroll-dot" />
           </div>
         </div>
       </section>
@@ -199,14 +212,13 @@ function Home() {
               key={f.title}
               data-aos="fade-up"
               data-aos-delay={i * 80}
-              className="group relative p-6 rounded-2xl glass hover:shadow-glow transition-spring hover:-translate-y-1"
+              className="group card-premium p-6 rounded-2xl glass"
             >
-              <div className="absolute inset-0 bg-gradient-primary opacity-0 group-hover:opacity-5 rounded-2xl transition-smooth" />
-              <div className="relative">
+              <div className="relative z-10">
                 <div className="size-12 rounded-xl bg-gradient-primary flex items-center justify-center shadow-glow mb-4 group-hover:scale-110 transition-spring">
-                  <f.icon className="size-6 text-primary-foreground" />
+                  <f.icon className="size-6 text-primary-foreground animate-pulse" style={{ animationDuration: '3s' }} />
                 </div>
-                <h3 className="font-display font-semibold text-lg mb-2">
+                <h3 className="font-display font-semibold text-lg mb-2 transition-smooth group-hover:text-primary">
                   {f.title}
                 </h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">
@@ -269,25 +281,30 @@ function Home() {
                 key={t.name}
                 data-aos="fade-up"
                 data-aos-delay={i * 100}
-                className="p-6 rounded-2xl glass hover:shadow-elegant transition-spring"
+                className="group card-premium p-6 rounded-2xl glass"
               >
-                <div className="flex gap-0.5 mb-4">
-                  {Array.from({ length: 5 }).map((_, j) => (
-                    <Star
-                      key={j}
-                      className="size-4 fill-primary text-primary"
-                    />
-                  ))}
-                </div>
-                <p className="text-sm leading-relaxed mb-6">"{t.text}"</p>
-                <div className="flex items-center gap-3">
-                  <div className="size-10 rounded-full bg-gradient-primary flex items-center justify-center text-primary-foreground font-bold">
-                    {t.name.charAt(0)}
-                  </div>
+                <div className="relative z-10 flex flex-col h-full justify-between">
                   <div>
-                    <div className="font-semibold text-sm">{t.name}</div>
-                    <div className="text-xs text-muted-foreground">
-                      {t.role}
+                    <div className="flex gap-0.5 mb-4">
+                      {Array.from({ length: 5 }).map((_, j) => (
+                        <Star
+                          key={j}
+                          className="size-4 fill-primary text-primary group-hover:scale-110 transition-spring"
+                          style={{ transitionDelay: `${j * 50}ms` }}
+                        />
+                      ))}
+                    </div>
+                    <p className="text-sm leading-relaxed mb-6 italic">"{t.text}"</p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="size-10 rounded-full bg-gradient-primary flex items-center justify-center text-primary-foreground font-bold shadow-glow group-hover:scale-110 transition-spring">
+                      {t.name.charAt(0)}
+                    </div>
+                    <div>
+                      <div className="font-semibold text-sm transition-smooth group-hover:text-primary">{t.name}</div>
+                      <div className="text-xs text-muted-foreground">
+                        {t.role}
+                      </div>
                     </div>
                   </div>
                 </div>
