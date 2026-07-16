@@ -100,6 +100,7 @@ function RootComponent() {
     <ThemeProvider>
       <AppQueryProvider>
       <AosProvider>
+        <div className="scroll-progress" />
         <div className="min-h-screen flex flex-col">
           <Navbar />
           <main className="flex-1 pt-24">
