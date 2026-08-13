@@ -1,8 +1,8 @@
-import { env } from '@/config/env';
-import { authStore } from '@/store/auth-store';
-import { ApiError, ApiErrorResponse, ApiResponse } from '@/types/api';
+import { env } from "@/config/env";
+import { authStore } from "@/store/auth-store";
+import { ApiError, ApiErrorResponse, ApiResponse } from "@/types/api";
 
-type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 let csrfToken: string | null = null;
 let isRefreshing = false;
@@ -24,8 +24,8 @@ export function getCsrfToken(): string | null {
 export async function fetchCsrfToken(): Promise<string | null> {
   try {
     const res = await fetch(`${env.apiBaseUrl}/auth/csrf`, {
-      method: 'GET',
-      credentials: 'include',
+      method: "GET",
+      credentials: "include",
     });
     if (res.ok) {
       const json = await res.json();
@@ -35,7 +35,7 @@ export async function fetchCsrfToken(): Promise<string | null> {
         json?.data?.token ??
         json?.csrfToken ??
         json?.token;
-      if (typeof token === 'string') {
+      if (typeof token === "string") {
         csrfToken = token;
         return token;
       }
@@ -56,10 +56,10 @@ async function performRefresh(): Promise<boolean> {
   isRefreshing = true;
   try {
     const response = await fetch(`${env.apiBaseUrl}/auth/refresh`, {
-      method: 'POST',
-      credentials: 'include',
+      method: "POST",
+      credentials: "include",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
 
@@ -92,8 +92,8 @@ async function request<T>(
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), env.apiTimeoutMs);
 
-  const isMutation = ['POST', 'PUT', 'PATCH', 'DELETE'].includes(method);
-  const isAuthBypassPath = ['/auth/login', '/auth/csrf', '/auth/refresh', '/auth/logout'].includes(path);
+  const isMutation = ["POST", "PUT", "PATCH", "DELETE"].includes(method);
+  const isAuthBypassPath = ["/auth/login", "/auth/csrf", "/auth/refresh", "/auth/logout"].includes(path);
 
   // Obtain CSRF token for mutations if missing
   if (isMutation && !isAuthBypassPath && !csrfToken) {
@@ -103,7 +103,7 @@ async function request<T>(
   const headers: Record<string, string> = {};
 
   if (isMutation && csrfToken) {
-    headers['X-CSRF-Token'] = csrfToken;
+    headers["X-CSRF-Token"] = csrfToken;
   }
 
   let requestBody: BodyInit | undefined = undefined;
@@ -111,7 +111,7 @@ async function request<T>(
     if (body instanceof FormData) {
       requestBody = body;
     } else {
-      headers['Content-Type'] = 'application/json';
+      headers["Content-Type"] = "application/json";
       requestBody = JSON.stringify(body);
     }
   }
@@ -121,12 +121,12 @@ async function request<T>(
       method,
       headers,
       body: requestBody,
-      credentials: 'include',
+      credentials: "include",
       signal: controller.signal,
     });
 
     // Check for CSRF header in response
-    const newCsrf = response.headers.get('X-CSRF-Token');
+    const newCsrf = response.headers.get("X-CSRF-Token");
     if (newCsrf) {
       csrfToken = newCsrf;
     }
@@ -153,22 +153,22 @@ async function request<T>(
       const message =
         errorPayload?.error?.message ??
         (response.status === 401
-          ? 'Session expirée ou non autorisée.'
+          ? "Session expirée ou non autorisée."
           : response.status === 403
-          ? 'Accès refusé.'
+          ? "Accès refusé."
           : response.status === 404
-          ? 'Ressource introuvable.'
+          ? "Ressource introuvable."
           : `Erreur serveur (${response.status})`);
 
       const code =
         errorPayload?.error?.code ??
         (response.status === 401
-          ? 'UNAUTHENTICATED'
+          ? "UNAUTHENTICATED"
           : response.status === 403
-          ? 'FORBIDDEN'
+          ? "FORBIDDEN"
           : response.status === 404
-          ? 'NOT_FOUND'
-          : 'INTERNAL_ERROR');
+          ? "NOT_FOUND"
+          : "INTERNAL_ERROR");
 
       throw new ApiError(
         message,
@@ -186,8 +186,8 @@ async function request<T>(
     const data = (await response.json()) as T;
     return data;
   } catch (error) {
-    if (error instanceof DOMException && error.name === 'AbortError') {
-      throw new ApiError('Délai d’attente dépassé (timeout).', 408, 'TIMEOUT');
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw new ApiError("Délai d’attente dépassé (timeout).", 408, "TIMEOUT");
     }
     throw error;
   } finally {
@@ -196,9 +196,9 @@ async function request<T>(
 }
 
 export const apiClient = {
-  get: <T>(path: string) => request<T>('GET', path),
-  post: <T>(path: string, body?: unknown) => request<T>('POST', path, body),
-  put: <T>(path: string, body?: unknown) => request<T>('PUT', path, body),
-  patch: <T>(path: string, body?: unknown) => request<T>('PATCH', path, body),
-  delete: <T>(path: string) => request<T>('DELETE', path),
+  get: <T>(path: string) => request<T>("GET", path),
+  post: <T>(path: string, body?: unknown) => request<T>("POST", path, body),
+  put: <T>(path: string, body?: unknown) => request<T>("PUT", path, body),
+  patch: <T>(path: string, body?: unknown) => request<T>("PATCH", path, body),
+  delete: <T>(path: string) => request<T>("DELETE", path),
 };
