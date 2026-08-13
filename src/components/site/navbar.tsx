@@ -98,19 +98,19 @@ export function Navbar() {
                 <Moon className="size-4 text-foreground" />
               )}
             </button>
-            {authStore.hasRole("super_admin") && (
+            {/* {authStore.hasRole("super_admin") && (
               <Link
                 to="/admin"
                 className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-primary text-primary-foreground text-sm font-semibold shadow-elegant hover:shadow-glow hover:-translate-y-0.5 transition-smooth"
               >
                 admin
               </Link>
-            )}
+            )} */}
             <Link
-              to="/contact"
+              to={authStore.hasRole("super_admin") ? "/admin" : "/contact"}
               className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-primary text-primary-foreground text-sm font-semibold shadow-elegant hover:shadow-glow hover:-translate-y-0.5 transition-smooth"
             >
-              S'inscrire
+              {authStore.hasRole("super_admin") ? "Admin" : "S'inscrire"}
             </Link>
             <button
               className="lg:hidden size-10 rounded-lg glass flex items-center justify-center"
@@ -154,6 +154,14 @@ export function Navbar() {
                 </Link>
               </li>
             ))}
+            {authStore.hasRole("super_admin") && (
+              <Link
+                to="/admin"
+                className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-primary text-primary-foreground text-sm font-semibold shadow-elegant hover:shadow-glow hover:-translate-y-0.5 transition-smooth"
+              >
+                admin
+              </Link>
+            )}
             <li className="pt-2">
               <Link
                 to="/contact"
