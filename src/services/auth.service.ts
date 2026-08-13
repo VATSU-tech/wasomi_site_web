@@ -1,13 +1,32 @@
-import { apiClient } from '@/api/client';
-import { ApiSuccessResponse } from '@/types/api';
-import { AuthPayload, User } from '@/types/domain';
+import { apiClient, fetchCsrfToken } from '@/api/client';
+import { ApiResponse } from '@/types/api';
+import { User } from '@/types/domain';
 
-export interface LoginDto { email:string; password:string; device_name:string }
-export interface RegisterDto extends LoginDto { name:string; password_confirmation:string }
+export interface LoginDto {
+  email: string;
+  password: string;
+}
+
+export interface ForgotPasswordDto {
+  email: string;
+}
+
+export interface ResetPasswordDto {
+  token: string;
+  email: string;
+  password: string;
+  password_confirmation: string;
+}
 
 export const authService = {
-  login: (dto: LoginDto) => apiClient.post<ApiSuccessResponse<AuthPayload>>('/auth/login', dto),
-  register: (dto: RegisterDto) => apiClient.post<ApiSuccessResponse<AuthPayload>>('/auth/register', dto),
-  logout: () => apiClient.post<ApiSuccessResponse<null>>('/auth/logout'),
-  me: () => apiClient.get<User>('/auth/me'),
+  getCsrf: () => fetchCsrfToken(),
+  login: (dto: LoginDto) => apiClient.post<ApiResponse<User>>('/auth/login', dto),
+  logout: () => apiClient.post<ApiResponse<null>>('/auth/logout'),
+  me: () => apiClient.get<ApiResponse<User>>('/auth/me'),
+  forgotPassword: (dto: ForgotPasswordDto) =>
+    apiClient.post<ApiResponse<{ message: string }>>('/auth/forgot-password', dto),
+  resetPassword: (dto: ResetPasswordDto) =>
+    apiClient.post<ApiResponse<{ message: string }>>('/auth/reset-password', dto),
+  verifyEmail: (token: string) =>
+    apiClient.post<ApiResponse<{ message: string }>>('/auth/verify-email', { token }),
 };
