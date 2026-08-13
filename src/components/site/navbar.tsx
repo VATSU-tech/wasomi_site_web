@@ -3,6 +3,8 @@ import { Link, useLocation } from "@tanstack/react-router";
 import { Menu, X, Moon, Sun, GraduationCap } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
+import { authService } from "@/services/auth.service";
+import { authStore } from "@/store/auth-store";
 
 const links = [
   { to: "/", label: "Accueil" },
@@ -96,6 +98,14 @@ export function Navbar() {
                 <Moon className="size-4 text-foreground" />
               )}
             </button>
+            {authStore.hasRole("super_admin") && (
+              <Link
+                to="/admin"
+                className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-primary text-primary-foreground text-sm font-semibold shadow-elegant hover:shadow-glow hover:-translate-y-0.5 transition-smooth"
+              >
+                admin
+              </Link>
+            )}
             <Link
               to="/contact"
               className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-primary text-primary-foreground text-sm font-semibold shadow-elegant hover:shadow-glow hover:-translate-y-0.5 transition-smooth"

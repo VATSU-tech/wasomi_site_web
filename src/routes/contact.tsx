@@ -1,7 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Mail, Phone, MapPin, Send, CheckCircle2, AlertCircle, GraduationCap } from "lucide-react";
 import { useContactMutation, useAdmissionMutation, usePublicSettingsQuery } from "@/hooks/useWasomiApi";
+import { authStore } from "@/store/auth-store";
+import { useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "@/constants/query-keys";
+import { toast } from "sonner";
 import { z } from "zod";
 
 export const Route = createFileRoute("/contact")({
@@ -36,6 +40,8 @@ const admissionSchema = z.object({
 });
 
 function ContactPage() {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [tab, setTab] = useState<"contact" | "admission">("contact");
   const [sentContact, setSentContact] = useState(false);
   const [sentAdmission, setSentAdmission] = useState(false);
@@ -62,7 +68,14 @@ function ContactPage() {
     }
 
     try {
-      await contactMutation.mutateAsync(result.data);
+      const res = await contactMutation.mutateAsync(result.data);
+      if (res.data?.authenticated && res.data.user) {
+        authStore.setUser(res.data.user);
+        await queryClient.invalidateQueries({ queryKey: queryKeys.auth.me });
+        toast.success("Connexion réussie");
+        navigate({ to: "/admin" });
+        return;
+      }
       setSentContact(true);
     } catch (err: any) {
       if (err?.fields) {
