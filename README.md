@@ -179,16 +179,37 @@ Puis ouvrir l'URL affichee par Vite.
 Les variables sont optionnelles pour les pages publiques, mais necessaires pour les routes connectees/API.
 
 ```bash
-VITE_API_BASE_URL=http://localhost:8000/api/v1
+VITE_API_BASE_URL=http://localhost:3000/api/v1
 VITE_API_TIMEOUT_MS=15000
-VITE_APP_NAME=Wasomi Shop
+VITE_APP_NAME=Wasomi
 ```
 
 Valeurs par defaut definies dans `src/config/env.ts` :
 
-- `VITE_API_BASE_URL` : `http://localhost:8000/api/v1`
+- `VITE_API_BASE_URL` : `http://localhost:3000/api/v1`
 - `VITE_API_TIMEOUT_MS` : `15000`
-- `VITE_APP_NAME` : `Wasomi Shop`
+- `VITE_APP_NAME` : `Wasomi`
+
+## API d'administration (Express)
+
+Le dossier `server/` contient l'API Node/Express + MySQL (XAMPP).
+
+```bash
+# MySQL XAMPP
+sudo /opt/lampp/lampp start
+
+cd server && npm install && npm run setup && npm run dev
+# API : http://localhost:3000/api/v1
+
+# Front (autre terminal)
+npm run dev
+```
+
+Compte admin seed : `admin@wasomi.cd` / `WasomiAdmin2026!`
+
+Connexion discrete : page Contact → email admin + mot de passe dans le champ Message → redirection `/admin`.
+
+Details : `server/README.md`.
 
 ## Commandes utiles
 
@@ -197,6 +218,18 @@ npm run dev
 ```
 
 Lance le serveur de developpement.
+
+```bash
+npm run dev:api
+```
+
+Lance l'API Express.
+
+```bash
+npm run api:setup
+```
+
+Migrations + seed MySQL.
 
 ```bash
 npm run build
