@@ -137,10 +137,31 @@ export interface ContactMessagePayload {
   phone?: string;
 }
 
+export interface ContactMessage {
+  id: string;
+  name: string;
+  email: string;
+  subject?: string;
+  message: string;
+  phone?: string;
+  status: 'new' | 'in_progress' | 'handled' | 'archived';
+  admin_notes?: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface AdmissionRequestPayload {
   name: string;
   email: string;
   phone: string;
   program_id?: string | number;
   message?: string;
+}
+
+export interface AdmissionRequest extends AdmissionRequestPayload {
+  id: string;
+  status: 'new' | 'read' | 'in_progress' | 'handled' | 'accepted' | 'rejected';
+  admin_notes?: string;
+  created_at: string;
+  updated_at: string;
 }
