@@ -1,2 +1,8 @@
 node_modules
 dist
+.env
+server/.env
+server/uploads/**
+!server/uploads/.gitkeep
+server/node_modules
+data.txt
