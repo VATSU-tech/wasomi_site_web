@@ -107,7 +107,7 @@ function RootComponent() {
             <Outlet />
           </main>
           <Footer />
-          <Toaster position='top-right' />
+          <Toaster />
         </div>
       </AosProvider>
       </AppQueryProvider>

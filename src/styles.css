@@ -281,6 +281,196 @@
   }
 }
 
+/* ============================================================
+ * Toast Notifications — Indigo Midnight
+ * Premium toasts with glass effect and color-coded accents
+ * ============================================================ */
+
+/* Container positioning */
+[data-sonner-toaster] {
+  --toast-bg: color-mix(in oklab, var(--surface-elevated) 78%, transparent);
+  --toast-border: color-mix(in oklab, var(--border) 50%, transparent);
+  --toast-shadow:
+    0 8px 32px -6px oklch(0 0 0 / 0.12),
+    0 0 0 1px color-mix(in oklab, var(--border) 30%, transparent);
+  font-family: var(--font-sans) !important;
+  z-index: 9999 !important;
+}
+
+.dark [data-sonner-toaster] {
+  --toast-bg: color-mix(in oklab, var(--surface-elevated) 65%, transparent);
+  --toast-shadow:
+    0 12px 40px -8px oklch(0 0 0 / 0.45),
+    0 0 0 1px color-mix(in oklab, var(--border) 40%, transparent);
+}
+
+/* Base toast */
+.toast-wasomi {
+  background: var(--toast-bg) !important;
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--toast-border) !important;
+  border-radius: var(--radius-xl) !important;
+  box-shadow: var(--toast-shadow) !important;
+  padding: 14px 18px !important;
+  gap: 14px !important;
+  align-items: flex-start !important;
+  position: relative;
+  overflow: hidden;
+  min-width: 340px;
+  max-width: 420px;
+}
+
+/* Accent bar on the left */
+.toast-wasomi::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 6px;
+  bottom: 6px;
+  width: 3.5px;
+  border-radius: 0 4px 4px 0;
+  background: var(--gradient-primary);
+  opacity: 0.9;
+}
+
+/* Title */
+.toast-wasomi__title {
+  font-family: var(--font-display) !important;
+  font-weight: 600 !important;
+  font-size: 0.9rem !important;
+  letter-spacing: -0.01em;
+  line-height: 1.4 !important;
+  color: var(--foreground) !important;
+}
+
+/* Description */
+.toast-wasomi__description {
+  font-size: 0.8rem !important;
+  line-height: 1.5 !important;
+  color: var(--muted-foreground) !important;
+  margin-top: 2px !important;
+}
+
+/* Icon container */
+.toast-wasomi__icon {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* Action button */
+.toast-wasomi__action {
+  background: var(--gradient-primary) !important;
+  color: var(--primary-foreground) !important;
+  border: none !important;
+  border-radius: var(--radius-md) !important;
+  font-family: var(--font-display) !important;
+  font-weight: 600 !important;
+  font-size: 0.78rem !important;
+  padding: 6px 14px !important;
+  transition: all var(--transition-smooth) !important;
+  box-shadow: 0 2px 8px -2px color-mix(in oklab, var(--primary) 40%, transparent);
+}
+.toast-wasomi__action:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-glow) !important;
+}
+
+/* Cancel button */
+.toast-wasomi__cancel {
+  background: transparent !important;
+  color: var(--muted-foreground) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-md) !important;
+  font-family: var(--font-display) !important;
+  font-weight: 500 !important;
+  font-size: 0.78rem !important;
+  padding: 6px 14px !important;
+  transition: all var(--transition-smooth) !important;
+}
+.toast-wasomi__cancel:hover {
+  background: var(--muted) !important;
+  color: var(--foreground) !important;
+}
+
+/* Close button */
+.toast-wasomi__close {
+  color: var(--muted-foreground) !important;
+  opacity: 0;
+  transition: opacity 200ms ease, color 200ms ease !important;
+}
+.toast-wasomi:hover .toast-wasomi__close {
+  opacity: 1;
+}
+.toast-wasomi__close:hover {
+  color: var(--foreground) !important;
+}
+
+/* ── Per-type accent colors ── */
+
+/* Success — fresh green */
+.toast-wasomi--success {
+  --toast-accent: oklch(72% 0.19 145);
+}
+.toast-wasomi--success::before {
+  background: var(--toast-accent) !important;
+}
+.toast-wasomi--success .toast-wasomi__icon {
+  color: var(--toast-accent);
+}
+
+/* Error — warm red */
+.toast-wasomi--error {
+  --toast-accent: oklch(62% 0.22 25);
+}
+.toast-wasomi--error::before {
+  background: var(--toast-accent) !important;
+}
+.toast-wasomi--error .toast-wasomi__icon {
+  color: var(--toast-accent);
+}
+
+/* Warning — amber */
+.toast-wasomi--warning {
+  --toast-accent: oklch(78% 0.16 75);
+}
+.toast-wasomi--warning::before {
+  background: var(--toast-accent) !important;
+}
+.toast-wasomi--warning .toast-wasomi__icon {
+  color: var(--toast-accent);
+}
+
+/* Info — primary indigo */
+.toast-wasomi--info::before {
+  background: var(--primary) !important;
+}
+.toast-wasomi--info .toast-wasomi__icon {
+  color: var(--primary);
+}
+
+/* Loading — muted pulse */
+.toast-wasomi--loading::before {
+  background: var(--muted-foreground) !important;
+  animation: toast-pulse 1.5s ease-in-out infinite;
+}
+.toast-wasomi--loading .toast-wasomi__icon {
+  color: var(--muted-foreground);
+}
+
+@keyframes toast-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .toast-wasomi {
+    min-width: 0 !important;
+    max-width: calc(100vw - 32px) !important;
+  }
+}
+
 /* Animations */
 @keyframes float {
   0%,
