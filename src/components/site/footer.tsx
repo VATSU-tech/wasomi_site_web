@@ -9,8 +9,15 @@ import {
   Linkedin,
   Twitter,
 } from "lucide-react";
+import { usePublicSettingsQuery } from "@/hooks/useWasomiApi";
 
 export function Footer() {
+  const { data: settings } = usePublicSettingsQuery();
+
+  const phone = settings?.phone ?? "+243 997 742 651";
+  const email = settings?.email ?? "cswasomi@gmail.com";
+  const address = settings?.address ?? "5 Rue Sivirwa Q.Residentiel, C.Bungulu, Beni";
+
   return (
     <footer className="relative mt-32 border-t border-border bg-surface">
       <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-primary to-transparent opacity-50" />
@@ -21,17 +28,22 @@ export function Footer() {
               <div className="bg-gradient-primary rounded-lg p-2">
                 <GraduationCap className="size-5 text-primary-foreground" />
               </div>
-              <span className="font-display font-bold text-lg">Wasomi</span>
+              <span className="font-display font-bold text-lg">{settings?.app_name ?? "Wasomi"}</span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed">
               Une école d'excellence qui forme les talents de demain à travers
               des programmes innovants et un accompagnement personnalisé.
             </p>
             <div className="flex gap-2">
-              {[Facebook, Instagram, Linkedin, Twitter].map((Icon, i) => (
+              {[
+                { icon: Facebook, href: settings?.social_links?.facebook ?? "#" },
+                { icon: Instagram, href: settings?.social_links?.instagram ?? "#" },
+                { icon: Linkedin, href: settings?.social_links?.linkedin ?? "#" },
+                { icon: Twitter, href: settings?.social_links?.twitter ?? "#" },
+              ].map(({ icon: Icon, href }, i) => (
                 <a
                   key={i}
-                  href="#"
+                  href={href}
                   aria-label="Social"
                   className="size-9 rounded-lg glass flex items-center justify-center hover:shadow-glow hover:-translate-y-0.5 transition-smooth"
                 >
@@ -49,6 +61,7 @@ export function Footer() {
                 { to: "/galerie", label: "Galerie" },
                 { to: "/equipe", label: "Équipe" },
                 { to: "/blog", label: "Blog" },
+                { to: "/about", label: "À propos" },
               ].map((l) => (
                 <li key={l.to}>
                   <Link
@@ -67,30 +80,26 @@ export function Footer() {
             <ul className="space-y-3 text-sm text-muted-foreground">
               <li className="flex items-start gap-2">
                 <MapPin className="size-4 mt-0.5 text-primary shrink-0" />
-                <a
-                  href="https://maps.app.goo.gl/B5W7Stfqe8WuNYVF9"
-                  target="_blank"
-                  className="hover:text-foreground transition-smooth"
-                >
-                  5 Rue Sivirwa Q.Residentiel, C.Bungulu, Beni
-                </a>
+                <span className="hover:text-foreground transition-smooth">
+                  {address}
+                </span>
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="size-4 text-primary shrink-0" />
                 <a
-                  href="tel:+243997742651"
+                  href={`tel:${phone.replace(/\s+/g, '')}`}
                   className="hover:text-foreground transition-smooth"
                 >
-                  +243 997 742 651
+                  {phone}
                 </a>
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="size-4 text-primary shrink-0" />
                 <a
-                  href="mailto:cswasomi@gmail.com"
+                  href={`mailto:${email}`}
                   className="hover:text-foreground transition-smooth"
                 >
-                  cswasomi@gmail.com
+                  {email}
                 </a>
               </li>
             </ul>
@@ -118,7 +127,7 @@ export function Footer() {
         </div>
 
         <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-          <p>© {new Date().getFullYear()} Wasomi. Tous droits réservés.</p>
+          <p>© {new Date().getFullYear()} {settings?.app_name ?? "Wasomi"}. Tous droits réservés.</p>
           <div className="flex gap-6">
             <a href="#" className="hover:text-foreground transition-smooth">
               Mentions légales

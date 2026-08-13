@@ -1,5 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { Calendar, ArrowRight } from "lucide-react";
+import { createFileRoute } from "@tanstack/react-router";
+import { Calendar, AlertCircle } from "lucide-react";
+import { usePostsQuery } from "@/hooks/useWasomiApi";
 
 export const Route = createFileRoute("/blog")({
   head: () => ({
@@ -17,8 +18,9 @@ export const Route = createFileRoute("/blog")({
   component: BlogPage,
 });
 
-const posts = [
+const fallbackPosts = [
   {
+    id: "1",
     title: "Rentrée 2025 : ce qui change",
     date: "12 Septembre 2025",
     category: "Actualités",
@@ -26,6 +28,7 @@ const posts = [
     img: "/gallerie/IMG-20260519-WA0002.jpg",
   },
   {
+    id: "2",
     title: "5 conseils pour réussir ses examens scolaire",
     date: "28 mars 2025",
     category: "Conseils",
@@ -33,6 +36,7 @@ const posts = [
     img: "/gallerie/IMG-20260519-WA0021.jpg",
   },
   {
+    id: "3",
     title: "Independance: lipanda fiesta chez wasomi",
     date: "30 juin 2025",
     category: "Événement",
@@ -41,6 +45,7 @@ const posts = [
     img: "/gallerie/festival lipanda fiesta.jpg",
   },
   {
+    id: "4",
     title: "Labo science : inauguration de notre nouvel espace",
     date: "2 mars 2025",
     category: "Événement",
@@ -49,6 +54,7 @@ const posts = [
     img: "/gallerie/IMG-20260519-WA0067.jpg",
   },
   {
+    id: "5",
     title: "Visite a l'aeroport de mavivi : une experience inoubliable",
     date: "20 fév. 2025",
     category: "Visite",
@@ -57,16 +63,30 @@ const posts = [
     img: "/gallerie/sortie visite aeroport mavivi.jpg",
   },
   {
+    id: "6",
     title: "Colonie de vacances : s'amuser et apprendre pendant les vacances",
     date: "10 Aout 2025",
     category: "Vaccances",
     excerpt:
       "Notre colonie de vacances offre une expérience enrichissante où les enfants peuvent s'amuser tout en développant de nouvelles compétences à travers des activités ludiques et éducatives.",
-    img: "gallerie/colonie de vaccances.jpg",
+    img: "/gallerie/colonie de vaccances.jpg",
   },
 ];
 
 function BlogPage() {
+  const { data, isLoading, isError, error } = usePostsQuery();
+
+  const posts = data?.items && data.items.length > 0
+    ? data.items.map((p) => ({
+        id: String(p.id),
+        title: p.title,
+        date: p.published_at ? new Date(p.published_at).toLocaleDateString('fr-FR') : "Date récente",
+        category: p.category || "Actualités",
+        excerpt: p.summary || p.content?.slice(0, 120) || "",
+        img: p.cover_image || "/gallerie/IMG-20260519-WA0002.jpg",
+      }))
+    : fallbackPosts;
+
   return (
     <>
       <section className="relative bg-hero py-20">
@@ -89,46 +109,65 @@ function BlogPage() {
       </section>
 
       <section className="py-20 container mx-auto px-4 max-w-7xl">
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {posts.map((p, i) => (
-            <article
-              key={p.title}
-              data-aos="fade-up"
-              data-aos-delay={(i % 3) * 80}
-              className="group rounded-2xl overflow-hidden bg-card shadow-elegant hover:shadow-glow transition-spring hover:-translate-y-2"
-            >
-              <div className="relative aspect-[16/10] overflow-hidden">
-                <img
-                  src={p.img}
-                  alt={p.title}
-                  loading="lazy"
-                  className="size-full object-cover transition-spring group-hover:scale-110"
-                />
-                <span className="absolute top-4 left-4 px-3 py-1 rounded-full glass text-xs font-semibold text-foreground">
-                  {p.category}
-                </span>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
-                  <Calendar className="size-3.5" />
-                  {p.date}
+        {isLoading && (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div key={i} className="h-80 rounded-2xl bg-surface-elevated animate-pulse" />
+            ))}
+          </div>
+        )}
+
+        {isError && (
+          <div className="rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-destructive flex items-center gap-3 mb-6">
+            <AlertCircle className="size-5 shrink-0" />
+            <p className="text-sm font-medium">
+              Impossible de charger les articles du blog : {error?.message}
+            </p>
+          </div>
+        )}
+
+        {!isLoading && posts.length === 0 && (
+          <div className="text-center py-16">
+            <p className="text-muted-foreground">Aucun article disponible pour le moment.</p>
+          </div>
+        )}
+
+        {!isLoading && posts.length > 0 && (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {posts.map((p, i) => (
+              <article
+                key={p.id || p.title}
+                data-aos="fade-up"
+                data-aos-delay={(i % 3) * 80}
+                className="group rounded-2xl overflow-hidden bg-card shadow-elegant hover:shadow-glow transition-spring hover:-translate-y-2"
+              >
+                <div className="relative aspect-[16/10] overflow-hidden">
+                  <img
+                    src={p.img}
+                    alt={p.title}
+                    loading="lazy"
+                    className="size-full object-cover transition-spring group-hover:scale-110"
+                  />
+                  <span className="absolute top-4 left-4 px-3 py-1 rounded-full glass text-xs font-semibold text-foreground">
+                    {p.category}
+                  </span>
                 </div>
-                <h3 className="font-display text-lg font-bold mb-2 group-hover:text-primary transition-smooth">
-                  {p.title}
-                </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                  {p.excerpt}
-                </p>
-                {/* <Link
-                  to="/blog"
-                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary group-hover:gap-2.5 transition-smooth"
-                >
-                  Lire l'article <ArrowRight className="size-4" />
-                </Link> */}
-              </div>
-            </article>
-          ))}
-        </div>
+                <div className="p-6">
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
+                    <Calendar className="size-3.5" />
+                    {p.date}
+                  </div>
+                  <h3 className="font-display text-lg font-bold mb-2 group-hover:text-primary transition-smooth">
+                    {p.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                    {p.excerpt}
+                  </p>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
       </section>
     </>
   );

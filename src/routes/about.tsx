@@ -1,12 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Target, Heart, Lightbulb, Award } from "lucide-react";
-import { SectionHeading } from "@/components/site/section-heading";
 import { AudioPlayer } from "@/components/site/history/AudioPlayer";
 import { HistoryFullText } from "@/components/site/history/HistoryFullText";
 import { HistoryTimeline } from "@/components/site/history/HistoryTimeline";
 import { HistorySummarySection } from "@/components/site/history/HistorySummarySection";
 import { useVTTData } from "@/hooks/useVTTData";
 import { schoolHistoryConfig } from "@/data/school-history";
+import { usePageQuery } from "@/hooks/useWasomiApi";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -28,6 +27,7 @@ export const Route = createFileRoute("/about")({
 });
 
 function AboutPage() {
+  const { data: aboutPage } = usePageQuery('about');
   const { data: vttData } = useVTTData(schoolHistoryConfig.subtitlesFile);
   const cues = vttData?.cues || [];
 
@@ -40,16 +40,19 @@ function AboutPage() {
             className="font-display text-4xl md:text-6xl font-bold tracking-tight"
             data-aos="fade-up"
           >
-            À propos de <span className="text-gradient">Wasomi</span>
+            {aboutPage?.title ?? (
+              <>
+                À propos de <span className="text-gradient">Wasomi</span>
+              </>
+            )}
           </h1>
           <p
             className="mt-6 text-lg text-muted-foreground leading-relaxed"
             data-aos="fade-up"
             data-aos-delay="100"
           >
-            Fondée en 2021, Wasomi est née d'une conviction simple : chaque
-            élève mérite une éducation qui révèle son potentiel unique.
-            Aujourd'hui, c'est plusieurs élèves formés chez nous.
+            {aboutPage?.content ||
+              "Fondée en 2021, Wasomi est née d'une conviction simple : chaque élève mérite une éducation qui révèle son potentiel unique. Aujourd'hui, c'est plusieurs élèves formés chez nous."}
           </p>
         </div>
       </section>
@@ -60,7 +63,7 @@ function AboutPage() {
             <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-glow">
               <img
                 src="/gallerie/realisation.jpg"
-                alt=""
+                alt="Notre mission"
                 className="size-full object-cover"
               />
             </div>
@@ -75,8 +78,7 @@ function AboutPage() {
             <p className="text-muted-foreground leading-relaxed mb-4">
               Nous croyons en une pédagogie où l'humain est au centre. Chaque
               élève est accompagné individuellement par un mentor, et nos
-              programmes sont conçus avec les entreprises pour garantir une
-              employabilité maximale.
+              programmes sont conçus pour garantir un apprentissage d'excellence.
             </p>
             <p className="text-muted-foreground leading-relaxed">
               Notre objectif : faire éclore des leaders éthiques, créatifs et
@@ -84,47 +86,6 @@ function AboutPage() {
             </p>
           </div>
         </div>
-{/* 
-        <SectionHeading eyebrow="Nos valeurs" title="Ce qui nous anime" />
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[
-            {
-              icon: Target,
-              title: "Excellence",
-              desc: "Viser le meilleur dans chaque détail.",
-            },
-            {
-              icon: Heart,
-              title: "Bienveillance",
-              desc: "Un environnement sûr et inclusif.",
-            },
-            {
-              icon: Lightbulb,
-              title: "Innovation",
-              desc: "Toujours apprendre, toujours évoluer.",
-            },
-            {
-              icon: Award,
-              title: "Engagement",
-              desc: "Tenir nos promesses, jusqu'au bout.",
-            },
-          ].map((v, i) => (
-            <div
-              key={v.title}
-              data-aos="fade-up"
-              data-aos-delay={i * 80}
-              className="p-6 rounded-2xl glass text-center hover:shadow-glow transition-spring hover:-translate-y-1"
-            >
-              <div className="size-14 mx-auto rounded-xl bg-gradient-primary flex items-center justify-center shadow-glow mb-4">
-                <v.icon className="size-7 text-primary-foreground" />
-              </div>
-              <h3 className="font-display font-semibold text-lg mb-2">
-                {v.title}
-              </h3>
-              <p className="text-sm text-muted-foreground">{v.desc}</p>
-            </div>
-          ))}
-        </div> */}
       </section>
 
       {/* History Summary Section */}

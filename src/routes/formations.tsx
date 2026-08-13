@@ -11,8 +11,7 @@ import {
   Microscope,
   BadgeDollarSign,
   CalendarClock,
-  CircleDot,
-  Info,
+  AlertCircle,
 } from "lucide-react";
 import {
   Dialog,
@@ -22,6 +21,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useProgramsQuery } from "@/hooks/useWasomiApi";
 
 export const Route = createFileRoute("/formations")({
   head: () => ({
@@ -43,7 +43,7 @@ export const Route = createFileRoute("/formations")({
 });
 
 type FormationDetail = {
-  id: number;
+  id: string | number;
   icon: typeof Baby;
   image: string;
   title: string;
@@ -62,8 +62,6 @@ type FormationDetail = {
     secondInstallment: string;
     thirdInstallment: string;
   };
-  // options: string[];
-  // usefulInfos: string[];
   schedule: {
     arrivalTime: string;
     classStart: string;
@@ -86,7 +84,7 @@ const sharedFees = {
   thirdInstallment: "180 $",
 };
 
-const formations: FormationDetail[] = [
+const fallbackFormations: FormationDetail[] = [
   {
     id: 1,
     icon: Baby,
@@ -101,12 +99,6 @@ const formations: FormationDetail[] = [
       ...sharedFees,
       cycle: "Cycle complet",
     },
-    // options: ["Éveil sensoriel", "Premières notions de langage", "Activités motrices"],
-    // usefulInfos: [
-    //   "Suivi pédagogique individualisé",
-    //   "Encadrement rapproché et sécurisé",
-    //   "Communication régulière avec les parents",
-    // ],
     schedule: {
       arrivalTime: "07h00 - 07h30",
       classStart: "07h30",
@@ -132,12 +124,6 @@ const formations: FormationDetail[] = [
       ...sharedFees,
       cycle: "Cycle complet",
     },
-    // options: ["Expression orale et artistique", "Initiation au calcul", "Jeux éducatifs"],
-    // usefulInfos: [
-    //   "Classes adaptées à l'âge des enfants",
-    //   "Progression pédagogique par compétence",
-    //   "Activités d'éveil culturel et citoyen",
-    // ],
     schedule: {
       arrivalTime: "07h00 - 07h30",
       classStart: "07h30",
@@ -163,12 +149,6 @@ const formations: FormationDetail[] = [
       ...sharedFees,
       cycle: "1ère en 6ème année",
     },
-    // options: ["Français et mathématiques renforcés", "Sciences et découverte", "Activités sportives"],
-    // usefulInfos: [
-    //   "Évaluations continues pendant l'année",
-    //   "Suivi des performances par trimestre",
-    //   "Accompagnement à la méthode de travail",
-    // ],
     schedule: {
       arrivalTime: "06h45 - 07h20",
       classStart: "07h30",
@@ -194,12 +174,6 @@ const formations: FormationDetail[] = [
       ...sharedFees,
       cycle: "7ème et 8ème année",
     },
-    // options: ["Renforcement des compétences fondamentales", "Projet d'orientation", "Initiation numérique"],
-    // usefulInfos: [
-    //   "Préparation à la transition vers le secondaire",
-    //   "Soutien académique en modules ciblés",
-    //   "Activités de responsabilisation et leadership",
-    // ],
     schedule: {
       arrivalTime: "06h45 - 07h20",
       classStart: "07h30",
@@ -225,12 +199,6 @@ const formations: FormationDetail[] = [
       ...sharedFees,
       cycle: "Atelier complémentaire",
     },
-    // options: ["Capteurs et automatismes", "Programmation embarquée", "Mini-projets pratiques"],
-    // usefulInfos: [
-    //   "Accès au laboratoire selon planning",
-    //   "Travaux pratiques encadrés",
-    //   "Présentation de projet en fin de module",
-    // ],
     schedule: {
       arrivalTime: "13h15 - 13h30",
       classStart: "13h30",
@@ -256,12 +224,6 @@ const formations: FormationDetail[] = [
       ...sharedFees,
       cycle: "Atelier complémentaire",
     },
-    // options: ["Manipulations en laboratoire", "Sécurité expérimentale", "Méthodologie scientifique"],
-    // usefulInfos: [
-    //   "Kit de laboratoire requis",
-    //   "Séances démonstratives encadrées",
-    //   "Rapports d'expérience évalués",
-    // ],
     schedule: {
       arrivalTime: "13h15 - 13h30",
       classStart: "13h30",
@@ -276,6 +238,38 @@ const formations: FormationDetail[] = [
 ];
 
 function FormationsPage() {
+  const { data: apiPrograms, isLoading, isError, error } = useProgramsQuery();
+
+  // Map API programs if available, otherwise use fallbackFormations
+  const displayFormations: FormationDetail[] = apiPrograms && apiPrograms.length > 0
+    ? apiPrograms.map((p, idx) => ({
+        id: p.id,
+        icon: [Baby, Blocks, BookOpen, GraduationCap, Code2, Microscope][idx % 6],
+        image: p.image || "/gallerie/IMG-20260519-WA0016.jpg",
+        title: p.title,
+        fullName: p.title,
+        duration: p.duration || "1 an",
+        students: "30+",
+        desc: p.summary || p.description || "Formation d'excellence.",
+        color: ["from-indigo-500 to-purple-500", "from-pink-500 to-rose-500", "from-blue-500 to-cyan-500", "from-emerald-500 to-teal-500", "from-blue-500 to-purple-500", "from-amber-500 to-yellow-500"][idx % 6],
+        fees: {
+          ...sharedFees,
+          total: p.price ? `${p.price} $` : sharedFees.total,
+          cycle: p.level || "Cycle complet",
+        },
+        schedule: {
+          arrivalTime: "07h00 - 07h30",
+          classStart: "07h30",
+          morningBreak: "09h30 - 09h45",
+          lunchTime: "11h30",
+          middayBreak: "12h00 - 13h00",
+          afternoonResume: "13h00",
+          classEnd: "15h00",
+          specialHours: "Programme modulable.",
+        },
+      }))
+    : fallbackFormations;
+
   return (
     <>
       <section className="relative bg-hero py-20">
@@ -298,117 +292,124 @@ function FormationsPage() {
       </section>
 
       <section className="py-20 container mx-auto px-4 max-w-7xl">
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {formations.map((f, i) => (
-            <article
-              key={f.id}
-              data-aos="fade-up"
-              data-aos-delay={(i % 3) * 80}
-              className="group relative overflow-hidden rounded-2xl bg-card shadow-elegant transition-spring hover:-translate-y-2 hover:shadow-glow"
-            >
-              <div className="relative h-[420px] overflow-hidden">
-                <div
-                  className="absolute inset-0 bg-cover bg-center transition-spring group-hover:scale-110"
-                  style={{
-                    backgroundImage: `url(${f.image})`,
-                  }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
-                <div className="absolute inset-0 bg-black/20" />
-                <div
-                  className={`absolute -right-20 -top-20 size-52 rounded-full bg-gradient-to-br ${f.color} opacity-20 blur-3xl transition-smooth group-hover:opacity-40`}
-                />
-                <div className="absolute inset-x-0 bottom-0 z-10 p-6">
+        {isLoading && (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div key={i} className="h-96 rounded-2xl bg-surface-elevated animate-pulse" />
+            ))}
+          </div>
+        )}
+
+        {isError && (
+          <div className="rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-destructive flex items-center gap-3 mb-6">
+            <AlertCircle className="size-5 shrink-0" />
+            <p className="text-sm font-medium">
+              Impossible de charger les formations depuis le serveur : {error?.message}
+            </p>
+          </div>
+        )}
+
+        {!isLoading && displayFormations.length === 0 && (
+          <div className="text-center py-16">
+            <p className="text-muted-foreground">Aucune formation disponible pour le moment.</p>
+          </div>
+        )}
+
+        {!isLoading && displayFormations.length > 0 && (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {displayFormations.map((f, i) => (
+              <article
+                key={f.id}
+                data-aos="fade-up"
+                data-aos-delay={(i % 3) * 80}
+                className="group relative overflow-hidden rounded-2xl bg-card shadow-elegant transition-spring hover:-translate-y-2 hover:shadow-glow"
+              >
+                <div className="relative h-[420px] overflow-hidden">
                   <div
-                    className={`mb-5 flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br ${f.color} shadow-glow transition-spring group-hover:scale-110 group-hover:rotate-3`}
-                  >
-                    <f.icon className="size-7 text-white" />
+                    className="absolute inset-0 bg-cover bg-center transition-spring group-hover:scale-110"
+                    style={{
+                      backgroundImage: `url(${f.image})`,
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+                  <div className="absolute inset-0 bg-black/20" />
+                  <div
+                    className={`absolute -right-20 -top-20 size-52 rounded-full bg-gradient-to-br ${f.color} opacity-20 blur-3xl transition-smooth group-hover:opacity-40`}
+                  />
+                  <div className="absolute inset-x-0 bottom-0 z-10 p-6">
+                    <div
+                      className={`mb-5 flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br ${f.color} shadow-glow transition-spring group-hover:scale-110 group-hover:rotate-3`}
+                    >
+                      <f.icon className="size-7 text-white" />
+                    </div>
+                    <h3 className="font-display text-2xl font-bold text-white">
+                      {f.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-white/80 line-clamp-2">
+                      {f.desc}
+                    </p>
+                    <div className="mt-4 flex items-center gap-4 text-xs text-white/70">
+                      <span className="inline-flex items-center gap-1">
+                        <Clock className="size-3.5" />
+                        {f.duration}
+                      </span>
+                      <span className="inline-flex items-center gap-1">
+                        <Users className="size-3.5" />
+                        {f.students}
+                      </span>
+                    </div>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <button
+                          type="button"
+                          className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary transition-all duration-300 group-hover:gap-3"
+                        >
+                          En savoir plus
+                          <ArrowRight className="size-4" />
+                        </button>
+                      </DialogTrigger>
+                      <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-3xl">
+                        <DialogHeader>
+                          <DialogTitle>{f.fullName}</DialogTitle>
+                          <DialogDescription>{f.desc}</DialogDescription>
+                        </DialogHeader>
+                        <div className="grid gap-4 text-sm">
+                          <div className="grid gap-2 rounded-lg border p-4">
+                            <p className="inline-flex items-center gap-2 font-semibold">
+                              <BadgeDollarSign className="size-4 text-primary" /> Frais scolaires
+                            </p>
+                            <p>Total annuel: {f.fees.total}</p>
+                            <p>Cycle: {f.fees.cycle}</p>
+                            <p>Frais connexes: {f.fees.connectedFees}</p>
+                            <p>Frais Labotech: {f.fees.labotech}</p>
+                            <p>Infirmerie: {f.fees.infirmary}</p>
+                            <p>1ère tranche: {f.fees.firstInstallment}</p>
+                            <p>2ème tranche: {f.fees.secondInstallment}</p>
+                            <p>3ème tranche: {f.fees.thirdInstallment}</p>
+                          </div>
+
+                          <div className="grid gap-2 rounded-lg border p-4">
+                            <p className="inline-flex items-center gap-2 font-semibold">
+                              <CalendarClock className="size-4 text-primary" /> Horaires scolaires
+                            </p>
+                            <p>Arrivée: {f.schedule.arrivalTime}</p>
+                            <p>Début des cours: {f.schedule.classStart}</p>
+                            <p>Pause du matin: {f.schedule.morningBreak}</p>
+                            <p>Heure du repas: {f.schedule.lunchTime}</p>
+                            <p>Pause de midi: {f.schedule.middayBreak}</p>
+                            <p>Reprise des cours: {f.schedule.afternoonResume}</p>
+                            <p>Fin des cours: {f.schedule.classEnd}</p>
+                            <p>Horaires spéciaux: {f.schedule.specialHours}</p>
+                          </div>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
                   </div>
-                  <h3 className="font-display text-2xl font-bold text-white">
-                    {f.title}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-white/80">
-                    {f.desc}
-                  </p>
-                  <div className="mt-4 flex items-center gap-4 text-xs text-white/70">
-                    <span className="inline-flex items-center gap-1">
-                      <Clock className="size-3.5" />
-                      {f.duration}
-                    </span>
-                    <span className="inline-flex items-center gap-1">
-                      <Users className="size-3.5" />
-                      {f.students}
-                    </span>
-                  </div>
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <button
-                        type="button"
-                        className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary transition-all duration-300 group-hover:gap-3"
-                      >
-                        En savoir plus
-                        <ArrowRight className="size-4" />
-                      </button>
-                    </DialogTrigger>
-                    <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-3xl">
-                      <DialogHeader>
-                        <DialogTitle>{f.fullName}</DialogTitle>
-                        <DialogDescription>{f.desc}</DialogDescription>
-                      </DialogHeader>
-                      <div className="grid gap-4 text-sm">
-                        <div className="grid gap-2 rounded-lg border p-4">
-                          <p className="inline-flex items-center gap-2 font-semibold">
-                            <BadgeDollarSign className="size-4 text-primary" /> Frais scolaires
-                          </p>
-                          <p>Total annuel: {f.fees.total}</p>
-                          <p>Cycle: {f.fees.cycle}</p>
-                          <p>Frais connexes: {f.fees.connectedFees}</p>
-                          <p>Frais Labotech: {f.fees.labotech}</p>
-                          <p>Infirmerie: {f.fees.infirmary}</p>
-                          <p>1ère tranche: {f.fees.firstInstallment}</p>
-                          <p>2ème tranche: {f.fees.secondInstallment}</p>
-                          <p>3ème tranche: {f.fees.thirdInstallment}</p>
-                        </div>
-
-                  {/*      <div className="grid gap-2 rounded-lg border p-4">
-                          <p className="inline-flex items-center gap-2 font-semibold">
-                            <CircleDot className="size-4 text-primary" /> Options disponibles
-                          </p>
-                          {f.options.map((option) => (
-                            <p key={option}>• {option}</p>
-                          ))}
-                        </div>
-
-                        <div className="grid gap-2 rounded-lg border p-4">
-                          <p className="inline-flex items-center gap-2 font-semibold">
-                            <Info className="size-4 text-primary" /> Informations utiles
-                          </p>
-                          {f.usefulInfos.map((info) => (
-                            <p key={info}>• {info}</p>
-                          ))}
-                        </div>*/}
-
-                        <div className="grid gap-2 rounded-lg border p-4">
-                          <p className="inline-flex items-center gap-2 font-semibold">
-                            <CalendarClock className="size-4 text-primary" /> Horaires scolaires
-                          </p>
-                          <p>Arrivée: {f.schedule.arrivalTime}</p>
-                          <p>Début des cours: {f.schedule.classStart}</p>
-                          <p>Pause du matin: {f.schedule.morningBreak}</p>
-                          <p>Heure du repas: {f.schedule.lunchTime}</p>
-                          <p>Pause de midi: {f.schedule.middayBreak}</p>
-                          <p>Reprise des cours: {f.schedule.afternoonResume}</p>
-                          <p>Fin des cours: {f.schedule.classEnd}</p>
-                          <p>Horaires spéciaux: {f.schedule.specialHours}</p>
-                        </div>
-                      </div>
-                    </DialogContent>
-                  </Dialog>
                 </div>
-              </div>
-            </article>
-          ))}
-        </div>
+              </article>
+            ))}
+          </div>
+        )}
       </section>
     </>
   );
