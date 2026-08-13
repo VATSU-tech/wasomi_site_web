@@ -1,6 +1,45 @@
-export interface ApiSuccessResponse<T> { success: boolean; message?: string; data: T }
-export interface ApiErrorResponse { success: false; message: string; errors?: Record<string,string[]> }
-export interface LaravelPaginationLinks { first: string|null; last: string|null; prev: string|null; next: string|null }
-export interface LaravelPaginationMeta { current_page:number; from:number|null; last_page:number; path:string; per_page:number; to:number|null; total:number }
-export interface LaravelPaginatedResponse<T> { data:T[]; links:LaravelPaginationLinks; meta:LaravelPaginationMeta }
-export class ApiError extends Error { constructor(message:string, public status:number, public errors?:Record<string,string[]>) { super(message) }}
+export interface ApiMeta {
+  page?: number;
+  limit?: number;
+  total?: number;
+  totalPages?: number;
+  requestId?: string;
+}
+
+export interface ApiResponse<T> {
+  data: T;
+  meta?: ApiMeta;
+}
+
+export interface ApiErrorDetail {
+  code: string;
+  message: string;
+  fields?: Record<string, string[]>;
+}
+
+export interface ApiErrorResponse {
+  error: ApiErrorDetail;
+  meta?: ApiMeta;
+}
+
+export class ApiError extends Error {
+  public code: string;
+  public status: number;
+  public fields?: Record<string, string[]>;
+  public requestId?: string;
+
+  constructor(
+    message: string,
+    status: number,
+    code = 'UNKNOWN_ERROR',
+    fields?: Record<string, string[]>,
+    requestId?: string,
+  ) {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+    this.code = code;
+    this.fields = fields;
+    this.requestId = requestId;
+  }
+}
