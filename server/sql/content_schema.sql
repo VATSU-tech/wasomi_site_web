@@ -148,3 +148,5 @@ CREATE TABLE IF NOT EXISTS `AdmissionRequest` (
   PRIMARY KEY (`id`),
   KEY `AdmissionRequest_status_idx` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
