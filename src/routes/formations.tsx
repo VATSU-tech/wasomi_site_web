@@ -249,13 +249,14 @@ function FormationsPage() {
         title: p.title,
         fullName: p.title,
         duration: p.duration || "1 an",
-        students: "30+",
+        students: (p as { students?: string }).students || "30+",
         desc: p.summary || p.description || "Formation d'excellence.",
-        color: ["from-indigo-500 to-purple-500", "from-pink-500 to-rose-500", "from-blue-500 to-cyan-500", "from-emerald-500 to-teal-500", "from-blue-500 to-purple-500", "from-amber-500 to-yellow-500"][idx % 6],
+        color: (p as { color?: string }).color || ["from-indigo-500 to-purple-500", "from-pink-500 to-rose-500", "from-blue-500 to-cyan-500", "from-emerald-500 to-teal-500", "from-blue-500 to-purple-500", "from-amber-500 to-yellow-500"][idx % 6],
         fees: {
           ...sharedFees,
-          total: p.price ? `${p.price} $` : sharedFees.total,
-          cycle: p.level || "Cycle complet",
+          ...((p as { fees?: Partial<FormationDetail["fees"]> }).fees || {}),
+          total: (p as { fees?: { total?: string } }).fees?.total || (p.price ? `${p.price}` : sharedFees.total),
+          cycle: (p as { fees?: { cycle?: string } }).fees?.cycle || p.level || "Cycle complet",
         },
         schedule: {
           arrivalTime: "07h00 - 07h30",
@@ -266,6 +267,7 @@ function FormationsPage() {
           afternoonResume: "13h00",
           classEnd: "15h00",
           specialHours: "Programme modulable.",
+          ...((p as { schedule?: Partial<FormationDetail["schedule"]> }).schedule || {}),
         },
       }))
     : fallbackFormations;
