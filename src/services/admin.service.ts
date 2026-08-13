@@ -45,6 +45,20 @@ export const adminService = {
   updateSettings: (data: unknown) => apiClient.patch<ApiResponse<unknown>>('/admin/settings', data),
 
   // Messages & Admissions
+  getOverviewStats: () =>
+    apiClient.get<
+      ApiResponse<{
+        unread_messages: number;
+        total_messages: number;
+        pending_admissions: number;
+        total_admissions: number;
+        total_posts: number;
+        total_programs: number;
+        total_staff: number;
+        recent_unopened_messages?: any[];
+        recent_unopened_admissions?: any[];
+      }>
+    >('/admin/overview-stats'),
   getContactMessages: () => apiClient.get<ApiResponse<unknown[]>>('/admin/contact-messages'),
   updateContactMessage: (id: string | number, data: unknown) => apiClient.patch<ApiResponse<unknown>>(`/admin/contact-messages/${id}`, data),
   getAdmissionRequests: () => apiClient.get<ApiResponse<unknown[]>>('/admin/admission-requests'),
