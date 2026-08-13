@@ -300,6 +300,9 @@ router.post(
           message: 'Connexion administrateur réussie.',
         });
       }
+      // Mauvais mot de passe : ne pas enregistrer la tentative comme message
+      // (le champ « message » contient un mot de passe, on ne doit jamais le persister)
+      return ok(res, { id: createId(), authenticated: false, message: 'Message envoyé avec succès.' }, undefined, 201);
     }
 
     const id = createId();
