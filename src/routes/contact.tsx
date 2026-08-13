@@ -1,12 +1,13 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Mail, Phone, MapPin, Send, CheckCircle2, AlertCircle, GraduationCap } from "lucide-react";
-import { useContactMutation, useAdmissionMutation, usePublicSettingsQuery } from "@/hooks/useWasomiApi";
+import { useContactMutation, useAdmissionMutation, usePublicSettingsQuery, useProgramsQuery } from "@/hooks/useWasomiApi";
 import { authStore } from "@/store/auth-store";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/constants/query-keys";
 import { toast } from "sonner";
 import { z } from "zod";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -35,7 +36,8 @@ const contactSchema = z.object({
 const admissionSchema = z.object({
   name: z.string().min(2, "Nom trop court (minimum 2 caractères)"),
   email: z.string().email("Adresse email invalide"),
-  phone: z.string().min(6, "Téléphone requis"),
+  phone: z.string().min(6, "Téléphone requis (ex: +243...)"),
+  program_id: z.string().optional(),
   message: z.string().optional(),
 });
 
@@ -48,13 +50,28 @@ function ContactPage() {
 
   // Form states
   const [contactData, setContactData] = useState({ name: "", email: "", subject: "", message: "", phone: "" });
-  const [admissionData, setAdmissionData] = useState({ name: "", email: "", phone: "", message: "" });
-  
+  const [admissionData, setAdmissionData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    program_id: "",
+    message: "",
+  });
+
+  const initialAdmissionState = {
+    name: "",
+    email: "",
+    phone: "",
+    program_id: "",
+    message: "",
+  };
+
   const [formErrors, setFormErrors] = useState<Record<string, string[]>>({});
 
   const contactMutation = useContactMutation();
   const admissionMutation = useAdmissionMutation();
   const { data: settings } = usePublicSettingsQuery();
+  const { data: programsData } = useProgramsQuery();
 
   const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -107,102 +124,112 @@ function ContactPage() {
 
   return (
     <>
-      <section className="relative bg-hero py-20">
-        <div className="absolute inset-0 bg-mesh" />
-        <div className="container mx-auto px-4 max-w-4xl relative text-center">
-          <h1
-            className="font-display text-4xl md:text-6xl font-bold tracking-tight"
-            data-aos="fade-up"
-          >
-            Parlons <span className="text-gradient">ensemble</span>
+      {/* Hero Section */}
+      <section className="relative py-20 overflow-hidden bg-hero">
+        <div className="container mx-auto px-4 relative z-10 text-center max-w-3xl">
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs font-semibold uppercase tracking-wider text-primary mb-6">
+            <Mail className="size-3.5" />
+            Contact & Préinscriptions
+          </span>
+          <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight mb-4">
+            Construisons Votre Avenir <span className="text-gradient">Ensemble</span>
           </h1>
-          <p
-            className="mt-4 text-muted-foreground max-w-2xl mx-auto"
-            data-aos="fade-up"
-            data-aos-delay="100"
-          >
-            Une question, un projet ou une demande de préinscription ? Notre équipe vous répond au plus vite.
+          <p className="text-muted-foreground text-lg">
+            Posez-nous vos questions ou préinscrivez-vous directement en quelques clics pour réserver votre place.
           </p>
         </div>
       </section>
 
-      <section className="py-20 container mx-auto px-4 max-w-7xl">
-        <div className="grid lg:grid-cols-5 gap-8">
-          {/* Info */}
-          <div className="lg:col-span-2 space-y-4" data-aos="fade-right">
-            {[
-              {
-                icon: MapPin,
-                title: "Adresse",
-                value: settings?.address ?? "5 Rue Sivirwa Q.Residentiel, C.Bungulu, Beni",
-                link: "https://maps.app.goo.gl/B5W7Stfqe8WuNYVF9",
-              },
-              {
-                icon: Phone,
-                title: "Téléphone",
-                value: settings?.phone ?? "+243 997 742 651",
-                link: `tel:${(settings?.phone ?? "+243 997 742 651").replace(/\s+/g, '')}`,
-              },
-              {
-                icon: Mail,
-                title: "Email",
-                value: settings?.email ?? "cswasomi@gmail.com",
-                link: `mailto:${settings?.email ?? "cswasomi@gmail.com"}`,
-              },
-            ].map((c) => (
-              <a
-                key={c.title}
-                href={c.link}
-                target="_blank"
-                className="p-5 rounded-2xl glass hover:shadow-glow hover:border-primary transition-spring flex items-start gap-4"
-              >
-                <div className="size-11 rounded-xl bg-gradient-primary flex items-center justify-center shadow-glow shrink-0">
-                  <c.icon className="size-5 text-primary-foreground" />
-                </div>
-                <div>
-                  <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-                    {c.title}
+      {/* Main Content */}
+      <section className="py-16 container mx-auto px-4 max-w-6xl">
+        <div className="grid lg:grid-cols-3 gap-12">
+          {/* Info Card Sidebar */}
+          <div className="space-y-6">
+            <div className="card-premium p-8 rounded-2xl bg-surface border border-border space-y-6">
+              <h2 className="font-display text-xl font-bold">Nos Coordonnées</h2>
+
+              <div className="space-y-4 text-sm">
+                <a href="https://www.google.com/maps?q={settings?.contact_address || 'Rue N°5,Q.Residentiel, C.Bungulu, Beni, Nord-Kivu, RDC'}" target="_blank" className="flex items-start gap-4 border-border border rounded-2xl p-2 hover:bg-surface-elevated transition-smooth">
+                  <div className="size-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                    <MapPin className="size-5" />
                   </div>
-                  <div className="font-medium mt-1">{c.value}</div>
-                </div>
-              </a>
-            ))}
+                  <div>
+                    <h3 className="font-semibold text-foreground">Adresse</h3>
+                    <p className="text-muted-foreground mt-0.5">
+                      {settings?.contact_address || "Rue N°5,Q.Residentiel, C.Bungulu, Beni, Nord-Kivu, RDC"}
+                    </p>
+                  </div>
+                </a>
+
+                <a href="tel:+24396000000" className="flex items-start gap-4 border-border border rounded-2xl p-2 hover:bg-surface-elevated transition-smooth">
+                  <div className="size-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                    <Phone className="size-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground">Téléphone & WhatsApp</h3>
+                    <p className="text-muted-foreground mt-0.5">
+                      {settings?.contact_phone || "+243 970 000 000"}
+                    </p>
+                  </div>
+                </a>
+
+                <a href="mailto:contact@wasomi.cd" className="flex items-start gap-4 border-border border rounded-2xl p-2 hover:bg-surface-elevated transition-smooth">
+                  <div className="size-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                    <Mail className="size-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground">Email</h3>
+                    <p className="text-muted-foreground mt-0.5">
+                      {settings?.contact_email || "contact@wasomi.cd"}
+                    </p>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-gradient-primary text-primary-foreground space-y-3 shadow-elegant">
+              <GraduationCap className="size-8" />
+              <h3 className="font-display font-bold text-lg">Inscriptions Ouvertes 2026</h3>
+              <p className="text-xs text-primary-foreground/90 leading-relaxed">
+                Les places dans nos cohortes d'excellence sont limitées. Remplissez le formulaire de préinscription pour bénéficier d'un entretien personnalisé.
+              </p>
+            </div>
           </div>
 
-          {/* Form container */}
-          <div className="lg:col-span-3 p-8 rounded-2xl glass shadow-elegant" data-aos="fade-left">
-            {/* Tab switchers */}
-            <div className="flex gap-2 p-1.5 bg-surface-elevated rounded-xl mb-6">
+          {/* Form Area */}
+          <div className="lg:col-span-2 card-premium p-8 rounded-2xl bg-surface border border-border">
+            {/* Tabs selector */}
+            <div className="flex p-1 rounded-xl bg-muted mb-8">
               <button
                 type="button"
                 onClick={() => { setTab("contact"); setFormErrors({}); }}
-                className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-smooth ${
+                className={cn(
+                  "flex-1 py-2.5 text-sm font-semibold rounded-lg transition-smooth",
                   tab === "contact"
-                    ? "bg-gradient-primary text-primary-foreground shadow-elegant"
+                    ? "bg-surface-elevated text-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground"
-                }`}
+                )}
               >
-                Message de contact
+                Message Général
               </button>
               <button
                 type="button"
                 onClick={() => { setTab("admission"); setFormErrors({}); }}
-                className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-smooth flex items-center justify-center gap-2 ${
+                className={cn(
+                  "flex-1 py-2.5 text-sm font-semibold rounded-lg transition-smooth",
                   tab === "admission"
-                    ? "bg-gradient-primary text-primary-foreground shadow-elegant"
+                    ? "bg-surface-elevated text-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground"
-                }`}
+                )}
               >
-                <GraduationCap className="size-4" />
-                Préinscription
+                Préinscription Élève
               </button>
             </div>
 
-            {/* General Server Error Banner */}
             {(contactMutation.isError || admissionMutation.isError) && (
-              <div className="mb-6 p-4 rounded-xl border border-destructive/30 bg-destructive/10 text-destructive flex items-center gap-3">
+              <div className="mb-6 p-4 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive text-sm flex items-center gap-3">
                 <AlertCircle className="size-5 shrink-0" />
-                <p className="text-sm">
+                <p>
                   {contactMutation.error?.message || admissionMutation.error?.message || "Une erreur est survenue lors de l'envoi."}
                 </p>
               </div>
@@ -216,10 +243,10 @@ function ContactPage() {
                     <CheckCircle2 className="size-8 text-primary-foreground" />
                   </div>
                   <h3 className="font-display text-2xl font-bold">
-                    Message envoyé avec succès !
+                    Message Envoyé avec Succès !
                   </h3>
                   <p className="text-muted-foreground mt-2">
-                    Notre équipe vous recontactera sous 24h ouvrées.
+                    Merci de nous avoir contactés. Notre équipe vous répondra dans les plus brefs délais.
                   </p>
                   <button
                     type="button"
@@ -230,19 +257,21 @@ function ContactPage() {
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleContactSubmit}>
-                  <div className="grid sm:grid-cols-2 gap-4 mb-4">
-                    <div>
-                      <label className="block text-sm font-semibold mb-2">Nom <span className="text-primary">*</span></label>
-                      <input
-                        type="text"
-                        required
-                        value={contactData.name}
-                        onChange={(e) => setContactData({ ...contactData, name: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl bg-surface-elevated border border-border focus:border-primary focus:outline-none transition-smooth"
-                      />
-                      {formErrors.name && <p className="text-xs text-destructive mt-1">{formErrors.name.join(', ')}</p>}
-                    </div>
+                <form onSubmit={handleContactSubmit} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-semibold mb-2">Nom complet <span className="text-primary">*</span></label>
+                    <input
+                      type="text"
+                      required
+                      value={contactData.name}
+                      onChange={(e) => setContactData({ ...contactData, name: e.target.value })}
+                      placeholder="Votre nom complet"
+                      className="w-full px-4 py-3 rounded-xl bg-surface-elevated border border-border focus:border-primary focus:outline-none transition-smooth"
+                    />
+                    {formErrors.name && <p className="text-xs text-destructive mt-1">{formErrors.name.join(', ')}</p>}
+                  </div>
+
+                  <div className="grid sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-semibold mb-2">Email <span className="text-primary">*</span></label>
                       <input
@@ -250,41 +279,43 @@ function ContactPage() {
                         required
                         value={contactData.email}
                         onChange={(e) => setContactData({ ...contactData, email: e.target.value })}
+                        placeholder="exemple@domaine.com"
                         className="w-full px-4 py-3 rounded-xl bg-surface-elevated border border-border focus:border-primary focus:outline-none transition-smooth"
                       />
                       {formErrors.email && <p className="text-xs text-destructive mt-1">{formErrors.email.join(', ')}</p>}
                     </div>
-                  </div>
 
-                  <div className="grid sm:grid-cols-2 gap-4 mb-4">
                     <div>
-                      <label className="block text-sm font-semibold mb-2">Téléphone</label>
+                      <label className="block text-sm font-semibold mb-2">Téléphone / WhatsApp</label>
                       <input
                         type="tel"
                         value={contactData.phone}
                         onChange={(e) => setContactData({ ...contactData, phone: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl bg-surface-elevated border border-border focus:border-primary focus:outline-none transition-smooth"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-semibold mb-2">Sujet</label>
-                      <input
-                        type="text"
-                        value={contactData.subject}
-                        onChange={(e) => setContactData({ ...contactData, subject: e.target.value })}
+                        placeholder="+243..."
                         className="w-full px-4 py-3 rounded-xl bg-surface-elevated border border-border focus:border-primary focus:outline-none transition-smooth"
                       />
                     </div>
                   </div>
 
-                  <div className="mb-4">
+                  <div>
+                    <label className="block text-sm font-semibold mb-2">Sujet</label>
+                    <input
+                      type="text"
+                      value={contactData.subject}
+                      onChange={(e) => setContactData({ ...contactData, subject: e.target.value })}
+                      placeholder="Sujet de votre message"
+                      className="w-full px-4 py-3 rounded-xl bg-surface-elevated border border-border focus:border-primary focus:outline-none transition-smooth"
+                    />
+                  </div>
+
+                  <div>
                     <label className="block text-sm font-semibold mb-2">Message <span className="text-primary">*</span></label>
                     <textarea
-                      required
                       rows={5}
+                      required
                       value={contactData.message}
                       onChange={(e) => setContactData({ ...contactData, message: e.target.value })}
-                      placeholder="Expliquez-nous votre demande..."
+                      placeholder="Écrivez votre message ici..."
                       className="w-full px-4 py-3 rounded-xl bg-surface-elevated border border-border focus:border-primary focus:outline-none transition-smooth resize-none"
                     />
                     {formErrors.message && <p className="text-xs text-destructive mt-1">{formErrors.message.join(', ')}</p>}
@@ -293,16 +324,16 @@ function ContactPage() {
                   <button
                     type="submit"
                     disabled={contactMutation.isPending}
-                    className="mt-4 w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-primary text-primary-foreground font-semibold shadow-elegant hover:shadow-glow transition-spring disabled:opacity-50"
+                    className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-primary text-primary-foreground font-semibold shadow-elegant hover:shadow-glow transition-spring disabled:opacity-50"
                   >
-                    {contactMutation.isPending ? "Envoi en cours..." : "Envoyer le message"}
+                    {contactMutation.isPending ? "Envoi en cours..." : "Envoyer le Message"}
                     <Send className="size-4" />
                   </button>
                 </form>
               )
             )}
 
-            {/* TAB 2: ADMISSION */}
+            {/* TAB 2: ADMISSION ENRICHIE */}
             {tab === "admission" && (
               sentAdmission ? (
                 <div className="text-center py-12 animate-in zoom-in-95 duration-500">
@@ -312,63 +343,90 @@ function ContactPage() {
                   <h3 className="font-display text-2xl font-bold">
                     Demande de préinscription enregistrée !
                   </h3>
-                  <p className="text-muted-foreground mt-2">
-                    Nous avons bien reçu votre dossier de préinscription et prendrons contact très prochainement.
+                  <p className="text-muted-foreground mt-2 max-w-md mx-auto">
+                    Nous avons bien reçu le dossier complet de préinscription. Notre équipe d'admission analysera votre profil et vous recontactera rapidement.
                   </p>
                   <button
                     type="button"
-                    onClick={() => { setSentAdmission(false); setAdmissionData({ name: "", email: "", phone: "", message: "" }); }}
+                    onClick={() => { setSentAdmission(false); setAdmissionData(initialAdmissionState); }}
                     className="mt-6 text-sm font-semibold text-primary hover:underline"
                   >
                     Soumettre une autre préinscription
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleAdmissionSubmit}>
-                  <div className="mb-4">
-                    <label className="block text-sm font-semibold mb-2">Nom complet <span className="text-primary">*</span></label>
+                <form onSubmit={handleAdmissionSubmit} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-semibold mb-2">
+                      Nom complet de l'élève <span className="text-primary">*</span>
+                    </label>
                     <input
                       type="text"
                       required
                       value={admissionData.name}
                       onChange={(e) => setAdmissionData({ ...admissionData, name: e.target.value })}
+                      placeholder="Nom et Prénom"
                       className="w-full px-4 py-3 rounded-xl bg-surface-elevated border border-border focus:border-primary focus:outline-none transition-smooth"
                     />
                     {formErrors.name && <p className="text-xs text-destructive mt-1">{formErrors.name.join(', ')}</p>}
                   </div>
 
-                  <div className="grid sm:grid-cols-2 gap-4 mb-4">
+                  <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-semibold mb-2">Email <span className="text-primary">*</span></label>
+                      <label className="block text-sm font-semibold mb-2">
+                        Email <span className="text-primary">*</span>
+                      </label>
                       <input
                         type="email"
                         required
                         value={admissionData.email}
                         onChange={(e) => setAdmissionData({ ...admissionData, email: e.target.value })}
+                        placeholder="eleve@exemple.com"
                         className="w-full px-4 py-3 rounded-xl bg-surface-elevated border border-border focus:border-primary focus:outline-none transition-smooth"
                       />
                       {formErrors.email && <p className="text-xs text-destructive mt-1">{formErrors.email.join(', ')}</p>}
                     </div>
+
                     <div>
-                      <label className="block text-sm font-semibold mb-2">Téléphone <span className="text-primary">*</span></label>
+                      <label className="block text-sm font-semibold mb-2">
+                        Téléphone / WhatsApp <span className="text-primary">*</span>
+                      </label>
                       <input
                         type="tel"
                         required
                         value={admissionData.phone}
                         onChange={(e) => setAdmissionData({ ...admissionData, phone: e.target.value })}
+                        placeholder="+243 970 000 000"
                         className="w-full px-4 py-3 rounded-xl bg-surface-elevated border border-border focus:border-primary focus:outline-none transition-smooth"
                       />
                       {formErrors.phone && <p className="text-xs text-destructive mt-1">{formErrors.phone.join(', ')}</p>}
                     </div>
                   </div>
 
-                  <div className="mb-4">
-                    <label className="block text-sm font-semibold mb-2">Précisions ou questions (optionnel)</label>
+                  <div>
+                    <label className="block text-sm font-semibold mb-2">Formation souhaitée</label>
+                    <select
+                      value={admissionData.program_id}
+                      onChange={(e) => setAdmissionData({ ...admissionData, program_id: e.target.value })}
+                      className="w-full px-4 py-3 rounded-xl bg-surface-elevated border border-border focus:border-primary focus:outline-none transition-smooth"
+                    >
+                      <option value="">-- Sélectionner une formation --</option>
+                      {programsData && Array.isArray(programsData) && programsData.map((prog: any) => (
+                        <option key={prog.id} value={prog.id}>
+                          {prog.title} ({prog.duration || "Formation"})
+                        </option>
+                      ))}
+                      <option value="conseil">Conseil d'orientation / À définir</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold mb-2">Message ou remarques (optionnel)</label>
                     <textarea
                       rows={4}
                       value={admissionData.message}
                       onChange={(e) => setAdmissionData({ ...admissionData, message: e.target.value })}
-                      placeholder="Précisez le niveau ou la formation souhaitée..."
+                      placeholder="Parlez-nous de vos objectifs d'études ou posez vos questions..."
                       className="w-full px-4 py-3 rounded-xl bg-surface-elevated border border-border focus:border-primary focus:outline-none transition-smooth resize-none"
                     />
                   </div>
@@ -376,10 +434,10 @@ function ContactPage() {
                   <button
                     type="submit"
                     disabled={admissionMutation.isPending}
-                    className="mt-4 w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-primary text-primary-foreground font-semibold shadow-elegant hover:shadow-glow transition-spring disabled:opacity-50"
+                    className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-primary text-primary-foreground font-semibold shadow-elegant hover:shadow-glow transition-spring disabled:opacity-50"
                   >
-                    {admissionMutation.isPending ? "Soumission en cours..." : "Soumettre la préinscription"}
-                    <GraduationCap className="size-4" />
+                    {admissionMutation.isPending ? "Soumission en cours..." : "Soumettre la Préinscription"}
+                    <GraduationCap className="size-5" />
                   </button>
                 </form>
               )
