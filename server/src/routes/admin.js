@@ -868,6 +868,39 @@ router.patch(
   }),
 );
 
+// ——— Overview stats ———
+router.get(
+  '/overview-stats',
+  asyncHandler(async (_req, res) => {
+    const [messagesNew] = await query(`SELECT COUNT(*) as count FROM ContactMessage WHERE status = 'new' AND deleted_at IS NULL`);
+    const [messagesTotal] = await query(`SELECT COUNT(*) as count FROM ContactMessage WHERE deleted_at IS NULL`);
+    const [admissionsNew] = await query(`SELECT COUNT(*) as count FROM AdmissionRequest WHERE status = 'new' AND deleted_at IS NULL`);
+    const [admissionsTotal] = await query(`SELECT COUNT(*) as count FROM AdmissionRequest WHERE deleted_at IS NULL`);
+    const [postsTotal] = await query(`SELECT COUNT(*) as count FROM Post WHERE deleted_at IS NULL`);
+    const [programsTotal] = await query(`SELECT COUNT(*) as count FROM Program WHERE deleted_at IS NULL`);
+    const [staffTotal] = await query(`SELECT COUNT(*) as count FROM Staff WHERE deleted_at IS NULL`);
+
+    const recentUnopenedMessages = await query(
+      `SELECT * FROM ContactMessage WHERE status = 'new' AND deleted_at IS NULL ORDER BY created_at DESC LIMIT 5`
+    );
+    const recentUnopenedAdmissions = await query(
+      `SELECT * FROM AdmissionRequest WHERE status = 'new' AND deleted_at IS NULL ORDER BY created_at DESC LIMIT 5`
+    );
+
+    return ok(res, {
+      unread_messages: Number(messagesNew?.count || 0),
+      total_messages: Number(messagesTotal?.count || 0),
+      pending_admissions: Number(admissionsNew?.count || 0),
+      total_admissions: Number(admissionsTotal?.count || 0),
+      total_posts: Number(postsTotal?.count || 0),
+      total_programs: Number(programsTotal?.count || 0),
+      total_staff: Number(staffTotal?.count || 0),
+      recent_unopened_messages: recentUnopenedMessages,
+      recent_unopened_admissions: recentUnopenedAdmissions,
+    });
+  }),
+);
+
 // ——— Messages & admissions ———
 router.get(
   '/contact-messages',
