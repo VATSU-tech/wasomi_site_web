@@ -443,15 +443,15 @@ export function AdminPage() {
           <div className="space-y-1 bg-card p-3 rounded-2xl border border-border shadow-sm h-fit">
             {(
               [
-                { id: 'overview', label: 'Dashboard', icon: LayoutDashboard },
-                { id: 'admissions', label: 'Préinscriptions', icon: GraduationCap, badge: stats?.pending_admissions },
-                { id: 'messages', label: 'Messages', icon: MessageSquare, badge: stats?.unread_messages },
-                { id: 'programs', label: 'Formations', icon: BookOpen },
-                { id: 'posts', label: 'Articles Blog', icon: FileText },
-                { id: 'gallery', label: 'Galerie', icon: ImageIcon },
-                { id: 'staff', label: 'Équipe', icon: Users },
-                { id: 'media', label: 'Médias', icon: Upload },
-              ] as const
+                { id: 'overview' as const, label: 'Dashboard', icon: LayoutDashboard, badge: undefined },
+                { id: 'admissions' as const, label: 'Préinscriptions', icon: GraduationCap, badge: stats?.pending_admissions },
+                { id: 'messages' as const, label: 'Messages', icon: MessageSquare, badge: stats?.unread_messages },
+                { id: 'programs' as const, label: 'Formations', icon: BookOpen, badge: undefined },
+                { id: 'posts' as const, label: 'Articles Blog', icon: FileText, badge: undefined },
+                { id: 'gallery' as const, label: 'Galerie', icon: ImageIcon, badge: undefined },
+                { id: 'staff' as const, label: 'Équipe', icon: Users, badge: undefined },
+                { id: 'media' as const, label: 'Médias', icon: Upload, badge: undefined },
+              ]
             ).map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
