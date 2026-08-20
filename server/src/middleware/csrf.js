@@ -26,6 +26,9 @@ export function csrfProtection(req, res, next) {
     '/auth/csrf',
     '/auth/refresh',
     '/auth/logout',
+    '/auth/forgot-password',
+    '/auth/reset-password',
+    '/auth/verify-email',
     '/contact-messages',
     '/admission-requests',
   ];
