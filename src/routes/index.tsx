@@ -35,27 +35,24 @@ function Home() {
   return (
     <>
       {/* HERO */}
-      <section className="relative overflow-hidden bg-hero min-h-[90vh] flex items-center">
-        <div className="absolute inset-0 bg-mesh pointer-events-none" />
+      <section className="relative overflow-hidden  min-h-[90vh] flex items-center bg-fixed bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: "url('/gallerie/IMG-20260519-WA0028.jpg')",
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent" />
+        {/* <div className="absolute inset-0 bg-mesh pointer-events-none" />
         <div className="absolute top-1/4 -left-32 size-96 rounded-full bg-primary/20 blur-3xl animate-float parallax-blur-1 pointer-events-none" />
         <div
           className="absolute bottom-1/4 -right-32 size-96 rounded-full bg-accent/20 blur-3xl animate-float parallax-blur-2 pointer-events-none"
           style={{ animationDelay: "2s" }}
-        />
+        /> */}
 
         <div className="container mx-auto px-4 max-w-7xl relative py-20 md:py-32">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <span
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs font-semibold tracking-widest uppercase text-primary mb-6"
-                data-aos="fade-down"
-              >
-                <Sparkles className="size-3.5 animate-pulse" />
-                Année Scolaire {new Date().getFullYear() - 1} -{" "}
-                {new Date().getFullYear()}
-              </span>
               <h1
-                className="font-display text-5xl md:text-7xl font-bold tracking-tight leading-[1.05]"
+                className="font-display text-gray-200 text-5xl md:text-7xl font-bold tracking-tight leading-[1.05]"
                 data-aos="fade-up"
               >
                 L'école qui révèle{" "}
@@ -65,7 +62,7 @@ function Home() {
                 de demain.
               </h1>
               <p
-                className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-xl"
+                className="mt-6 text-lg text-gray-400 leading-relaxed max-w-xl"
                 data-aos="fade-up"
                 data-aos-delay="100"
               >
@@ -119,10 +116,10 @@ function Home() {
 
             {/* Hero visual */}
             <div className="relative" data-aos="fade-left" data-aos-delay="200">
-              <div className="absolute -inset-4 bg-gradient-primary rounded-3xl blur-2xl opacity-30 animate-glow-pulse" />
+              {/* <div className="absolute -inset-4 bg-gradient-primary rounded-3xl  opacity-30" /> */}
               <div className="relative grid grid-cols-2 gap-4">
                 <div className="space-y-4 parallax-grid-col-1">
-                  <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-elegant animate-float image-zoom-container">
+                  <div className="aspect-[3/4] rounded-2xl overflow-hidden  animate-float image-zoom-container">
                     <img
                       src="/gallerie/equipement_1.jpg"
                       alt="Équipement"
@@ -130,7 +127,7 @@ function Home() {
                     />
                   </div>
                   <div
-                    className="aspect-square rounded-2xl overflow-hidden shadow-elegant animate-float image-zoom-container"
+                    className="aspect-square rounded-2xl overflow-hidden  animate-float image-zoom-container"
                     style={{ animationDelay: "1.5s" }}
                   >
                     <img
@@ -166,20 +163,16 @@ function Home() {
             </div>
           </div>
         </div>
-
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground pointer-events-none select-none z-10 animate-fade-in-delayed">
-          <span className="text-[10px] uppercase tracking-widest font-semibold opacity-60">
-            Défiler pour explorer
-          </span>
-          <div className="w-6 h-10 border-2 border-muted-foreground/30 rounded-full flex justify-center p-1.5 backdrop-blur-sm">
-            <div className="w-1.5 h-2 bg-gradient-primary rounded-full animate-scroll-dot" />
-          </div>
-        </div>
       </section>
 
       {/* FEATURES */}
-      <section className="py-24 container mx-auto px-4 max-w-7xl">
+      <section
+        className="relative min-h-[90vh] w-full bg-fixed bg-cover bg-center bg-no-repeat flex items-center flex-col justify-center pt-0"
+        style={{
+          backgroundImage: "url('/gallerie/IMG-20260519-WA0028.jpg')",
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-background/90" />
         <SectionHeading
           eyebrow="Pourquoi Wasomi"
           title="Une expérience d'apprentissage repensée"
@@ -218,7 +211,7 @@ function Home() {
                 <div className="size-12 rounded-xl bg-gradient-primary flex items-center justify-center shadow-glow mb-4 group-hover:scale-110 transition-spring">
                   <f.icon className="size-6 text-primary-foreground animate-pulse" style={{ animationDuration: '3s' }} />
                 </div>
-                <h3 className="font-display font-semibold text-lg mb-2 transition-smooth group-hover:text-primary">
+                <h3 className="font-display font-semibold text-lg mb-2 transition-smooth ">
                   {f.title}
                 </h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">
@@ -253,11 +246,18 @@ function Home() {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="py-24 bg-surface">
+      <section
+        className="relative min-h-[90vh] w-full bg-fixed bg-cover bg-center bg-no-repeat flex items-center flex-col justify-center pt-0"
+        style={{
+          backgroundImage: "url('/gallerie/IMG-20260519-WA0028.jpg')",
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-background/90" />
         <div className="container mx-auto px-4 max-w-7xl">
           <SectionHeading
             eyebrow="Témoignages"
             title="ILs ont confiance en nous !"
+            className="text-primary"
           />
           <div className="grid md:grid-cols-3 gap-6">
             {[
