@@ -36,6 +36,9 @@ export interface PublicSettings {
   email?: string;
   phone?: string;
   address?: string;
+  contact_email?: string;
+  contact_phone?: string;
+  contact_address?: string;
   logo_url?: string;
   hero_title?: string;
   hero_subtitle?: string;
