@@ -5,6 +5,7 @@ import { ApiError, ApiErrorResponse, ApiResponse } from "@/types/api";
 type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 let csrfToken: string | null = null;
+let csrfPromise: Promise<string | null> | null = null;
 let isRefreshing = false;
 let refreshSubscribers: ((success: boolean) => void)[] = [];
 
@@ -17,33 +18,55 @@ export function setCsrfToken(token: string | null) {
   csrfToken = token;
 }
 
+function getCsrfFromCookie(): string | null {
+  if (typeof document === "undefined") return null;
+  const match = document.cookie.match(/(?:^|;\s*)wasomi_csrf=([^;]+)/);
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
 export function getCsrfToken(): string | null {
-  return csrfToken;
+  return csrfToken || getCsrfFromCookie();
 }
 
 export async function fetchCsrfToken(): Promise<string | null> {
-  try {
-    const res = await fetch(`${env.apiBaseUrl}/auth/csrf`, {
-      method: "GET",
-      credentials: "include",
-    });
-    if (res.ok) {
-      const json = await res.json();
-      const token =
-        json?.data?.csrfToken ??
-        json?.data?.csrf_token ??
-        json?.data?.token ??
-        json?.csrfToken ??
-        json?.token;
-      if (typeof token === "string") {
-        csrfToken = token;
-        return token;
-      }
-    }
-  } catch {
-    // Ignore CSRF fetch network errors
+  const cookieToken = getCsrfFromCookie();
+  if (cookieToken) {
+    csrfToken = cookieToken;
+    return cookieToken;
   }
-  return csrfToken;
+
+  if (csrfPromise) {
+    return csrfPromise;
+  }
+
+  csrfPromise = (async () => {
+    try {
+      const res = await fetch(`${env.apiBaseUrl}/auth/csrf`, {
+        method: "GET",
+        credentials: "include",
+      });
+      if (res.ok) {
+        const json = await res.json();
+        const token =
+          json?.data?.csrfToken ??
+          json?.data?.csrf_token ??
+          json?.data?.token ??
+          json?.csrfToken ??
+          json?.token;
+        if (typeof token === "string") {
+          csrfToken = token;
+          return token;
+        }
+      }
+    } catch {
+      // Ignore CSRF fetch network errors
+    } finally {
+      csrfPromise = null;
+    }
+    return csrfToken || getCsrfFromCookie();
+  })();
+
+  return csrfPromise;
 }
 
 async function performRefresh(): Promise<boolean> {
@@ -93,17 +116,31 @@ async function request<T>(
   const timeout = setTimeout(() => controller.abort(), env.apiTimeoutMs);
 
   const isMutation = ["POST", "PUT", "PATCH", "DELETE"].includes(method);
-  const isAuthBypassPath = ["/auth/login", "/auth/csrf", "/auth/refresh", "/auth/logout"].includes(path);
+  const isAuthBypassPath = [
+    "/auth/login",
+    "/auth/csrf",
+    "/auth/refresh",
+    "/auth/logout",
+    "/auth/forgot-password",
+    "/auth/reset-password",
+    "/auth/verify-email",
+    "/contact-messages",
+    "/admission-requests",
+  ].includes(path);
 
   // Obtain CSRF token for mutations if missing
-  if (isMutation && !isAuthBypassPath && !csrfToken) {
-    await fetchCsrfToken();
+  if (isMutation && !isAuthBypassPath) {
+    const currentToken = csrfToken || getCsrfFromCookie();
+    if (!currentToken) {
+      await fetchCsrfToken();
+    }
   }
 
   const headers: Record<string, string> = {};
 
-  if (isMutation && csrfToken) {
-    headers["X-CSRF-Token"] = csrfToken;
+  const activeCsrf = csrfToken || getCsrfFromCookie();
+  if (isMutation && activeCsrf) {
+    headers["X-CSRF-Token"] = activeCsrf;
   }
 
   let requestBody: BodyInit | undefined = undefined;
@@ -125,10 +162,15 @@ async function request<T>(
       signal: controller.signal,
     });
 
-    // Check for CSRF header in response
+    // Check for CSRF header or updated cookie in response
     const newCsrf = response.headers.get("X-CSRF-Token");
     if (newCsrf) {
       csrfToken = newCsrf;
+    } else {
+      const cookieCsrf = getCsrfFromCookie();
+      if (cookieCsrf) {
+        csrfToken = cookieCsrf;
+      }
     }
 
     if (!response.ok) {
@@ -155,20 +197,20 @@ async function request<T>(
         (response.status === 401
           ? "Session expirée ou non autorisée."
           : response.status === 403
-          ? "Accès refusé."
-          : response.status === 404
-          ? "Ressource introuvable."
-          : `Erreur serveur (${response.status})`);
+            ? "Accès refusé."
+            : response.status === 404
+              ? "Ressource introuvable."
+              : `Erreur serveur (${response.status})`);
 
       const code =
         errorPayload?.error?.code ??
         (response.status === 401
           ? "UNAUTHENTICATED"
           : response.status === 403
-          ? "FORBIDDEN"
-          : response.status === 404
-          ? "NOT_FOUND"
-          : "INTERNAL_ERROR");
+            ? "FORBIDDEN"
+            : response.status === 404
+              ? "NOT_FOUND"
+              : "INTERNAL_ERROR");
 
       throw new ApiError(
         message,
