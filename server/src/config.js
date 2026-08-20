@@ -6,10 +6,19 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
 
 function parseOrigins(value) {
-  return (value || 'http://localhost:5173')
+  const defaultOrigins = [
+    'http://localhost:5173',
+    'http://localhost:8080',
+    'http://127.0.0.1:5173',
+    'http://127.0.0.1:8080',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+  ];
+  const parsed = (value || '')
     .split(',')
     .map((s) => s.trim())
     .filter(Boolean);
+  return Array.from(new Set([...parsed, ...defaultOrigins]));
 }
 
 export const env = {
