@@ -8,6 +8,7 @@ import {
   refreshSession,
   verifyPassword,
 } from '../middleware/auth.js';
+import { COOKIES } from '../config.js';
 import { generateCsrfToken, setCsrfCookie } from '../middleware/csrf.js';
 import { asyncHandler, fail, ok } from '../utils/helpers.js';
 
@@ -20,8 +21,11 @@ const loginSchema = z.object({
 
 router.get(
   '/csrf',
-  asyncHandler(async (_req, res) => {
-    const token = generateCsrfToken();
+  asyncHandler(async (req, res) => {
+    const existing = req.cookies?.[COOKIES.csrf];
+    const token = existing && typeof existing === 'string' && existing.length >= 32
+      ? existing
+      : generateCsrfToken();
     setCsrfCookie(res, token);
     return ok(res, { csrfToken: token });
   }),
