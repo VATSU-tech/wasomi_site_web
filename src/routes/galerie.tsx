@@ -43,12 +43,6 @@ function GaleriePage() {
       <section className="relative overflow-hidden bg-hero">
         <div className="absolute inset-0 bg-mesh" />
         <div className="container mx-auto px-4 max-w-7xl relative py-20 text-center">
-          <span
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs font-semibold tracking-widest uppercase text-primary mb-4"
-            data-aos="fade-down"
-          >
-            Notre univers
-          </span>
           <h1
             className="font-display text-4xl md:text-6xl font-bold tracking-tight"
             data-aos="fade-up"

@@ -15,7 +15,11 @@ export function TeachingsPage() {
   const [categories, setCategories] = useState<CategorieEvaluation[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [newCat, setNewCat] = useState({ nom: '', poids: '', type_categorie: 'DC' as const });
+  const [newCat, setNewCat] = useState<{ nom: string; poids: string; type_categorie: 'DC' | 'EX' }>({
+    nom: '',
+    poids: '',
+    type_categorie: 'DC',
+  });
   const [deleteId, setDeleteId] = useState<number | null>(null);
 
   useEffect(() => {

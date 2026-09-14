@@ -18,6 +18,8 @@ export const Route = createFileRoute("/equipe")({
   component: EquipePage,
 });
 
+const DEFAULT_AVATAR = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23e2e8f0' stroke='%2394a3b8' stroke-width='1.5'%3E%3Crect width='24' height='24' fill='%23f1f5f9'/%3E%3Cpath d='M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E";
+
 function EquipePage() {
   const { data: staff, isLoading, isError, error } = useStaffQuery();
 
@@ -78,9 +80,12 @@ function EquipePage() {
               >
                 <div className="relative aspect-[4/5] overflow-hidden">
                   <img
-                    src={member.avatar || "/gallerie/personne.jpg"}
+                    src={member.avatar || DEFAULT_AVATAR}
                     alt={member.name}
                     loading="lazy"
+                    onError={(e) => {
+                      e.currentTarget.src = DEFAULT_AVATAR;
+                    }}
                     className="size-full object-cover transition-spring group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />

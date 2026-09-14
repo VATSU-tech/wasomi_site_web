@@ -204,7 +204,7 @@ function Home() {
       <section
         className="relative min-h-[90vh] w-full bg-fixed bg-cover bg-center bg-no-repeat flex items-center flex-col justify-center pt-0"
         style={{
-          backgroundImage: "url('https://imgs.search.brave.com/IPGhPYQ2JMokOpI4s8pXnYN82ZCiGOMnK2vG0ZwfrN8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvOTU1/MDYyMzUyL3Bob3Rv/L2NsYXNzZS1kdW5l/LSVDMyVBOWNvbGUt/cHJpbWFpcmUtZGUt/c3VtbWl0LWRhbnMt/bGUtbmV3LWplcnNl/eS1jaXJjYS0xOTcw/LWV0YXRzLXVuaXMu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PXJ0aGxZUW5UX2hi/NjJXUlB1eG15OHRo/WUpLRFFNdHlSMFNh/azNqUEw1NEU9')",
+          backgroundImage: "url('/gallerie/realisation.jpg')",
         }}
       >
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-background/90" />

@@ -24,16 +24,17 @@ export function AppShell({ children }: { children?: ReactNode }) {
     }
   }, [isLoading, isSuspended, navigate, pathname]);
 
-  if (isBarePage) {
-    return <>{children ?? <Outlet />}</>;
-  }
-
   useEffect(() => {
+    if (isBarePage) return;
     schoolService
       .getActiveAnnee()
       .then((a) => setAnneeLabel(a?.libelle ?? ''))
       .catch(() => setAnneeLabel(''));
-  }, []);
+  }, [isBarePage]);
+
+  if (isBarePage) {
+    return <>{children ?? <Outlet />}</>;
+  }
 
   if (isLoading) {
     return (

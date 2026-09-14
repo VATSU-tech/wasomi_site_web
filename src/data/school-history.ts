@@ -1,5 +1,4 @@
-import GradiationCap, { Library, LucideIcon, Microscope, Trees } from 'lucide-react'
-import { GraduationCap } from 'lucide-react';
+import { GraduationCap, Library, LucideIcon, Microscope, Trees } from 'lucide-react';
 /**
  * School history configuration
  * Centralized metadata for the history section
