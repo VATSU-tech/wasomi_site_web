@@ -1,6 +1,19 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Mail, Phone, MapPin, Send, CheckCircle2, AlertCircle, GraduationCap } from "lucide-react";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Send,
+  CheckCircle2,
+  AlertCircle,
+  GraduationCap,
+  User,
+  Baby,
+  Calendar,
+  Sparkles,
+  ShieldCheck,
+} from "lucide-react";
 import { useContactMutation, useAdmissionMutation, usePublicSettingsQuery, useProgramsQuery } from "@/hooks/useWasomiApi";
 import { authStore } from "@/store/auth-store";
 import { useQueryClient } from "@tanstack/react-query";
@@ -34,12 +47,61 @@ const contactSchema = z.object({
 });
 
 const admissionSchema = z.object({
-  name: z.string().min(2, "Nom trop court (minimum 2 caractères)"),
-  email: z.string().email("Adresse email invalide"),
-  phone: z.string().min(6, "Téléphone requis (ex: +243...)"),
+  last_name: z.string().min(2, "Nom de l'enfant requis (minimum 2 caractères)"),
+  first_name: z.string().min(2, "Prénom de l'enfant requis (minimum 2 caractères)"),
+  birth_date: z.string().min(1, "Date de naissance requise"),
+  gender: z.enum(["M", "F"], { required_error: "Veuillez préciser le sexe de l'enfant" }),
+  class_level: z.string().min(1, "Veuillez sélectionner la classe souhaitée"),
   program_id: z.string().optional(),
+  guardian_name: z.string().min(2, "Nom du parent ou tuteur requis"),
+  guardian_relation: z.string().optional(),
+  phone: z.string().min(6, "Téléphone requis (ex: +243...)"),
+  email: z.string().email("Adresse email invalide"),
+  emergency_phone: z.string().optional(),
+  address: z.string().optional(),
+  previous_school: z.string().optional(),
+  last_grade_result: z.string().optional(),
   message: z.string().optional(),
 });
+
+const AVAILABLE_CLASSES = [
+  {
+    cycle: "Crèche",
+    items: [{ id: "Crèche (Pré-éveil)", label: "Crèche (Pré-éveil & Garderie)" }],
+  },
+  {
+    cycle: "Maternelle",
+    items: [
+      { id: "1ère Maternelle", label: "1ère Maternelle (Petite Section)" },
+      { id: "2ème Maternelle", label: "2ème Maternelle (Moyenne Section)" },
+      { id: "3ème Maternelle", label: "3ème Maternelle (Grande Section)" },
+    ],
+  },
+  {
+    cycle: "Primaire",
+    items: [
+      { id: "1ère Primaire", label: "1ère Année Primaire" },
+      { id: "2ème Primaire", label: "2ème Année Primaire" },
+      { id: "3ème Primaire", label: "3ème Année Primaire" },
+      { id: "4ème Primaire", label: "4ème Année Primaire" },
+      { id: "5ème Primaire", label: "5ème Année Primaire" },
+      { id: "6ème Primaire", label: "6ème Année Primaire" },
+    ],
+  },
+];
+
+function computeAge(birthDateStr: string): number | null {
+  if (!birthDateStr) return null;
+  const birth = new Date(birthDateStr);
+  if (isNaN(birth.getTime())) return null;
+  const today = new Date();
+  let age = today.getFullYear() - birth.getFullYear();
+  const m = today.getMonth() - birth.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+    age--;
+  }
+  return age >= 0 ? age : null;
+}
 
 function ContactPage() {
   const navigate = useNavigate();
@@ -51,18 +113,38 @@ function ContactPage() {
   // Form states
   const [contactData, setContactData] = useState({ name: "", email: "", subject: "", message: "", phone: "" });
   const [admissionData, setAdmissionData] = useState({
-    name: "",
-    email: "",
-    phone: "",
+    last_name: "",
+    first_name: "",
+    birth_date: "",
+    gender: "M" as "M" | "F",
+    class_level: "",
     program_id: "",
+    guardian_name: "",
+    guardian_relation: "Père",
+    phone: "",
+    email: "",
+    emergency_phone: "",
+    address: "",
+    previous_school: "",
+    last_grade_result: "",
     message: "",
   });
 
   const initialAdmissionState = {
-    name: "",
-    email: "",
-    phone: "",
+    last_name: "",
+    first_name: "",
+    birth_date: "",
+    gender: "M" as "M" | "F",
+    class_level: "",
     program_id: "",
+    guardian_name: "",
+    guardian_relation: "Père",
+    phone: "",
+    email: "",
+    emergency_phone: "",
+    address: "",
+    previous_school: "",
+    last_grade_result: "",
     message: "",
   };
 
@@ -72,6 +154,8 @@ function ContactPage() {
   const admissionMutation = useAdmissionMutation();
   const { data: settings } = usePublicSettingsQuery();
   const { data: programsData } = useProgramsQuery();
+
+  const calculatedAge = computeAge(admissionData.birth_date);
 
   const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -94,9 +178,10 @@ function ContactPage() {
         return;
       }
       setSentContact(true);
-    } catch (err: any) {
-      if (err?.fields) {
-        setFormErrors(err.fields);
+    } catch (err: unknown) {
+      const errorObj = err as { fields?: Record<string, string[]> };
+      if (errorObj?.fields) {
+        setFormErrors(errorObj.fields);
       }
     }
   };
@@ -109,15 +194,25 @@ function ContactPage() {
     if (!result.success) {
       const formatted = result.error.flatten().fieldErrors;
       setFormErrors(formatted as Record<string, string[]>);
+      toast.error("Veuillez vérifier les informations renseignées.");
       return;
     }
 
     try {
-      await admissionMutation.mutateAsync(result.data);
+      const fullName = `${result.data.last_name} ${result.data.first_name}`.trim();
+      await admissionMutation.mutateAsync({
+        ...result.data,
+        name: fullName,
+        age: calculatedAge ?? undefined,
+      });
       setSentAdmission(true);
-    } catch (err: any) {
-      if (err?.fields) {
-        setFormErrors(err.fields);
+      toast.success("Demande de préinscription envoyée avec succès !");
+    } catch (err: unknown) {
+      const errorObj = err as { fields?: Record<string, string[]>; message?: string };
+      if (errorObj?.fields) {
+        setFormErrors(errorObj.fields);
+      } else {
+        toast.error(errorObj?.message || "Une erreur est survenue lors de l'enregistrement.");
       }
     }
   };
@@ -355,88 +450,352 @@ function ContactPage() {
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleAdmissionSubmit} className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-semibold mb-2">
-                      Nom complet de l'élève <span className="text-primary">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={admissionData.name}
-                      onChange={(e) => setAdmissionData({ ...admissionData, name: e.target.value })}
-                      placeholder="Nom et Prénom"
-                      className="w-full px-4 py-3 rounded-xl bg-surface-elevated border border-border focus:border-primary focus:outline-none transition-smooth"
-                    />
-                    {formErrors.name && <p className="text-xs text-destructive mt-1">{formErrors.name.join(', ')}</p>}
+                <form onSubmit={handleAdmissionSubmit} className="space-y-6">
+                  {/* SECTION 1 : ÉLÈVE */}
+                  <div className="p-4 sm:p-5 rounded-2xl bg-surface-elevated/70 border border-border space-y-4">
+                    <div className="flex items-center gap-2 pb-2 border-b border-border/60">
+                      <Baby className="size-4 text-primary" />
+                      <h4 className="text-sm font-bold uppercase tracking-wider text-foreground">
+                        1. Identité de l'élève
+                      </h4>
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-semibold mb-1.5 text-foreground">
+                          Nom de l'enfant <span className="text-primary">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={admissionData.last_name}
+                          onChange={(e) => setAdmissionData({ ...admissionData, last_name: e.target.value })}
+                          placeholder="Ex: Kasereka"
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-surface border border-border focus:border-primary focus:outline-none transition-smooth text-sm"
+                        />
+                        {formErrors.last_name && (
+                          <p className="text-xs text-destructive mt-1">{formErrors.last_name.join(', ')}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold mb-1.5 text-foreground">
+                          Prénom de l'enfant <span className="text-primary">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={admissionData.first_name}
+                          onChange={(e) => setAdmissionData({ ...admissionData, first_name: e.target.value })}
+                          placeholder="Ex: David"
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-surface border border-border focus:border-primary focus:outline-none transition-smooth text-sm"
+                        />
+                        {formErrors.first_name && (
+                          <p className="text-xs text-destructive mt-1">{formErrors.first_name.join(', ')}</p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 gap-4 items-center">
+                      <div>
+                        <label className="block text-xs font-semibold mb-1.5 text-foreground">
+                          Sexe / Genre <span className="text-primary">*</span>
+                        </label>
+                        <div className="grid grid-cols-2 gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setAdmissionData({ ...admissionData, gender: "M" })}
+                            className={cn(
+                              "py-2 px-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2 transition-smooth",
+                              admissionData.gender === "M"
+                                ? "bg-primary text-primary-foreground border-primary shadow-sm"
+                                : "bg-surface border-border text-muted-foreground hover:text-foreground",
+                            )}
+                          >
+                            <span>👦 Garçon</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setAdmissionData({ ...admissionData, gender: "F" })}
+                            className={cn(
+                              "py-2 px-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2 transition-smooth",
+                              admissionData.gender === "F"
+                                ? "bg-pink-600 text-white border-pink-600 shadow-sm"
+                                : "bg-surface border-border text-muted-foreground hover:text-foreground",
+                            )}
+                          >
+                            <span>👧 Fille</span>
+                          </button>
+                        </div>
+                        {formErrors.gender && (
+                          <p className="text-xs text-destructive mt-1">{formErrors.gender.join(', ')}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <div className="flex items-center justify-between mb-1.5">
+                          <label className="text-xs font-semibold text-foreground">
+                            Date de naissance <span className="text-primary">*</span>
+                          </label>
+                          {calculatedAge !== null && (
+                            <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-primary/10 text-primary">
+                              <Sparkles className="size-3" />
+                              {calculatedAge} an{calculatedAge > 1 ? "s" : ""}
+                            </span>
+                          )}
+                        </div>
+                        <input
+                          type="date"
+                          required
+                          max={new Date().toISOString().split("T")[0]}
+                          value={admissionData.birth_date}
+                          onChange={(e) => setAdmissionData({ ...admissionData, birth_date: e.target.value })}
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-surface border border-border focus:border-primary focus:outline-none transition-smooth text-sm"
+                        />
+                        {formErrors.birth_date && (
+                          <p className="text-xs text-destructive mt-1">{formErrors.birth_date.join(', ')}</p>
+                        )}
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-semibold mb-2">
-                        Email <span className="text-primary">*</span>
-                      </label>
-                      <input
-                        type="email"
-                        required
-                        value={admissionData.email}
-                        onChange={(e) => setAdmissionData({ ...admissionData, email: e.target.value })}
-                        placeholder="eleve@exemple.com"
-                        className="w-full px-4 py-3 rounded-xl bg-surface-elevated border border-border focus:border-primary focus:outline-none transition-smooth"
-                      />
-                      {formErrors.email && <p className="text-xs text-destructive mt-1">{formErrors.email.join(', ')}</p>}
+                  {/* SECTION 2 : CLASSE SOUHAITÉE */}
+                  <div className="p-4 sm:p-5 rounded-2xl bg-surface-elevated/70 border border-border space-y-4">
+                    <div className="flex items-center gap-2 pb-2 border-b border-border/60">
+                      <GraduationCap className="size-4 text-primary" />
+                      <h4 className="text-sm font-bold uppercase tracking-wider text-foreground">
+                        2. Classe & Niveau souhaité
+                      </h4>
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-semibold mb-1.5 text-foreground">
+                          Classe demandée <span className="text-primary">*</span>
+                        </label>
+                        <select
+                          required
+                          value={admissionData.class_level}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            // Synchronise automatiquement le program_id correspondant si possible
+                            let matchedProg = "";
+                            if (val.includes("Crèche")) matchedProg = "Creche";
+                            else if (val.includes("Maternelle")) matchedProg = "Maternelle";
+                            else if (val.includes("Primaire")) matchedProg = "Primaire";
+                            setAdmissionData({
+                              ...admissionData,
+                              class_level: val,
+                              program_id: matchedProg || admissionData.program_id,
+                            });
+                          }}
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-surface border border-border focus:border-primary focus:outline-none transition-smooth text-sm"
+                        >
+                          <option value="">-- Sélectionner la classe --</option>
+                          {AVAILABLE_CLASSES.map((grp) => (
+                            <optgroup key={grp.cycle} label={`Cycle : ${grp.cycle}`}>
+                              {grp.items.map((it) => (
+                                <option key={it.id} value={it.id}>
+                                  {it.label}
+                                </option>
+                              ))}
+                            </optgroup>
+                          ))}
+                        </select>
+                        {formErrors.class_level && (
+                          <p className="text-xs text-destructive mt-1">{formErrors.class_level.join(', ')}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold mb-1.5 text-foreground">
+                          Programme Wasomi associé
+                        </label>
+                        <select
+                          value={admissionData.program_id}
+                          onChange={(e) => setAdmissionData({ ...admissionData, program_id: e.target.value })}
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-surface border border-border focus:border-primary focus:outline-none transition-smooth text-sm"
+                        >
+                          <option value="">-- Sélectionner le cycle --</option>
+                          {programsData && Array.isArray(programsData) && programsData.map((prog: { id: string | number; title: string; duration?: string }) => (
+                            <option key={prog.id} value={String(prog.id)}>
+                              {prog.title} {prog.duration ? `(${prog.duration})` : ""}
+                            </option>
+                          ))}
+                          <option value="Creche">Crèche</option>
+                          <option value="Maternelle">Maternelle</option>
+                          <option value="Primaire">Primaire</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* SECTION 3 : PARENT / TUTEUR */}
+                  <div className="p-4 sm:p-5 rounded-2xl bg-surface-elevated/70 border border-border space-y-4">
+                    <div className="flex items-center gap-2 pb-2 border-b border-border/60">
+                      <User className="size-4 text-primary" />
+                      <h4 className="text-sm font-bold uppercase tracking-wider text-foreground">
+                        3. Responsable légal (Parent / Tuteur)
+                      </h4>
+                    </div>
+
+                    <div className="grid sm:grid-cols-3 gap-4">
+                      <div className="sm:col-span-2">
+                        <label className="block text-xs font-semibold mb-1.5 text-foreground">
+                          Nom complet du tuteur <span className="text-primary">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={admissionData.guardian_name}
+                          onChange={(e) => setAdmissionData({ ...admissionData, guardian_name: e.target.value })}
+                          placeholder="Nom, Post-nom et Prénom"
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-surface border border-border focus:border-primary focus:outline-none transition-smooth text-sm"
+                        />
+                        {formErrors.guardian_name && (
+                          <p className="text-xs text-destructive mt-1">{formErrors.guardian_name.join(', ')}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold mb-1.5 text-foreground">
+                          Lien de parenté
+                        </label>
+                        <select
+                          value={admissionData.guardian_relation}
+                          onChange={(e) => setAdmissionData({ ...admissionData, guardian_relation: e.target.value })}
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-surface border border-border focus:border-primary focus:outline-none transition-smooth text-sm"
+                        >
+                          <option value="Père">Père</option>
+                          <option value="Mère">Mère</option>
+                          <option value="Tuteur légal">Tuteur légal</option>
+                          <option value="Autre">Autre</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-semibold mb-1.5 text-foreground">
+                          Téléphone WhatsApp principal <span className="text-primary">*</span>
+                        </label>
+                        <input
+                          type="tel"
+                          required
+                          value={admissionData.phone}
+                          onChange={(e) => setAdmissionData({ ...admissionData, phone: e.target.value })}
+                          placeholder="+243 970 000 000"
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-surface border border-border focus:border-primary focus:outline-none transition-smooth text-sm"
+                        />
+                        {formErrors.phone && (
+                          <p className="text-xs text-destructive mt-1">{formErrors.phone.join(', ')}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold mb-1.5 text-foreground">
+                          Email de contact <span className="text-primary">*</span>
+                        </label>
+                        <input
+                          type="email"
+                          required
+                          value={admissionData.email}
+                          onChange={(e) => setAdmissionData({ ...admissionData, email: e.target.value })}
+                          placeholder="parent@exemple.com"
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-surface border border-border focus:border-primary focus:outline-none transition-smooth text-sm"
+                        />
+                        {formErrors.email && (
+                          <p className="text-xs text-destructive mt-1">{formErrors.email.join(', ')}</p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-semibold mb-1.5 text-foreground">
+                          Téléphone alternatif / Urgence
+                        </label>
+                        <input
+                          type="tel"
+                          value={admissionData.emergency_phone}
+                          onChange={(e) => setAdmissionData({ ...admissionData, emergency_phone: e.target.value })}
+                          placeholder="+243..."
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-surface border border-border focus:border-primary focus:outline-none transition-smooth text-sm"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold mb-1.5 text-foreground">
+                          Adresse de résidence (Beni)
+                        </label>
+                        <input
+                          type="text"
+                          value={admissionData.address}
+                          onChange={(e) => setAdmissionData({ ...admissionData, address: e.target.value })}
+                          placeholder="Quartier, Commune, Avenue..."
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-surface border border-border focus:border-primary focus:outline-none transition-smooth text-sm"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* SECTION 4 : SCOLARITÉ & REMARQUES */}
+                  <div className="p-4 sm:p-5 rounded-2xl bg-surface-elevated/70 border border-border space-y-4">
+                    <div className="flex items-center gap-2 pb-2 border-b border-border/60">
+                      <ShieldCheck className="size-4 text-primary" />
+                      <h4 className="text-sm font-bold uppercase tracking-wider text-foreground">
+                        4. Scolarité antérieure & Remarques
+                      </h4>
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-semibold mb-1.5 text-foreground">
+                          École de provenance (si applicable)
+                        </label>
+                        <input
+                          type="text"
+                          value={admissionData.previous_school}
+                          onChange={(e) => setAdmissionData({ ...admissionData, previous_school: e.target.value })}
+                          placeholder="Nom de l'école précédente"
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-surface border border-border focus:border-primary focus:outline-none transition-smooth text-sm"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold mb-1.5 text-foreground">
+                          Dernier pourcentage / Mention
+                        </label>
+                        <input
+                          type="text"
+                          value={admissionData.last_grade_result}
+                          onChange={(e) => setAdmissionData({ ...admissionData, last_grade_result: e.target.value })}
+                          placeholder="Ex: 68%, Distinction..."
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-surface border border-border focus:border-primary focus:outline-none transition-smooth text-sm"
+                        />
+                      </div>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold mb-2">
-                        Téléphone / WhatsApp <span className="text-primary">*</span>
+                      <label className="block text-xs font-semibold mb-1.5 text-foreground">
+                        Remarques ou besoins particuliers (santé, régime, etc.)
                       </label>
-                      <input
-                        type="tel"
-                        required
-                        value={admissionData.phone}
-                        onChange={(e) => setAdmissionData({ ...admissionData, phone: e.target.value })}
-                        placeholder="+243 970 000 000"
-                        className="w-full px-4 py-3 rounded-xl bg-surface-elevated border border-border focus:border-primary focus:outline-none transition-smooth"
+                      <textarea
+                        rows={3}
+                        value={admissionData.message}
+                        onChange={(e) => setAdmissionData({ ...admissionData, message: e.target.value })}
+                        placeholder="Informations médicales, allergies ou toute précision utile pour l'équipe pédagogique..."
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-surface border border-border focus:border-primary focus:outline-none transition-smooth text-sm resize-none"
                       />
-                      {formErrors.phone && <p className="text-xs text-destructive mt-1">{formErrors.phone.join(', ')}</p>}
                     </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold mb-2">Formation souhaitée</label>
-                    <select
-                      value={admissionData.program_id}
-                      onChange={(e) => setAdmissionData({ ...admissionData, program_id: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl bg-surface-elevated border border-border focus:border-primary focus:outline-none transition-smooth"
-                    >
-                      <option value="">-- Sélectionner une formation --</option>
-                      {programsData && Array.isArray(programsData) && programsData.map((prog: any) => (
-                        <option key={prog.id} value={prog.id}>
-                          {prog.title} ({prog.duration || "Formation"})
-                        </option>
-                        ))}
-                      <option value="conseil">Conseil d'orientation / À définir</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold mb-2">Message ou remarques (optionnel)</label>
-                    <textarea
-                      rows={4}
-                      value={admissionData.message}
-                      onChange={(e) => setAdmissionData({ ...admissionData, message: e.target.value })}
-                      placeholder="Parlez-nous de vos objectifs d'études ou posez vos questions..."
-                      className="w-full px-4 py-3 rounded-xl bg-surface-elevated border border-border focus:border-primary focus:outline-none transition-smooth resize-none"
-                    />
                   </div>
 
                   <button
                     type="submit"
                     disabled={admissionMutation.isPending}
-                    className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-primary text-primary-foreground font-semibold shadow-elegant hover:shadow-glow transition-spring disabled:opacity-50"
+                    className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-gradient-primary text-primary-foreground font-bold shadow-elegant hover:shadow-glow transition-spring disabled:opacity-50 text-base"
                   >
-                    {admissionMutation.isPending ? "Soumission en cours..." : "Soumettre la Préinscription"}
+                    {admissionMutation.isPending ? "Transmission du dossier en cours..." : "Valider et Soumettre le Dossier de Préinscription"}
                     <GraduationCap className="size-5" />
                   </button>
                 </form>
