@@ -71,7 +71,7 @@ export function AdminPage() {
   const [items, setItems] = useState<any[]>([]);
   const [editing, setEditing] = useState<any | null>(null);
   const [form, setForm] = useState<Record<string, string>>({});
-  
+
   // Overview stats & Detail modal
   const [stats, setStats] = useState<Stats | null>(null);
   const [selectedDetail, setSelectedDetail] = useState<{
@@ -459,11 +459,10 @@ export function AdminPage() {
                 <button
                   key={item.id}
                   onClick={() => setActiveTab(item.id)}
-                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold text-left transition-smooth ${
-                    isActive
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold text-left transition-smooth ${isActive
                       ? 'bg-gradient-primary text-primary-foreground shadow-elegant'
                       : 'text-muted-foreground hover:bg-surface-elevated hover:text-foreground'
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center gap-3">
                     <Icon className="size-4" />
@@ -471,11 +470,10 @@ export function AdminPage() {
                   </div>
                   {Boolean(item.badge && item.badge > 0) && (
                     <span
-                      className={`px-2 py-0.5 rounded-full text-xs font-bold ${
-                        isActive
+                      className={`px-2 py-0.5 rounded-full text-xs font-bold ${isActive
                           ? 'bg-white/20 text-white'
                           : 'bg-primary/20 text-primary'
-                      }`}
+                        }`}
                     >
                       {item.badge}
                     </span>
@@ -574,85 +572,85 @@ export function AdminPage() {
                 {/* Unopened Items Direct Overview Lists */}
                 {((stats?.recent_unopened_admissions && stats.recent_unopened_admissions.length > 0) ||
                   (stats?.recent_unopened_messages && stats.recent_unopened_messages.length > 0)) && (
-                  <div className="space-y-4 pt-2">
-                    <h3 className="text-lg font-bold font-display flex items-center gap-2">
-                      <Clock className="size-5 text-amber-500" />
-                      Derniers éléments reçus non encore ouverts
-                    </h3>
+                    <div className="space-y-4 pt-2">
+                      <h3 className="text-lg font-bold font-display flex items-center gap-2">
+                        <Clock className="size-5 text-amber-500" />
+                        Derniers éléments reçus non encore ouverts
+                      </h3>
 
-                    <div className="grid md:grid-cols-2 gap-4">
-                      {/* Unopened Admissions */}
-                      <div className="space-y-3 p-4 rounded-2xl bg-surface border border-border">
-                        <div className="flex items-center justify-between">
-                          <h4 className="font-semibold text-sm flex items-center gap-2">
-                            <GraduationCap className="size-4 text-primary" />
-                            Préinscriptions ({stats?.recent_unopened_admissions?.length || 0})
-                          </h4>
-                          <button
-                            onClick={() => setActiveTab('admissions')}
-                            className="text-xs text-primary font-semibold hover:underline"
-                          >
-                            Voir tout →
-                          </button>
+                      <div className="grid md:grid-cols-2 gap-4">
+                        {/* Unopened Admissions */}
+                        <div className="space-y-3 p-4 rounded-2xl bg-surface border border-border">
+                          <div className="flex items-center justify-between">
+                            <h4 className="font-semibold text-sm flex items-center gap-2">
+                              <GraduationCap className="size-4 text-primary" />
+                              Préinscriptions ({stats?.recent_unopened_admissions?.length || 0})
+                            </h4>
+                            <button
+                              onClick={() => setActiveTab('admissions')}
+                              className="text-xs text-primary font-semibold hover:underline"
+                            >
+                              Voir tout →
+                            </button>
+                          </div>
+
+                          {!stats?.recent_unopened_admissions || stats.recent_unopened_admissions.length === 0 ? (
+                            <p className="text-xs text-muted-foreground py-4 text-center">Aucune préinscription en attente</p>
+                          ) : (
+                            stats.recent_unopened_admissions.map((adm: any) => (
+                              <div key={adm.id} className="p-3 rounded-xl bg-background border border-border hover:border-primary/50 transition-smooth flex items-center justify-between gap-2">
+                                <div className="min-w-0 flex-1">
+                                  <p className="font-semibold text-sm truncate">{adm.name}</p>
+                                  <p className="text-xs text-muted-foreground truncate">{adm.phone} • {adm.preferred_schedule || 'Présentiel'}</p>
+                                </div>
+                                <button
+                                  onClick={() => openDetailModal(adm, 'admission')}
+                                  className="shrink-0 px-3 py-1.5 rounded-lg bg-gradient-primary text-primary-foreground text-xs font-semibold shadow-sm hover:shadow-glow transition-smooth"
+                                >
+                                  Ouvrir
+                                </button>
+                              </div>
+                            ))
+                          )}
                         </div>
 
-                        {!stats?.recent_unopened_admissions || stats.recent_unopened_admissions.length === 0 ? (
-                          <p className="text-xs text-muted-foreground py-4 text-center">Aucune préinscription en attente</p>
-                        ) : (
-                          stats.recent_unopened_admissions.map((adm: any) => (
-                            <div key={adm.id} className="p-3 rounded-xl bg-background border border-border hover:border-primary/50 transition-smooth flex items-center justify-between gap-2">
-                              <div className="min-w-0 flex-1">
-                                <p className="font-semibold text-sm truncate">{adm.name}</p>
-                                <p className="text-xs text-muted-foreground truncate">{adm.phone} • {adm.preferred_schedule || 'Présentiel'}</p>
-                              </div>
-                              <button
-                                onClick={() => openDetailModal(adm, 'admission')}
-                                className="shrink-0 px-3 py-1.5 rounded-lg bg-gradient-primary text-primary-foreground text-xs font-semibold shadow-sm hover:shadow-glow transition-smooth"
-                              >
-                                Ouvrir
-                              </button>
-                            </div>
-                          ))
-                        )}
-                      </div>
+                        {/* Unopened Messages */}
+                        <div className="space-y-3 p-4 rounded-2xl bg-surface border border-border">
+                          <div className="flex items-center justify-between">
+                            <h4 className="font-semibold text-sm flex items-center gap-2">
+                              <MessageSquare className="size-4 text-blue-500" />
+                              Messages de contact ({stats?.recent_unopened_messages?.length || 0})
+                            </h4>
+                            <button
+                              onClick={() => setActiveTab('messages')}
+                              className="text-xs text-primary font-semibold hover:underline"
+                            >
+                              Voir tout →
+                            </button>
+                          </div>
 
-                      {/* Unopened Messages */}
-                      <div className="space-y-3 p-4 rounded-2xl bg-surface border border-border">
-                        <div className="flex items-center justify-between">
-                          <h4 className="font-semibold text-sm flex items-center gap-2">
-                            <MessageSquare className="size-4 text-blue-500" />
-                            Messages de contact ({stats?.recent_unopened_messages?.length || 0})
-                          </h4>
-                          <button
-                            onClick={() => setActiveTab('messages')}
-                            className="text-xs text-primary font-semibold hover:underline"
-                          >
-                            Voir tout →
-                          </button>
+                          {!stats?.recent_unopened_messages || stats.recent_unopened_messages.length === 0 ? (
+                            <p className="text-xs text-muted-foreground py-4 text-center">Aucun message non lu</p>
+                          ) : (
+                            stats.recent_unopened_messages.map((msg: any) => (
+                              <div key={msg.id} className="p-3 rounded-xl bg-background border border-border hover:border-blue-500/50 transition-smooth flex items-center justify-between gap-2">
+                                <div className="min-w-0 flex-1">
+                                  <p className="font-semibold text-sm truncate">{msg.name}</p>
+                                  <p className="text-xs text-muted-foreground truncate">{msg.subject || msg.email}</p>
+                                </div>
+                                <button
+                                  onClick={() => openDetailModal(msg, 'message')}
+                                  className="shrink-0 px-3 py-1.5 rounded-lg bg-blue-600 text-white text-xs font-semibold shadow-sm hover:bg-blue-700 transition-smooth"
+                                >
+                                  Ouvrir
+                                </button>
+                              </div>
+                            ))
+                          )}
                         </div>
-
-                        {!stats?.recent_unopened_messages || stats.recent_unopened_messages.length === 0 ? (
-                          <p className="text-xs text-muted-foreground py-4 text-center">Aucun message non lu</p>
-                        ) : (
-                          stats.recent_unopened_messages.map((msg: any) => (
-                            <div key={msg.id} className="p-3 rounded-xl bg-background border border-border hover:border-blue-500/50 transition-smooth flex items-center justify-between gap-2">
-                              <div className="min-w-0 flex-1">
-                                <p className="font-semibold text-sm truncate">{msg.name}</p>
-                                <p className="text-xs text-muted-foreground truncate">{msg.subject || msg.email}</p>
-                              </div>
-                              <button
-                                onClick={() => openDetailModal(msg, 'message')}
-                                className="shrink-0 px-3 py-1.5 rounded-lg bg-blue-600 text-white text-xs font-semibold shadow-sm hover:bg-blue-700 transition-smooth"
-                              >
-                                Ouvrir
-                              </button>
-                            </div>
-                          ))
-                        )}
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
                 {/* Secondary Counters */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
@@ -795,7 +793,7 @@ export function AdminPage() {
                             </p>
                             {item.status && getStatusBadge(item.status)}
                           </div>
-                          
+
                           <p className="text-xs text-muted-foreground line-clamp-2">
                             {item.email && <span className="font-medium text-foreground mr-2"><Mail className="size-4 inline-block mr-1" /> {item.email}</span>}
                             {item.phone && <span className="font-medium text-foreground mr-2"><Phone className="size-4 inline-block mr-1" /> {item.phone}</span>}
@@ -929,8 +927,7 @@ export function AdminPage() {
 
                       <a
                         href={`https://wa.me/${selectedDetail.data.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
-                          `Bonjour ${selectedDetail.data.name}, nous faisons suite à votre ${
-                            selectedDetail.type === 'admission' ? 'préinscription' : 'message'
+                          `Bonjour ${selectedDetail.data.name}, nous faisons suite à votre ${selectedDetail.type === 'admission' ? 'préinscription' : 'message'
                           } sur Wasomi.`
                         )}`}
                         target="_blank"

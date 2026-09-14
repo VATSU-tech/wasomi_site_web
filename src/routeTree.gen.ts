@@ -17,7 +17,21 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppIndexRouteImport } from './routes/app/index'
+import { Route as AppUsersRouteImport } from './routes/app/users'
+import { Route as AppTeachingsRouteImport } from './routes/app/teachings'
+import { Route as AppSettingsRouteImport } from './routes/app/settings'
+import { Route as AppProfileRouteImport } from './routes/app/profile'
+import { Route as AppMyGradesRouteImport } from './routes/app/my-grades'
+import { Route as AppLoginRouteImport } from './routes/app/login'
+import { Route as AppEvaluationsRouteImport } from './routes/app/evaluations'
+import { Route as AppEnrollmentsRouteImport } from './routes/app/enrollments'
+import { Route as AppDeliberationRouteImport } from './routes/app/deliberation'
+import { Route as AppDashboardRouteImport } from './routes/app/dashboard'
+import { Route as AppChildrenRouteImport } from './routes/app/children'
+import { Route as AppAccountSuspendedRouteImport } from './routes/app/account-suspended'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -59,14 +73,85 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppRouteRoute = AppRouteRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppUsersRoute = AppUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppTeachingsRoute = AppTeachingsRouteImport.update({
+  id: '/teachings',
+  path: '/teachings',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppProfileRoute = AppProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppMyGradesRoute = AppMyGradesRouteImport.update({
+  id: '/my-grades',
+  path: '/my-grades',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppLoginRoute = AppLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppEvaluationsRoute = AppEvaluationsRouteImport.update({
+  id: '/evaluations',
+  path: '/evaluations',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppEnrollmentsRoute = AppEnrollmentsRouteImport.update({
+  id: '/enrollments',
+  path: '/enrollments',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppDeliberationRoute = AppDeliberationRouteImport.update({
+  id: '/deliberation',
+  path: '/deliberation',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppDashboardRoute = AppDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppChildrenRoute = AppChildrenRouteImport.update({
+  id: '/children',
+  path: '/children',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppAccountSuspendedRoute = AppAccountSuspendedRouteImport.update({
+  id: '/account-suspended',
+  path: '/account-suspended',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/app': typeof AppRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/blog': typeof BlogRoute
@@ -75,6 +160,19 @@ export interface FileRoutesByFullPath {
   '/formations': typeof FormationsRoute
   '/galerie': typeof GalerieRoute
   '/login': typeof LoginRoute
+  '/app/account-suspended': typeof AppAccountSuspendedRoute
+  '/app/children': typeof AppChildrenRoute
+  '/app/dashboard': typeof AppDashboardRoute
+  '/app/deliberation': typeof AppDeliberationRoute
+  '/app/enrollments': typeof AppEnrollmentsRoute
+  '/app/evaluations': typeof AppEvaluationsRoute
+  '/app/login': typeof AppLoginRoute
+  '/app/my-grades': typeof AppMyGradesRoute
+  '/app/profile': typeof AppProfileRoute
+  '/app/settings': typeof AppSettingsRoute
+  '/app/teachings': typeof AppTeachingsRoute
+  '/app/users': typeof AppUsersRoute
+  '/app/': typeof AppIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -86,10 +184,24 @@ export interface FileRoutesByTo {
   '/formations': typeof FormationsRoute
   '/galerie': typeof GalerieRoute
   '/login': typeof LoginRoute
+  '/app/account-suspended': typeof AppAccountSuspendedRoute
+  '/app/children': typeof AppChildrenRoute
+  '/app/dashboard': typeof AppDashboardRoute
+  '/app/deliberation': typeof AppDeliberationRoute
+  '/app/enrollments': typeof AppEnrollmentsRoute
+  '/app/evaluations': typeof AppEvaluationsRoute
+  '/app/login': typeof AppLoginRoute
+  '/app/my-grades': typeof AppMyGradesRoute
+  '/app/profile': typeof AppProfileRoute
+  '/app/settings': typeof AppSettingsRoute
+  '/app/teachings': typeof AppTeachingsRoute
+  '/app/users': typeof AppUsersRoute
+  '/app': typeof AppIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/app': typeof AppRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/blog': typeof BlogRoute
@@ -98,11 +210,25 @@ export interface FileRoutesById {
   '/formations': typeof FormationsRoute
   '/galerie': typeof GalerieRoute
   '/login': typeof LoginRoute
+  '/app/account-suspended': typeof AppAccountSuspendedRoute
+  '/app/children': typeof AppChildrenRoute
+  '/app/dashboard': typeof AppDashboardRoute
+  '/app/deliberation': typeof AppDeliberationRoute
+  '/app/enrollments': typeof AppEnrollmentsRoute
+  '/app/evaluations': typeof AppEvaluationsRoute
+  '/app/login': typeof AppLoginRoute
+  '/app/my-grades': typeof AppMyGradesRoute
+  '/app/profile': typeof AppProfileRoute
+  '/app/settings': typeof AppSettingsRoute
+  '/app/teachings': typeof AppTeachingsRoute
+  '/app/users': typeof AppUsersRoute
+  '/app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/app'
     | '/about'
     | '/admin'
     | '/blog'
@@ -111,6 +237,19 @@ export interface FileRouteTypes {
     | '/formations'
     | '/galerie'
     | '/login'
+    | '/app/account-suspended'
+    | '/app/children'
+    | '/app/dashboard'
+    | '/app/deliberation'
+    | '/app/enrollments'
+    | '/app/evaluations'
+    | '/app/login'
+    | '/app/my-grades'
+    | '/app/profile'
+    | '/app/settings'
+    | '/app/teachings'
+    | '/app/users'
+    | '/app/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -122,9 +261,23 @@ export interface FileRouteTypes {
     | '/formations'
     | '/galerie'
     | '/login'
+    | '/app/account-suspended'
+    | '/app/children'
+    | '/app/dashboard'
+    | '/app/deliberation'
+    | '/app/enrollments'
+    | '/app/evaluations'
+    | '/app/login'
+    | '/app/my-grades'
+    | '/app/profile'
+    | '/app/settings'
+    | '/app/teachings'
+    | '/app/users'
+    | '/app'
   id:
     | '__root__'
     | '/'
+    | '/app'
     | '/about'
     | '/admin'
     | '/blog'
@@ -133,10 +286,24 @@ export interface FileRouteTypes {
     | '/formations'
     | '/galerie'
     | '/login'
+    | '/app/account-suspended'
+    | '/app/children'
+    | '/app/dashboard'
+    | '/app/deliberation'
+    | '/app/enrollments'
+    | '/app/evaluations'
+    | '/app/login'
+    | '/app/my-grades'
+    | '/app/profile'
+    | '/app/settings'
+    | '/app/teachings'
+    | '/app/users'
+    | '/app/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRouteRoute: typeof AppRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRoute
   BlogRoute: typeof BlogRoute
@@ -205,6 +372,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -212,11 +386,139 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/users': {
+      id: '/app/users'
+      path: '/users'
+      fullPath: '/app/users'
+      preLoaderRoute: typeof AppUsersRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/teachings': {
+      id: '/app/teachings'
+      path: '/teachings'
+      fullPath: '/app/teachings'
+      preLoaderRoute: typeof AppTeachingsRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/settings': {
+      id: '/app/settings'
+      path: '/settings'
+      fullPath: '/app/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/profile': {
+      id: '/app/profile'
+      path: '/profile'
+      fullPath: '/app/profile'
+      preLoaderRoute: typeof AppProfileRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/my-grades': {
+      id: '/app/my-grades'
+      path: '/my-grades'
+      fullPath: '/app/my-grades'
+      preLoaderRoute: typeof AppMyGradesRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/login': {
+      id: '/app/login'
+      path: '/login'
+      fullPath: '/app/login'
+      preLoaderRoute: typeof AppLoginRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/evaluations': {
+      id: '/app/evaluations'
+      path: '/evaluations'
+      fullPath: '/app/evaluations'
+      preLoaderRoute: typeof AppEvaluationsRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/enrollments': {
+      id: '/app/enrollments'
+      path: '/enrollments'
+      fullPath: '/app/enrollments'
+      preLoaderRoute: typeof AppEnrollmentsRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/deliberation': {
+      id: '/app/deliberation'
+      path: '/deliberation'
+      fullPath: '/app/deliberation'
+      preLoaderRoute: typeof AppDeliberationRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/dashboard': {
+      id: '/app/dashboard'
+      path: '/dashboard'
+      fullPath: '/app/dashboard'
+      preLoaderRoute: typeof AppDashboardRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/children': {
+      id: '/app/children'
+      path: '/children'
+      fullPath: '/app/children'
+      preLoaderRoute: typeof AppChildrenRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/account-suspended': {
+      id: '/app/account-suspended'
+      path: '/account-suspended'
+      fullPath: '/app/account-suspended'
+      preLoaderRoute: typeof AppAccountSuspendedRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
   }
 }
 
+interface AppRouteRouteChildren {
+  AppAccountSuspendedRoute: typeof AppAccountSuspendedRoute
+  AppChildrenRoute: typeof AppChildrenRoute
+  AppDashboardRoute: typeof AppDashboardRoute
+  AppDeliberationRoute: typeof AppDeliberationRoute
+  AppEnrollmentsRoute: typeof AppEnrollmentsRoute
+  AppEvaluationsRoute: typeof AppEvaluationsRoute
+  AppLoginRoute: typeof AppLoginRoute
+  AppMyGradesRoute: typeof AppMyGradesRoute
+  AppProfileRoute: typeof AppProfileRoute
+  AppSettingsRoute: typeof AppSettingsRoute
+  AppTeachingsRoute: typeof AppTeachingsRoute
+  AppUsersRoute: typeof AppUsersRoute
+  AppIndexRoute: typeof AppIndexRoute
+}
+
+const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppAccountSuspendedRoute: AppAccountSuspendedRoute,
+  AppChildrenRoute: AppChildrenRoute,
+  AppDashboardRoute: AppDashboardRoute,
+  AppDeliberationRoute: AppDeliberationRoute,
+  AppEnrollmentsRoute: AppEnrollmentsRoute,
+  AppEvaluationsRoute: AppEvaluationsRoute,
+  AppLoginRoute: AppLoginRoute,
+  AppMyGradesRoute: AppMyGradesRoute,
+  AppProfileRoute: AppProfileRoute,
+  AppSettingsRoute: AppSettingsRoute,
+  AppTeachingsRoute: AppTeachingsRoute,
+  AppUsersRoute: AppUsersRoute,
+  AppIndexRoute: AppIndexRoute,
+}
+
+const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
+  AppRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRouteRoute: AppRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   AdminRoute: AdminRoute,
   BlogRoute: BlogRoute,

@@ -1,0 +1,5 @@
+- supprimer NOTRE UNIVERS de la page galerie
+- supprimer FONDAMENTAUX dans apropos 
+- supprimer NOTRE CHRONOLOGIE dans apropos
+- supprimer CONTACT & PREINSCRIPTION
+- modifier NOTRE MISSION de la section apropos

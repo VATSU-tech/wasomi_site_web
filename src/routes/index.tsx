@@ -115,52 +115,7 @@ function Home() {
             </div>
 
             {/* Hero visual */}
-            <div className="relative" data-aos="fade-left" data-aos-delay="200">
-              {/* <div className="absolute -inset-4 bg-gradient-primary rounded-3xl  opacity-30" /> */}
-              <div className="relative grid grid-cols-2 gap-4">
-                <div className="space-y-4 parallax-grid-col-1">
-                  <div className="aspect-[3/4] rounded-2xl overflow-hidden  animate-float image-zoom-container">
-                    <img
-                      src="/gallerie/equipement_1.jpg"
-                      alt="Équipement"
-                      className="size-full object-cover"
-                    />
-                  </div>
-                  <div
-                    className="aspect-square rounded-2xl overflow-hidden  animate-float image-zoom-container"
-                    style={{ animationDelay: "1.5s" }}
-                  >
-                    <img
-                      src="/gallerie/IMG-20260519-WA0069.jpg"
-                      alt="Wasomi"
-                      className="size-full object-cover"
-                    />
-                  </div>
-                </div>
-                <div className="space-y-4 pt-12 parallax-grid-col-2">
-                  <div
-                    className="aspect-square rounded-2xl overflow-hidden shadow-elegant animate-float image-zoom-container"
-                    style={{ animationDelay: "0.7s" }}
-                  >
-                    <img
-                      src="/gallerie/IMG-20260519-WA0028.jpg"
-                      alt="Cours"
-                      className="size-full object-cover"
-                    />
-                  </div>
-                  <div
-                    className="aspect-[3/4] rounded-2xl overflow-hidden shadow-elegant animate-float image-zoom-container"
-                    style={{ animationDelay: "2.2s" }}
-                  >
-                    <img
-                      src="/gallerie/laureat lipanda fiesta.jpg"
-                      alt="Célébration"
-                      className="size-full object-cover"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+            
           </div>
         </div>
       </section>
@@ -169,7 +124,7 @@ function Home() {
       <section
         className="relative min-h-[90vh] w-full bg-fixed bg-cover bg-center bg-no-repeat flex items-center flex-col justify-center pt-0"
         style={{
-          backgroundImage: "url('/gallerie/IMG-20260519-WA0028.jpg')",
+          backgroundImage: "url('https://imgs.search.brave.com/brJFgVQAiBCmg3pxI4zXtoiyuNM5PwZ5KCS0pLeGmtg/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tYXJr/ZXRwbGFjZS5jYW52/YS5jb20vTUFDaGlX/S1pOUG8vMS90aHVt/Ym5haWxfbGFyZ2Ut/MS9jYW52YS0lQzMl/QTljb2xpZXJzLWNv/dXJhbnQtZGFucy1s/ZS1jb3Vsb2lyLWRl/LWwnJUMzJUE5Y29s/ZS1wcmltYWlyZS1N/QUNoaVdLWk5Qby5q/cGc')",
         }}
       >
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-background/90" />
@@ -249,14 +204,14 @@ function Home() {
       <section
         className="relative min-h-[90vh] w-full bg-fixed bg-cover bg-center bg-no-repeat flex items-center flex-col justify-center pt-0"
         style={{
-          backgroundImage: "url('/gallerie/IMG-20260519-WA0028.jpg')",
+          backgroundImage: "url('https://imgs.search.brave.com/IPGhPYQ2JMokOpI4s8pXnYN82ZCiGOMnK2vG0ZwfrN8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvOTU1/MDYyMzUyL3Bob3Rv/L2NsYXNzZS1kdW5l/LSVDMyVBOWNvbGUt/cHJpbWFpcmUtZGUt/c3VtbWl0LWRhbnMt/bGUtbmV3LWplcnNl/eS1jaXJjYS0xOTcw/LWV0YXRzLXVuaXMu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PXJ0aGxZUW5UX2hi/NjJXUlB1eG15OHRo/WUpLRFFNdHlSMFNh/azNqUEw1NEU9')",
         }}
       >
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-background/90" />
         <div className="container mx-auto px-4 max-w-7xl">
           <SectionHeading
             eyebrow="Témoignages"
-            title="ILs ont confiance en nous !"
+            title="Ils ont confiance en nous !"
             className="text-primary"
           />
           <div className="grid md:grid-cols-3 gap-6">

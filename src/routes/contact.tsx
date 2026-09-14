@@ -415,7 +415,7 @@ function ContactPage() {
                         <option key={prog.id} value={prog.id}>
                           {prog.title} ({prog.duration || "Formation"})
                         </option>
-                      ))}
+                        ))}
                       <option value="conseil">Conseil d'orientation / À définir</option>
                     </select>
                   </div>

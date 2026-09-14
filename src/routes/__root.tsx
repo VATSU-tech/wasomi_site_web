@@ -4,6 +4,7 @@ import {
   createRootRoute,
   HeadContent,
   Scripts,
+  useRouterState,
 } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
@@ -96,19 +97,31 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isAppPortal = pathname.startsWith('/app');
+
   return (
     <ThemeProvider>
       <AppQueryProvider>
       <AosProvider>
-        <div className="scroll-progress" />
-        <div className="min-h-screen flex flex-col">
-          <Navbar />
-          <main className="flex-1 pt-24">
+        {isAppPortal ? (
+          <div data-theme="school" className="min-h-screen">
             <Outlet />
-          </main>
-          <Footer />
-          <Toaster />
-        </div>
+            <Toaster />
+          </div>
+        ) : (
+          <>
+            <div className="scroll-progress" />
+            <div className="min-h-screen flex flex-col">
+              <Navbar />
+              <main className="flex-1 pt-24">
+                <Outlet />
+              </main>
+              <Footer />
+              <Toaster />
+            </div>
+          </>
+        )}
       </AosProvider>
       </AppQueryProvider>
     </ThemeProvider>
