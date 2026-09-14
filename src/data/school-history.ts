@@ -67,7 +67,7 @@ export const schoolHistoryConfig: SchoolHistoryConfig = {
     {
       year: 2025,
       event: "Section secondaire",
-      details: "Lancement de la classe de 7ème éducation de base",
+      details: "Lancement de la section secondaire chez WASOMI",
     },
   ],
   keyAchievements: [

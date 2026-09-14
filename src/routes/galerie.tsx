@@ -40,27 +40,27 @@ function GaleriePage() {
 
   return (
     <>
-      <section className="relative overflow-hidden bg-hero">
-        <div className="absolute inset-0 bg-mesh" />
-        <div className="container mx-auto px-4 max-w-7xl relative py-20 text-center">
+      <section className="relative overflow-hidden bg-surface">
+        <div className="container mx-auto px-4 max-w-7xl relative py-14 text-center">
+          <span className="badge-soft">Photos & souvenirs</span>
           <h1
-            className="font-display text-4xl md:text-6xl font-bold tracking-tight"
+            className="font-display text-4xl md:text-6xl font-bold tracking-tight mt-5"
             data-aos="fade-up"
           >
-            Galerie <span className="text-gradient">Wasomi</span>
+            La vie du <span className="text-primary">CS Wasomi</span> en images
           </h1>
           <p
-            className="mt-4 text-muted-foreground max-w-2xl mx-auto"
+            className="mt-5 text-muted-foreground max-w-2xl mx-auto"
             data-aos="fade-up"
             data-aos-delay="100"
           >
-            Plongez dans l'univers de notre école : site scolaire, équipements,
-            événements et réalisations.
+            Nos classes, nos ateliers, nos sorties et nos fêtes : plongez dans
+            le quotidien de notre école.
           </p>
         </div>
       </section>
 
-      <section className="py-20 container mx-auto px-4 max-w-7xl">
+      <section className="py-16 container mx-auto px-4 max-w-7xl">
         {isLoading && (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3, 4, 5, 6].map((i) => (

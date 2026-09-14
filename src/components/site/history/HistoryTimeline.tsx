@@ -13,10 +13,10 @@ export function HistoryTimeline({ config }: HistoryTimelineProps) {
     <section className="py-16 md:py-24">
       <div className="container mx-auto px-4 max-w-6xl">
         <div className="text-center mb-16">
-          <span className="text-xs font-semibold tracking-widest uppercase text-primary">
-            Notre chronologie
+          <span className="badge-soft">
+            Notre parcours
           </span>
-          <h2 className="font-display text-3xl md:text-4xl font-bold mt-2 mb-4">
+          <h2 className="font-display text-3xl md:text-4xl font-bold mt-4 mb-4">
             Une progression remarquable
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">

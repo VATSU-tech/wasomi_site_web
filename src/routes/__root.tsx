@@ -7,6 +7,8 @@ import {
   useRouterState,
 } from "@tanstack/react-router";
 
+import { useEffect, useState } from "react";
+import { ArrowUp } from "lucide-react";
 import appCss from "../styles.css?url";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AppQueryProvider } from '@/providers/query-provider';
@@ -14,6 +16,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { AosProvider } from "@/components/aos-provider";
 import { Navbar } from "@/components/site/navbar";
 import { Footer } from "@/components/site/footer";
+import { cn } from "@/lib/utils";
 
 function NotFoundComponent() {
   return (
@@ -68,7 +71,7 @@ export const Route = createRootRoute({
       },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap",
       },
     ],
   }),
@@ -112,12 +115,24 @@ function RootComponent() {
         ) : (
           <>
             <div className="scroll-progress" />
+            <a href="#main-content" className="skip-to-content">
+              Aller au contenu
+            </a>
             <div className="min-h-screen flex flex-col">
               <Navbar />
-              <main className="flex-1 pt-24">
-                <Outlet />
+              <main
+                id="main-content"
+                className={cn("flex-1", pathname === "/" ? "" : "pt-24")}
+              >
+                <div
+                  key={pathname}
+                  className="animate-page-in"
+                >
+                  <Outlet />
+                </div>
               </main>
               <Footer />
+              <BackToTop />
               <Toaster />
             </div>
           </>
@@ -125,5 +140,29 @@ function RootComponent() {
       </AosProvider>
       </AppQueryProvider>
     </ThemeProvider>
+  );
+}
+
+function BackToTop() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setVisible(window.scrollY > 600);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return (
+    <button
+      type="button"
+      aria-label="Retour en haut de page"
+      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      className={cn(
+        "back-to-top size-11 rounded-2xl bg-gradient-primary text-primary-foreground shadow-xl flex items-center justify-center hover:-translate-y-1 transition-transform",
+        visible && "visible",
+      )}
+    >
+      <ArrowUp className="size-5" />
+    </button>
   );
 }

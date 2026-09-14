@@ -116,10 +116,10 @@ export function Gallery({ items, categories }: Props) {
             key={cat}
             onClick={() => setFilter(cat)}
             className={cn(
-              "px-4 py-2 rounded-full text-sm font-medium transition-spring",
+              "px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 border",
               filter === cat
-                ? "bg-gradient-primary text-primary-foreground shadow-glow scale-105"
-                : "glass text-muted-foreground hover:text-foreground hover:scale-105",
+                ? "bg-gradient-primary text-primary-foreground border-transparent shadow-md scale-105"
+                : "bg-card border-border text-muted-foreground hover:text-foreground hover:border-primary/40 hover:scale-105",
             )}
           >
             {cat}
@@ -152,9 +152,9 @@ export function Gallery({ items, categories }: Props) {
                 <div className={cn("absolute inset-0 bg-gradient-to-t from-background/95 via-background/40 to-transparent transition-smooth", isActive ? "opacity-100" : "opacity-70 group-hover:opacity-100")} />
 
                 <div className={cn("absolute top-4 right-4 flex gap-2 transition-spring", isActive ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 group-hover:opacity-100 group-hover:translate-y-0")}>
-                  <button onClick={(e) => e.stopPropagation()} aria-label="Aimer" className="gap-1 px-2 py-1 rounded-full glass flex items-center justify-center hover:bg-primary hover:text-primary-foreground">
+                  {/* <button onClick={(e) => e.stopPropagation()} aria-label="Aimer" className="gap-1 px-2 py-1 rounded-full glass flex items-center justify-center hover:bg-primary hover:text-primary-foreground">
                     <Heart className="size-4" /> <span>{item.likes ?? 0}</span>
-                  </button>
+                  </button> */}
                   <button onClick={(e) => { e.stopPropagation(); onShare(item); }} aria-label="Partager" className="size-9 rounded-full glass flex items-center justify-center hover:bg-primary hover:text-primary-foreground">
                     <Share2 className="size-4" />
                   </button>
@@ -184,20 +184,6 @@ export function Gallery({ items, categories }: Props) {
           <div className="max-w-7xl w-full max-h-[92vh] flex flex-col gap-4" onClick={(e) => e.stopPropagation()}>
             <div className="relative rounded-2xl overflow-auto shadow-glow flex-1 min-h-0 bg-black" onTouchStart={(e) => (touchStartX.current = e.changedTouches[0].clientX)} onTouchEnd={(e) => { const sx = touchStartX.current; if (sx === null) return; const dx = e.changedTouches[0].clientX - sx; if (dx > 60) prev(); if (dx < -60) next(); touchStartX.current = null; }}>
               <img src={filtered[lightbox].src} alt={filtered[lightbox].title} className={cn("mx-auto h-full w-full object-contain transition-transform duration-300", zoomed && "scale-125 cursor-zoom-out")} onClick={() => setZoomed((z) => !z)} />
-            </div>
-          </div>
-        </div>
-      )}
-
-      {shareItem && (
-        <div className="fixed inset-0 z-[120] bg-black/70 flex items-center justify-center p-4" onClick={() => setShareItem(null)}>
-          <div className="w-full max-w-md glass rounded-2xl p-5" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between mb-4"><h3 className="font-semibold">Partager l'image</h3><button onClick={() => setShareItem(null)}><X className="size-5" /></button></div>
-            <div className="flex gap-3 items-center mb-4"><img src={shareItem.src} alt={shareItem.title} className="size-16 rounded-lg object-cover" /><div><p className="font-medium text-sm">{shareItem.title}</p><p className="text-xs text-muted-foreground">{shareItem.category}</p></div></div>
-            <div className="text-xs break-all bg-muted rounded-lg p-2 mb-3">{getShareUrl(shareItem)}</div>
-            <div className="grid grid-cols-2 gap-2">
-              <button className="glass rounded-lg py-2 text-sm" onClick={async () => { await navigator.clipboard.writeText(getShareUrl(shareItem)); setCopied(true); setTimeout(() => setCopied(false), 1500); }}><Copy className="size-4 inline mr-1" />{copied ? "Copié" : "Copier"}</button>
-              <a className="glass rounded-lg py-2 text-sm text-center" href={shareItem.src} download><Download className="size-4 inline mr-1" />Télécharger</a>
             </div>
           </div>
         </div>

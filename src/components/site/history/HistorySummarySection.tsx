@@ -9,7 +9,7 @@ interface HistorySummarySectionProps {
 }
 
 const colorPalette = [
-  { bg: "from-blue-500 to-cyan-500", text: "text-blue-600 dark:text-blue-400" },
+  { bg: "from-primary to-primary-glow", text: "text-primary" },
   { bg: "from-purple-500 to-pink-500", text: "text-purple-600 dark:text-purple-400" },
   { bg: "from-green-500 to-emerald-500", text: "text-green-600 dark:text-green-400" },
   { bg: "from-orange-500 to-red-500", text: "text-orange-600 dark:text-orange-400" },
@@ -22,11 +22,11 @@ export function HistorySummarySection({ config }: HistorySummarySectionProps) {
     <section className="py-20 container mx-auto px-4 max-w-7xl">
       {/* Section Title */}
       <div className="text-center mb-16" data-aos="fade-up">
-        <span className="text-xs font-semibold tracking-widest uppercase text-primary">
-          Fondamentaux
+        <span className="badge-soft">
+          Nos valeurs
         </span>
-        <h2 className="font-display text-3xl md:text-4xl font-bold mt-2 mb-4">
-          Nos réalisations et valeurs
+        <h2 className="font-display text-3xl md:text-4xl font-bold mt-4 mb-4">
+          Ce qui guide notre école
         </h2>
         <p className="text-muted-foreground max-w-2xl mx-auto">
           Wasomi s'est construit sur trois piliers fondamentaux qui guident
@@ -45,12 +45,14 @@ export function HistorySummarySection({ config }: HistorySummarySectionProps) {
               key={value.label}
               data-aos="fade-up"
               data-aos-delay={i * 100}
-              className="p-8 rounded-2xl glass border border-gradient/20 hover:shadow-glow transition-all group"
+              className="p-8 rounded-3xl bg-card border border-border hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
             >
-              <div className="text-5xl font-display font-bold text-gradient mb-4">
-                {value.label.charAt(0)}
+              <div className="size-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary transition-colors duration-300">
+                <span className="font-display text-xl font-bold text-primary group-hover:text-primary-foreground transition-colors">
+                  {value.label.charAt(0)}
+                </span>
               </div>
-              <h4 className="font-display text-xl font-semibold mb-3 group-hover:text-gradient transition-colors">
+              <h4 className="font-display text-xl font-semibold mb-3">
                 {value.label}
               </h4>
               <p className="text-muted-foreground leading-relaxed text-sm">
@@ -63,7 +65,7 @@ export function HistorySummarySection({ config }: HistorySummarySectionProps) {
       {/* Key Achievements */}
       <div>
         <h3 className="font-display text-2xl font-bold mb-8 text-center">
-          Nos réalisations
+          Nos résultats
         </h3>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {config.keyAchievements.map((achievement, i) => {
@@ -74,19 +76,19 @@ export function HistorySummarySection({ config }: HistorySummarySectionProps) {
                 key={achievement.title}
                 data-aos="zoom-in"
                 data-aos-delay={i * 100}
-                className="p-6 rounded-2xl glass border border-gradient/20 hover:shadow-glow transition-all hover:scale-105 group text-center"
+                className="p-7 rounded-3xl bg-card border border-border hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group text-center"
               >
-                <div className={`size-16 mx-auto rounded-xl bg-gradient-to-br ${color.bg} flex items-center justify-center shadow-glow mb-4 group-hover:scale-125 transition-transform`}>
+                <div className={`size-16 mx-auto rounded-2xl bg-gradient-to-br ${color.bg} flex items-center justify-center shadow-lg mb-4 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-300`}>
                   <IconComponent className="size-8 text-white" />
                 </div>
-                <h4 className="font-display font-semibold mb-2 group-hover:text-gradient transition-colors">
+                <h4 className="font-display font-semibold mb-2">
                   {achievement.title}
                 </h4>
                 <p className="text-muted-foreground text-sm mb-3">
                   {achievement.description}
                 </p>
                 {achievement.stats && (
-                  <div className="text-2xl font-bold text-gradient">
+                  <div className="text-2xl font-bold text-primary">
                     {achievement.stats}
                   </div>
                 )}

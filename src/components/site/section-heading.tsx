@@ -25,20 +25,16 @@ export function SectionHeading({
       data-aos="fade-up"
     >
       {eyebrow && (
-        <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full  text-xs font-semibold tracking-widest uppercase text-foreground bg-background border border-ring mb-4">
-          {/* <span className="size-1.5 rounded-full bg-primary animate-glow-pulse" /> */}
+        <span className="inline-flex cache items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase text-primary bg-primary/10 mb-5">
+          <span className="size-1.5 rounded-full bg-primary animate-pulse" style={{ animationDuration: "2s" }} />
           {eyebrow}
         </span>
       )}
-      <h2
-        className="font-display text-3xl md:text-5xl font-bold tracking-tight text-foreground"
-        style={{
-          WebkitTextStroke: "1px var(--primary-glow)",
-        }}
-      >        {title}
+      <h2 className="font-display text-3xl md:text-5xl font-bold tracking-tight text-foreground leading-tight">
+        {title}
       </h2>
       {description && (
-        <p className="mt-4 text-base md:text-lg text-muted-foreground leading-relaxed">
+        <p className="mt-4 text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
           {description}
         </p>
       )}

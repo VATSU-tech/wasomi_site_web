@@ -220,17 +220,19 @@ function ContactPage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative py-20 overflow-hidden bg-hero">
+      <section className="relative py-20 overflow-hidden bg-surface">
         <div className="container mx-auto px-4 relative z-10 text-center max-w-3xl">
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs font-semibold uppercase tracking-wider text-primary mb-6">
+          <span className="badge-soft">
             <Mail className="size-3.5" />
             Contact & Préinscriptions
           </span>
-          <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight mb-4">
-            Construisons Votre Avenir <span className="text-gradient">Ensemble</span>
+          <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight mt-5 mb-4">
+            Construisons l'avenir de votre enfant{" "}
+            <span className="text-primary">ensemble</span>
           </h1>
           <p className="text-muted-foreground text-lg">
-            Posez-nous vos questions ou préinscrivez-vous directement en quelques clics pour réserver votre place.
+            Posez-nous vos questions ou préinscrivez votre enfant directement
+            en quelques clics.
           </p>
         </div>
       </section>
@@ -240,11 +242,11 @@ function ContactPage() {
         <div className="grid lg:grid-cols-3 gap-12">
           {/* Info Card Sidebar */}
           <div className="space-y-6">
-            <div className="card-premium p-8 rounded-2xl bg-surface border border-border space-y-6">
+            <div className="card-premium p-8 rounded-3xl bg-card border border-border space-y-6">
               <h2 className="font-display text-xl font-bold">Nos Coordonnées</h2>
 
               <div className="space-y-4 text-sm">
-                <a href="https://www.google.com/maps?q={settings?.contact_address || 'Rue N°5,Q.Residentiel, C.Bungulu, Beni, Nord-Kivu, RDC'}" target="_blank" className="flex items-start gap-4 border-border border rounded-2xl p-2 hover:bg-surface-elevated transition-smooth">
+                <a href="https://maps.app.goo.gl/bSDTmFdURd7dP6zz5" target="_blank" className="flex items-start gap-4 border-border border rounded-2xl p-2 hover:bg-surface-elevated transition-smooth">
                   <div className="size-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
                     <MapPin className="size-5" />
                   </div>
@@ -256,7 +258,7 @@ function ContactPage() {
                   </div>
                 </a>
 
-                <a href="tel:+24396000000" className="flex items-start gap-4 border-border border rounded-2xl p-2 hover:bg-surface-elevated transition-smooth">
+                <a href="tel:+243970000000" className="flex items-start gap-4 border-border border rounded-2xl p-2 hover:bg-surface-elevated transition-smooth">
                   <div className="size-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
                     <Phone className="size-5" />
                   </div>
@@ -282,26 +284,30 @@ function ContactPage() {
               </div>
             </div>
 
-            <div className="p-6 rounded-2xl bg-gradient-primary text-primary-foreground space-y-3 shadow-elegant">
-              <GraduationCap className="size-8" />
-              <h3 className="font-display font-bold text-lg">Inscriptions Ouvertes 2026</h3>
-              <p className="text-xs text-primary-foreground/90 leading-relaxed">
-                Les places dans nos cohortes d'excellence sont limitées. Remplissez le formulaire de préinscription pour bénéficier d'un entretien personnalisé.
+            <div className="p-6 rounded-3xl bg-gradient-primary text-primary-foreground space-y-3 shadow-xl">
+              <div className="flex items-center gap-3">
+                <GraduationCap className="size-7" />
+                <h3 className="font-display font-bold text-lg">Inscriptions ouvertes</h3>
+              </div>
+              <p className="text-xs text-white/90 leading-relaxed">
+                Les places dans nos classes sont limitées. Remplissez le
+                formulaire de préinscription pour un premier échange
+                personnalisé avec notre équipe.
               </p>
             </div>
           </div>
 
           {/* Form Area */}
-          <div className="lg:col-span-2 card-premium p-8 rounded-2xl bg-surface border border-border">
+          <div className="lg:col-span-2 card-premium p-8 rounded-3xl bg-card border border-border">
             {/* Tabs selector */}
-            <div className="flex p-1 rounded-xl bg-muted mb-8">
+            <div className="flex p-1.5 rounded-2xl bg-surface border border-border mb-8">
               <button
                 type="button"
                 onClick={() => { setTab("contact"); setFormErrors({}); }}
                 className={cn(
-                  "flex-1 py-2.5 text-sm font-semibold rounded-lg transition-smooth",
+                  "flex-1 py-2.5 text-sm font-semibold rounded-xl transition-all duration-200",
                   tab === "contact"
-                    ? "bg-surface-elevated text-foreground shadow-sm"
+                    ? "bg-card text-foreground shadow-md"
                     : "text-muted-foreground hover:text-foreground"
                 )}
               >
@@ -311,9 +317,9 @@ function ContactPage() {
                 type="button"
                 onClick={() => { setTab("admission"); setFormErrors({}); }}
                 className={cn(
-                  "flex-1 py-2.5 text-sm font-semibold rounded-lg transition-smooth",
+                  "flex-1 py-2.5 text-sm font-semibold rounded-xl transition-all duration-200",
                   tab === "admission"
-                    ? "bg-surface-elevated text-foreground shadow-sm"
+                    ? "bg-card text-foreground shadow-md"
                     : "text-muted-foreground hover:text-foreground"
                 )}
               >
@@ -361,7 +367,7 @@ function ContactPage() {
                       value={contactData.name}
                       onChange={(e) => setContactData({ ...contactData, name: e.target.value })}
                       placeholder="Votre nom complet"
-                      className="w-full px-4 py-3 rounded-xl bg-surface-elevated border border-border focus:border-primary focus:outline-none transition-smooth"
+                      className="w-full px-4 py-3 rounded-xl bg-surface border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200"
                     />
                     {formErrors.name && <p className="text-xs text-destructive mt-1">{formErrors.name.join(', ')}</p>}
                   </div>
@@ -375,7 +381,7 @@ function ContactPage() {
                         value={contactData.email}
                         onChange={(e) => setContactData({ ...contactData, email: e.target.value })}
                         placeholder="exemple@domaine.com"
-                        className="w-full px-4 py-3 rounded-xl bg-surface-elevated border border-border focus:border-primary focus:outline-none transition-smooth"
+                        className="w-full px-4 py-3 rounded-xl bg-surface border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200"
                       />
                       {formErrors.email && <p className="text-xs text-destructive mt-1">{formErrors.email.join(', ')}</p>}
                     </div>
@@ -387,7 +393,7 @@ function ContactPage() {
                         value={contactData.phone}
                         onChange={(e) => setContactData({ ...contactData, phone: e.target.value })}
                         placeholder="+243..."
-                        className="w-full px-4 py-3 rounded-xl bg-surface-elevated border border-border focus:border-primary focus:outline-none transition-smooth"
+                        className="w-full px-4 py-3 rounded-xl bg-surface border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200"
                       />
                     </div>
                   </div>
@@ -399,7 +405,7 @@ function ContactPage() {
                       value={contactData.subject}
                       onChange={(e) => setContactData({ ...contactData, subject: e.target.value })}
                       placeholder="Sujet de votre message"
-                      className="w-full px-4 py-3 rounded-xl bg-surface-elevated border border-border focus:border-primary focus:outline-none transition-smooth"
+                      className="w-full px-4 py-3 rounded-xl bg-surface border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200"
                     />
                   </div>
 
@@ -411,7 +417,7 @@ function ContactPage() {
                       value={contactData.message}
                       onChange={(e) => setContactData({ ...contactData, message: e.target.value })}
                       placeholder="Écrivez votre message ici..."
-                      className="w-full px-4 py-3 rounded-xl bg-surface-elevated border border-border focus:border-primary focus:outline-none transition-smooth resize-none"
+                      className="w-full px-4 py-3 rounded-xl bg-surface border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 resize-none"
                     />
                     {formErrors.message && <p className="text-xs text-destructive mt-1">{formErrors.message.join(', ')}</p>}
                   </div>
@@ -452,7 +458,7 @@ function ContactPage() {
               ) : (
                 <form onSubmit={handleAdmissionSubmit} className="space-y-6">
                   {/* SECTION 1 : ÉLÈVE */}
-                  <div className="p-4 sm:p-5 rounded-2xl bg-surface-elevated/70 border border-border space-y-4">
+                  <div className="p-4 sm:p-5 rounded-2xl bg-surface border border-border space-y-4">
                     <div className="flex items-center gap-2 pb-2 border-b border-border/60">
                       <Baby className="size-4 text-primary" />
                       <h4 className="text-sm font-bold uppercase tracking-wider text-foreground">
@@ -471,7 +477,7 @@ function ContactPage() {
                           value={admissionData.last_name}
                           onChange={(e) => setAdmissionData({ ...admissionData, last_name: e.target.value })}
                           placeholder="Ex: Kasereka"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-surface border border-border focus:border-primary focus:outline-none transition-smooth text-sm"
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
                         />
                         {formErrors.last_name && (
                           <p className="text-xs text-destructive mt-1">{formErrors.last_name.join(', ')}</p>
@@ -488,7 +494,7 @@ function ContactPage() {
                           value={admissionData.first_name}
                           onChange={(e) => setAdmissionData({ ...admissionData, first_name: e.target.value })}
                           placeholder="Ex: David"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-surface border border-border focus:border-primary focus:outline-none transition-smooth text-sm"
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
                         />
                         {formErrors.first_name && (
                           <p className="text-xs text-destructive mt-1">{formErrors.first_name.join(', ')}</p>
@@ -512,7 +518,7 @@ function ContactPage() {
                                 : "bg-surface border-border text-muted-foreground hover:text-foreground",
                             )}
                           >
-                            <span>👦 Garçon</span>
+                            <span> Garçon</span>
                           </button>
                           <button
                             type="button"
@@ -524,7 +530,7 @@ function ContactPage() {
                                 : "bg-surface border-border text-muted-foreground hover:text-foreground",
                             )}
                           >
-                            <span>👧 Fille</span>
+                            <span> Fille</span>
                           </button>
                         </div>
                         {formErrors.gender && (
@@ -550,7 +556,7 @@ function ContactPage() {
                           max={new Date().toISOString().split("T")[0]}
                           value={admissionData.birth_date}
                           onChange={(e) => setAdmissionData({ ...admissionData, birth_date: e.target.value })}
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-surface border border-border focus:border-primary focus:outline-none transition-smooth text-sm"
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
                         />
                         {formErrors.birth_date && (
                           <p className="text-xs text-destructive mt-1">{formErrors.birth_date.join(', ')}</p>
@@ -560,7 +566,7 @@ function ContactPage() {
                   </div>
 
                   {/* SECTION 2 : CLASSE SOUHAITÉE */}
-                  <div className="p-4 sm:p-5 rounded-2xl bg-surface-elevated/70 border border-border space-y-4">
+                  <div className="p-4 sm:p-5 rounded-2xl bg-surface border border-border space-y-4">
                     <div className="flex items-center gap-2 pb-2 border-b border-border/60">
                       <GraduationCap className="size-4 text-primary" />
                       <h4 className="text-sm font-bold uppercase tracking-wider text-foreground">
@@ -589,7 +595,7 @@ function ContactPage() {
                               program_id: matchedProg || admissionData.program_id,
                             });
                           }}
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-surface border border-border focus:border-primary focus:outline-none transition-smooth text-sm"
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
                         >
                           <option value="">-- Sélectionner la classe --</option>
                           {AVAILABLE_CLASSES.map((grp) => (
@@ -614,7 +620,7 @@ function ContactPage() {
                         <select
                           value={admissionData.program_id}
                           onChange={(e) => setAdmissionData({ ...admissionData, program_id: e.target.value })}
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-surface border border-border focus:border-primary focus:outline-none transition-smooth text-sm"
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
                         >
                           <option value="">-- Sélectionner le cycle --</option>
                           {programsData && Array.isArray(programsData) && programsData.map((prog: { id: string | number; title: string; duration?: string }) => (
@@ -631,7 +637,7 @@ function ContactPage() {
                   </div>
 
                   {/* SECTION 3 : PARENT / TUTEUR */}
-                  <div className="p-4 sm:p-5 rounded-2xl bg-surface-elevated/70 border border-border space-y-4">
+                  <div className="p-4 sm:p-5 rounded-2xl bg-surface border border-border space-y-4">
                     <div className="flex items-center gap-2 pb-2 border-b border-border/60">
                       <User className="size-4 text-primary" />
                       <h4 className="text-sm font-bold uppercase tracking-wider text-foreground">
@@ -650,7 +656,7 @@ function ContactPage() {
                           value={admissionData.guardian_name}
                           onChange={(e) => setAdmissionData({ ...admissionData, guardian_name: e.target.value })}
                           placeholder="Nom, Post-nom et Prénom"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-surface border border-border focus:border-primary focus:outline-none transition-smooth text-sm"
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
                         />
                         {formErrors.guardian_name && (
                           <p className="text-xs text-destructive mt-1">{formErrors.guardian_name.join(', ')}</p>
@@ -664,7 +670,7 @@ function ContactPage() {
                         <select
                           value={admissionData.guardian_relation}
                           onChange={(e) => setAdmissionData({ ...admissionData, guardian_relation: e.target.value })}
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-surface border border-border focus:border-primary focus:outline-none transition-smooth text-sm"
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
                         >
                           <option value="Père">Père</option>
                           <option value="Mère">Mère</option>
@@ -685,7 +691,7 @@ function ContactPage() {
                           value={admissionData.phone}
                           onChange={(e) => setAdmissionData({ ...admissionData, phone: e.target.value })}
                           placeholder="+243 970 000 000"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-surface border border-border focus:border-primary focus:outline-none transition-smooth text-sm"
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
                         />
                         {formErrors.phone && (
                           <p className="text-xs text-destructive mt-1">{formErrors.phone.join(', ')}</p>
@@ -702,7 +708,7 @@ function ContactPage() {
                           value={admissionData.email}
                           onChange={(e) => setAdmissionData({ ...admissionData, email: e.target.value })}
                           placeholder="parent@exemple.com"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-surface border border-border focus:border-primary focus:outline-none transition-smooth text-sm"
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
                         />
                         {formErrors.email && (
                           <p className="text-xs text-destructive mt-1">{formErrors.email.join(', ')}</p>
@@ -720,7 +726,7 @@ function ContactPage() {
                           value={admissionData.emergency_phone}
                           onChange={(e) => setAdmissionData({ ...admissionData, emergency_phone: e.target.value })}
                           placeholder="+243..."
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-surface border border-border focus:border-primary focus:outline-none transition-smooth text-sm"
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
                         />
                       </div>
 
@@ -733,14 +739,14 @@ function ContactPage() {
                           value={admissionData.address}
                           onChange={(e) => setAdmissionData({ ...admissionData, address: e.target.value })}
                           placeholder="Quartier, Commune, Avenue..."
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-surface border border-border focus:border-primary focus:outline-none transition-smooth text-sm"
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
                         />
                       </div>
                     </div>
                   </div>
 
                   {/* SECTION 4 : SCOLARITÉ & REMARQUES */}
-                  <div className="p-4 sm:p-5 rounded-2xl bg-surface-elevated/70 border border-border space-y-4">
+                  <div className="p-4 sm:p-5 rounded-2xl bg-surface border border-border space-y-4">
                     <div className="flex items-center gap-2 pb-2 border-b border-border/60">
                       <ShieldCheck className="size-4 text-primary" />
                       <h4 className="text-sm font-bold uppercase tracking-wider text-foreground">
@@ -758,7 +764,7 @@ function ContactPage() {
                           value={admissionData.previous_school}
                           onChange={(e) => setAdmissionData({ ...admissionData, previous_school: e.target.value })}
                           placeholder="Nom de l'école précédente"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-surface border border-border focus:border-primary focus:outline-none transition-smooth text-sm"
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
                         />
                       </div>
 
@@ -771,7 +777,7 @@ function ContactPage() {
                           value={admissionData.last_grade_result}
                           onChange={(e) => setAdmissionData({ ...admissionData, last_grade_result: e.target.value })}
                           placeholder="Ex: 68%, Distinction..."
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-surface border border-border focus:border-primary focus:outline-none transition-smooth text-sm"
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
                         />
                       </div>
                     </div>

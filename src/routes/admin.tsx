@@ -545,10 +545,10 @@ export function AdminPage() {
 
                   <div
                     onClick={() => setActiveTab('messages')}
-                    className="p-6 rounded-2xl bg-gradient-to-br from-blue-500/10 via-cyan-500/5 to-transparent border border-blue-500/20 hover:border-blue-500 cursor-pointer transition-spring group"
+                    className="p-6 rounded-2xl bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/20 hover:border-primary cursor-pointer transition-spring group"
                   >
                     <div className="flex items-center justify-between">
-                      <div className="size-12 rounded-xl bg-blue-500 text-white flex items-center justify-center shadow-lg">
+                      <div className="size-12 rounded-xl bg-primary text-primary-foreground flex items-center justify-center shadow-lg">
                         <MessageSquare className="size-6" />
                       </div>
                       {stats && stats.unread_messages > 0 ? (
