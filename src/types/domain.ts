@@ -154,17 +154,53 @@ export interface ContactMessage {
 }
 
 export interface AdmissionRequestPayload {
-  name: string;
+  name?: string;
+  first_name?: string;
+  last_name?: string;
+  birth_date?: string;
+  age?: number;
+  gender?: 'M' | 'F' | string;
+  class_level?: string;
+  program_id?: string | number;
   email: string;
   phone: string;
-  program_id?: string | number;
+  guardian_name?: string;
+  guardian_relation?: string;
+  guardian_phone?: string;
+  guardian_email?: string;
+  emergency_phone?: string;
+  address?: string;
+  previous_school?: string;
+  last_grade_result?: string;
+  start_term?: string;
+  special_needs?: string;
   message?: string;
 }
 
 export interface AdmissionRequest extends AdmissionRequestPayload {
   id: string;
-  status: 'new' | 'read' | 'in_progress' | 'handled' | 'accepted' | 'rejected';
+  name: string;
+  status: 'new' | 'read' | 'in_progress' | 'handled' | 'accepted' | 'rejected' | 'archived';
   admin_notes?: string;
   created_at: string;
   updated_at: string;
+}
+
+export interface MediaItem {
+  id: string;
+  public_url: string;
+  url?: string;
+  original_filename: string;
+  mime_type: string;
+  size_bytes: number;
+  kind: string;
+  title?: string;
+  alt_text?: string;
+  caption?: string;
+  category?: string;
+  folder?: string;
+  width?: number | null;
+  height?: number | null;
+  createdAt?: string;
+  updatedAt?: string;
 }

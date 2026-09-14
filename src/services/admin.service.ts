@@ -1,5 +1,6 @@
 import { apiClient } from '@/api/client';
 import { ApiResponse } from '@/types/api';
+import { MediaItem, AdmissionRequest } from '@/types/domain';
 
 export const adminService = {
   // Posts
@@ -34,9 +35,28 @@ export const adminService = {
   deleteGalleryItem: (id: string | number) => apiClient.delete<ApiResponse<null>>(`/admin/gallery/items/${id}`),
 
   // Media
-  uploadMedia: (formData: FormData) => apiClient.post<ApiResponse<unknown>>('/admin/media/upload', formData),
-  getMedia: () => apiClient.get<ApiResponse<unknown[]>>('/admin/media'),
-  deleteMedia: (id: string | number) => apiClient.delete<ApiResponse<null>>(`/admin/media/${id}`),
+  uploadMedia: (formData: FormData, folder?: string) =>
+    apiClient.post<ApiResponse<MediaItem>>(
+      `/admin/media/upload${folder ? `?folder=${encodeURIComponent(folder)}` : ''}`,
+      formData,
+    ),
+  getMedia: (params?: { category?: string; folder?: string; q?: string; kind?: string }) => {
+    const qParams = new URLSearchParams();
+    if (params?.category) qParams.set('category', params.category);
+    if (params?.folder) qParams.set('folder', params.folder);
+    if (params?.q) qParams.set('q', params.q);
+    if (params?.kind) qParams.set('kind', params.kind);
+    const qs = qParams.toString();
+    return apiClient.get<ApiResponse<MediaItem[]>>(`/admin/media${qs ? `?${qs}` : ''}`);
+  },
+  updateMedia: (
+    id: string | number,
+    data: { title?: string; alt_text?: string; caption?: string; category?: string },
+  ) => apiClient.patch<ApiResponse<MediaItem>>(`/admin/media/${id}`, data),
+  deleteMedia: (id: string | number, force?: boolean) =>
+    apiClient.delete<ApiResponse<{ id: string; message: string } | null>>(
+      `/admin/media/${id}${force ? '?force=true' : ''}`,
+    ),
 
   // Pages & Settings
   getPage: (key: string) => apiClient.get<ApiResponse<unknown>>(`/admin/pages/${key}`),
@@ -61,8 +81,8 @@ export const adminService = {
     >('/admin/overview-stats'),
   getContactMessages: () => apiClient.get<ApiResponse<unknown[]>>('/admin/contact-messages'),
   updateContactMessage: (id: string | number, data: unknown) => apiClient.patch<ApiResponse<unknown>>(`/admin/contact-messages/${id}`, data),
-  getAdmissionRequests: () => apiClient.get<ApiResponse<unknown[]>>('/admin/admission-requests'),
-  updateAdmissionRequest: (id: string | number, data: unknown) => apiClient.patch<ApiResponse<unknown>>(`/admin/admission-requests/${id}`, data),
+  getAdmissionRequests: () => apiClient.get<ApiResponse<AdmissionRequest[]>>('/admin/admission-requests'),
+  updateAdmissionRequest: (id: string | number, data: Partial<AdmissionRequest>) => apiClient.patch<ApiResponse<AdmissionRequest>>(`/admin/admission-requests/${id}`, data),
 
   // Users
   getUsers: () => apiClient.get<ApiResponse<unknown[]>>('/admin/users'),
