@@ -4,6 +4,8 @@ import { useMeQuery, useLogoutMutation } from '@/features/auth/hooks';
 import { authStore } from '@/store/auth-store';
 import { adminService } from '@/services/admin.service';
 import { toast } from 'sonner';
+import { AdmissionRequest, MediaItem } from '@/types/domain';
+import { ImagePickerModal, SelectedMedia } from '@/components/admin/ImagePickerModal';
 import {
   LayoutDashboard,
   BookOpen,
@@ -80,6 +82,10 @@ export function AdminPage() {
   } | null>(null);
   const [detailNotes, setDetailNotes] = useState('');
   const [detailStatus, setDetailStatus] = useState('');
+
+  // Image Picker state
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const [pickerTargetField, setPickerTargetField] = useState<string>('cover_image');
 
   useEffect(() => {
     if (meQuery.isError) {
@@ -347,7 +353,7 @@ export function AdminPage() {
         });
       } else {
         await adminService.updateAdmissionRequest(selectedDetail.data.id, {
-          status: detailStatus,
+          status: detailStatus as AdmissionRequest['status'],
           admin_notes: detailNotes,
         });
       }
@@ -728,46 +734,119 @@ export function AdminPage() {
                 </div>
 
                 {/* Form editor for CRUD items */}
-                {editing && canCreate && (
-                  <div className="p-6 rounded-2xl border border-border bg-surface-elevated space-y-4 shadow-sm animate-in fade-in duration-300">
-                    <h3 className="font-display font-semibold text-lg">{editing === 'new' ? 'Nouveau Contenu' : 'Modifier le Contenu'}</h3>
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      {Object.keys(form).map((key) => (
-                        <div key={key} className={key === 'content' || key === 'bio' || key === 'summary' || key === 'description' ? 'sm:col-span-2' : ''}>
-                          <label className="text-xs font-semibold uppercase text-muted-foreground">{key}</label>
-                          {key === 'content' || key === 'bio' || key === 'summary' || key === 'description' ? (
-                            <textarea
-                              rows={4}
-                              value={form[key]}
-                              onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-                              className="w-full mt-1.5 px-3 py-2 rounded-xl border border-border bg-background text-sm focus:border-primary focus:outline-none"
-                            />
-                          ) : (
-                            <input
-                              value={form[key]}
-                              onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-                              className="w-full mt-1.5 px-3 py-2 rounded-xl border border-border bg-background text-sm focus:border-primary focus:outline-none"
-                            />
-                          )}
-                        </div>
-                      ))}
+                {editing && canCreate && (() => {
+                  const IMAGE_FIELDS = ['cover_image', 'image', 'avatar', 'image_url'];
+                  const TEXTAREA_FIELDS = ['content', 'bio', 'summary', 'description'];
+                  const FIELD_LABELS: Record<string, string> = {
+                    title: 'Titre',
+                    summary: 'Résumé',
+                    content: 'Contenu',
+                    category: 'Catégorie',
+                    cover_image: 'Image de couverture',
+                    image: 'Image',
+                    avatar: 'Photo de profil',
+                    image_url: 'Image',
+                    name: 'Nom',
+                    role: 'Rôle / Fonction',
+                    bio: 'Biographie',
+                    department: 'Département',
+                    duration: 'Durée',
+                    students: 'Étudiants',
+                    price: 'Prix',
+                    description: 'Description',
+                  };
+
+                  return (
+                    <div className="p-6 rounded-2xl border border-border bg-surface-elevated space-y-4 shadow-sm animate-in fade-in duration-300">
+                      <h3 className="font-display font-semibold text-lg">{editing === 'new' ? 'Nouveau Contenu' : 'Modifier le Contenu'}</h3>
+                      <div className="grid sm:grid-cols-2 gap-4">
+                        {Object.keys(form).map((key) => {
+                          const isImage = IMAGE_FIELDS.includes(key);
+                          const isTextarea = TEXTAREA_FIELDS.includes(key);
+                          const label = FIELD_LABELS[key] || key;
+
+                          if (isImage) {
+                            return (
+                              <div key={key} className="sm:col-span-2">
+                                <label className="text-xs font-semibold uppercase text-muted-foreground">{label}</label>
+                                <div className="mt-1.5 flex items-start gap-4">
+                                  {/* Thumbnail preview */}
+                                  <div className="size-24 rounded-xl border-2 border-dashed border-border bg-muted/30 flex items-center justify-center overflow-hidden shrink-0">
+                                    {form[key] ? (
+                                      <img src={form[key]} alt="Aperçu" className="size-full object-cover rounded-xl" />
+                                    ) : (
+                                      <ImageIcon className="size-8 text-muted-foreground/40" />
+                                    )}
+                                  </div>
+                                  <div className="flex flex-col gap-2 pt-1">
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        setPickerTargetField(key);
+                                        setPickerOpen(true);
+                                      }}
+                                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-primary/10 text-primary text-xs font-semibold hover:bg-primary hover:text-primary-foreground transition-smooth"
+                                    >
+                                      <ImageIcon className="size-3.5" />
+                                      {form[key] ? 'Remplacer l\'image' : 'Choisir une image'}
+                                    </button>
+                                    {form[key] && (
+                                      <button
+                                        type="button"
+                                        onClick={() => setForm((f) => ({ ...f, [key]: '' }))}
+                                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-destructive/30 text-destructive text-xs font-semibold hover:bg-destructive/10 transition-smooth"
+                                      >
+                                        <Trash2 className="size-3.5" />
+                                        Retirer l'image
+                                      </button>
+                                    )}
+                                    {form[key] && (
+                                      <p className="text-[10px] text-muted-foreground truncate max-w-xs" title={form[key]}>{form[key]}</p>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          }
+
+                          return (
+                            <div key={key} className={isTextarea ? 'sm:col-span-2' : ''}>
+                              <label className="text-xs font-semibold uppercase text-muted-foreground">{label}</label>
+                              {isTextarea ? (
+                                <textarea
+                                  rows={4}
+                                  value={form[key]}
+                                  onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+                                  className="w-full mt-1.5 px-3 py-2 rounded-xl border border-border bg-background text-sm focus:border-primary focus:outline-none"
+                                />
+                              ) : (
+                                <input
+                                  value={form[key]}
+                                  onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+                                  className="w-full mt-1.5 px-3 py-2 rounded-xl border border-border bg-background text-sm focus:border-primary focus:outline-none"
+                                />
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <div className="flex gap-3 pt-2">
+                        <button
+                          onClick={saveForm}
+                          className="px-5 py-2.5 rounded-xl bg-gradient-primary text-primary-foreground text-sm font-semibold shadow-elegant"
+                        >
+                          Enregistrer
+                        </button>
+                        <button
+                          onClick={() => setEditing(null)}
+                          className="px-5 py-2.5 rounded-xl border border-border text-sm font-semibold hover:bg-muted"
+                        >
+                          Annuler
+                        </button>
+                      </div>
                     </div>
-                    <div className="flex gap-3 pt-2">
-                      <button
-                        onClick={saveForm}
-                        className="px-5 py-2.5 rounded-xl bg-gradient-primary text-primary-foreground text-sm font-semibold shadow-elegant"
-                      >
-                        Enregistrer
-                      </button>
-                      <button
-                        onClick={() => setEditing(null)}
-                        className="px-5 py-2.5 rounded-xl border border-border text-sm font-semibold hover:bg-muted"
-                      >
-                        Annuler
-                      </button>
-                    </div>
-                  </div>
-                )}
+                  );
+                })()}
 
                 {/* Items List */}
                 {loading ? (
@@ -798,6 +877,7 @@ export function AdminPage() {
                             {item.email && <span className="font-medium text-foreground mr-2"><Mail className="size-4 inline-block mr-1" /> {item.email}</span>}
                             {item.phone && <span className="font-medium text-foreground mr-2"><Phone className="size-4 inline-block mr-1" /> {item.phone}</span>}
                             {item.preferred_schedule && <span className="text-primary font-medium mr-2">🕒 {item.preferred_schedule}</span>}
+                            {item.class_level && <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[11px] font-bold mr-2">🎓 {item.class_level}</span>}
                             {item.summary || item.role || item.category || item.message || item.public_url || ''}
                           </p>
 
@@ -1003,7 +1083,23 @@ export function AdminPage() {
                 {selectedDetail.data.gender && (
                   <div className="p-3 rounded-xl bg-surface border border-border">
                     <span className="text-xs text-muted-foreground font-semibold uppercase block">Genre</span>
-                    <span className="font-semibold text-foreground mt-0.5 block">{selectedDetail.data.gender}</span>
+                    <span className="font-semibold text-foreground mt-0.5 block">
+                      {selectedDetail.data.gender === 'M' ? '👦 Garçon' : selectedDetail.data.gender === 'F' ? '👧 Fille' : selectedDetail.data.gender}
+                    </span>
+                  </div>
+                )}
+
+                {selectedDetail.data.age != null && (
+                  <div className="p-3 rounded-xl bg-surface border border-border">
+                    <span className="text-xs text-muted-foreground font-semibold uppercase block">Âge</span>
+                    <span className="font-semibold text-foreground mt-0.5 block">{selectedDetail.data.age} ans</span>
+                  </div>
+                )}
+
+                {selectedDetail.data.class_level && (
+                  <div className="p-3 rounded-xl bg-primary/5 border border-primary/20">
+                    <span className="text-xs text-muted-foreground font-semibold uppercase block">Classe souhaitée</span>
+                    <span className="font-bold text-primary mt-0.5 block">{selectedDetail.data.class_level}</span>
                   </div>
                 )}
 
@@ -1181,6 +1277,22 @@ export function AdminPage() {
           </div>
         </div>
       )}
+      {/* Image Picker Modal — shared across Posts, Programs, Staff, Gallery */}
+      <ImagePickerModal
+        open={pickerOpen}
+        onClose={() => setPickerOpen(false)}
+        onSelect={(media) => {
+          setForm((f) => ({ ...f, [pickerTargetField]: media.url }));
+          setPickerOpen(false);
+        }}
+        currentValue={form[pickerTargetField] || ''}
+        defaultFolder={
+          pickerTargetField === 'cover_image' ? 'blog'
+            : pickerTargetField === 'image' ? 'programs'
+            : pickerTargetField === 'avatar' ? 'staff'
+            : 'gallery'
+        }
+      />
     </div>
   );
 }
