@@ -20,8 +20,9 @@ router.use(authRequired);
 
 const storage = multer.diskStorage({
   destination: (req, _file, cb) => {
-    const folder = String(req.body?.folder || 'misc').replace(/[^a-z0-9_-]/gi, '');
-    const dest = path.join(env.uploadDir, folder || 'misc');
+    const rawFolder = String(req.query?.folder || req.body?.folder || 'misc');
+    const folder = rawFolder.replace(/[^a-z0-9_-]/gi, '') || 'misc';
+    const dest = path.join(env.uploadDir, folder);
     fs.mkdirSync(dest, { recursive: true });
     cb(null, dest);
   },
@@ -677,7 +678,8 @@ router.post(
   upload.single('file'),
   asyncHandler(async (req, res) => {
     if (!req.file) return fail(res, 400, 'VALIDATION_ERROR', 'Fichier manquant.');
-    const folder = String(req.body?.folder || 'misc').replace(/[^a-z0-9_-]/gi, '') || 'misc';
+    const rawFolder = String(req.query?.folder || req.body?.folder || 'misc');
+    const folder = rawFolder.replace(/[^a-z0-9_-]/gi, '') || 'misc';
     const base = `${req.protocol}://${req.get('host')}`;
     const publicUrl = `${base}${env.publicUploadUrl}/${folder}/${req.file.filename}`;
     const id = createId();
@@ -687,11 +689,16 @@ router.post(
         ? 'audio'
         : 'document';
 
+    const cleanTitle = (req.body?.title || req.file.originalname.replace(/\.[^/.]+$/, '')).slice(0, 255);
+    const altText = (req.body?.alt_text || req.body?.alt || cleanTitle).slice(0, 255);
+    const caption = req.body?.caption ? String(req.body.caption) : null;
+    const category = (req.body?.category || folder || 'general').slice(0, 100);
+
     await query(
       `INSERT INTO Media
-        (id, storage_key, public_url, original_filename, mime_type, size_bytes, kind, uploaded_by_user_id, created_at, updated_at)
+        (id, storage_key, public_url, original_filename, mime_type, size_bytes, kind, title, alt_text, caption, category, folder, uploaded_by_user_id, created_at, updated_at)
        VALUES
-        (:id, :key, :url, :original, :mime, :size, :kind, :userId, NOW(3), NOW(3))`,
+        (:id, :key, :url, :original, :mime, :size, :kind, :title, :altText, :caption, :category, :folder, :userId, NOW(3), NOW(3))`,
       {
         id,
         key: `${folder}/${req.file.filename}`,
@@ -700,6 +707,11 @@ router.post(
         mime: req.file.mimetype,
         size: req.file.size,
         kind,
+        title: cleanTitle,
+        altText: altText || null,
+        caption,
+        category,
+        folder,
         userId: req.user.id,
       },
     );
@@ -714,6 +726,11 @@ router.post(
         mime_type: req.file.mimetype,
         size_bytes: req.file.size,
         kind,
+        title: cleanTitle,
+        alt_text: altText,
+        caption,
+        category,
+        folder,
       },
       undefined,
       201,
@@ -724,22 +741,95 @@ router.post(
 router.get(
   '/media',
   requirePermission('media.upload'),
-  asyncHandler(async (_req, res) => {
-    const rows = await query(
-      `SELECT * FROM Media WHERE deleted_at IS NULL ORDER BY created_at DESC LIMIT 200`,
-    );
+  asyncHandler(async (req, res) => {
+    let sql = `SELECT * FROM Media WHERE deleted_at IS NULL`;
+    const params = {};
+
+    if (req.query?.category && req.query.category !== 'all') {
+      sql += ` AND category = :category`;
+      params.category = String(req.query.category);
+    }
+    if (req.query?.folder && req.query.folder !== 'all') {
+      sql += ` AND folder = :folder`;
+      params.folder = String(req.query.folder);
+    }
+    if (req.query?.kind && req.query.kind !== 'all') {
+      sql += ` AND kind = :kind`;
+      params.kind = String(req.query.kind);
+    }
+    if (req.query?.q) {
+      sql += ` AND (original_filename LIKE :q OR title LIKE :q OR alt_text LIKE :q)`;
+      params.q = `%${String(req.query.q).trim()}%`;
+    }
+
+    sql += ` ORDER BY created_at DESC LIMIT 300`;
+
+    const rows = await query(sql, params);
     return ok(
       res,
       rows.map((r) => ({
         id: r.id,
         public_url: r.public_url,
+        url: r.public_url,
         original_filename: r.original_filename,
         mime_type: r.mime_type,
         size_bytes: Number(r.size_bytes || 0),
         kind: r.kind,
+        title: r.title || r.original_filename,
+        alt_text: r.alt_text || '',
+        caption: r.caption || '',
+        category: r.category || 'general',
+        folder: r.folder || 'misc',
+        width: r.width ? Number(r.width) : null,
+        height: r.height ? Number(r.height) : null,
         createdAt: r.created_at,
+        updatedAt: r.updated_at,
       })),
     );
+  }),
+);
+
+router.patch(
+  '/media/:id',
+  requirePermission('media.upload'),
+  asyncHandler(async (req, res) => {
+    const existing = await queryOne(`SELECT * FROM Media WHERE id = :id AND deleted_at IS NULL`, {
+      id: req.params.id,
+    });
+    if (!existing) return fail(res, 404, 'NOT_FOUND', 'Média introuvable.');
+
+    await query(
+      `UPDATE Media SET
+        title = COALESCE(:title, title),
+        alt_text = COALESCE(:altText, alt_text),
+        caption = COALESCE(:caption, caption),
+        category = COALESCE(:category, category),
+        updated_at = NOW(3)
+       WHERE id = :id`,
+      {
+        id: req.params.id,
+        title: req.body?.title !== undefined ? String(req.body.title).slice(0, 255) : null,
+        altText: req.body?.alt_text !== undefined ? String(req.body.alt_text).slice(0, 255) : null,
+        caption: req.body?.caption !== undefined ? String(req.body.caption) : null,
+        category: req.body?.category !== undefined ? String(req.body.category).slice(0, 100) : null,
+      },
+    );
+
+    const updated = await queryOne(`SELECT * FROM Media WHERE id = :id`, { id: req.params.id });
+    return ok(res, {
+      id: updated.id,
+      public_url: updated.public_url,
+      original_filename: updated.original_filename,
+      mime_type: updated.mime_type,
+      size_bytes: Number(updated.size_bytes || 0),
+      kind: updated.kind,
+      title: updated.title,
+      alt_text: updated.alt_text,
+      caption: updated.caption,
+      category: updated.category,
+      folder: updated.folder,
+      updatedAt: updated.updated_at,
+    });
   }),
 );
 
@@ -751,16 +841,67 @@ router.delete(
       id: req.params.id,
     });
     if (!row) return fail(res, 404, 'NOT_FOUND', 'Média introuvable.');
+
+    // Contrôle d'intégrité référentielle
+    const targetUrl = row.public_url;
+    const targetKey = row.storage_key;
+    const urlPattern = `%${targetUrl}%`;
+    const keyPattern = `%${targetKey}%`;
+
+    const postRef = await queryOne(
+      `SELECT count(*) as c FROM Post WHERE (cover_image LIKE :p1 OR cover_image LIKE :p2) AND deleted_at IS NULL`,
+      { p1: urlPattern, p2: keyPattern },
+    );
+    const progRef = await queryOne(
+      `SELECT count(*) as c FROM Program WHERE (image LIKE :p1 OR image LIKE :p2) AND deleted_at IS NULL`,
+      { p1: urlPattern, p2: keyPattern },
+    );
+    const staffRef = await queryOne(
+      `SELECT count(*) as c FROM Staff WHERE (avatar LIKE :p1 OR avatar LIKE :p2) AND deleted_at IS NULL`,
+      { p1: urlPattern, p2: keyPattern },
+    );
+    const galRef = await queryOne(
+      `SELECT count(*) as c FROM GalleryItem WHERE (image_url LIKE :p1 OR image_url LIKE :p2) AND deleted_at IS NULL`,
+      { p1: urlPattern, p2: keyPattern },
+    );
+
+    const postCount = Number(postRef?.c || 0);
+    const progCount = Number(progRef?.c || 0);
+    const staffCount = Number(staffRef?.c || 0);
+    const galCount = Number(galRef?.c || 0);
+    const totalRefs = postCount + progCount + staffCount + galCount;
+
+    if (totalRefs > 0 && req.query?.force !== 'true') {
+      return fail(
+        res,
+        409,
+        'MEDIA_IN_USE',
+        `Ce média est actuellement utilisé par ${totalRefs} élément(s) du site (Articles: ${postCount}, Formations: ${progCount}, Équipe: ${staffCount}, Galerie: ${galCount}). Veuillez dissocier l'image avant de la supprimer.`,
+        {
+          references: {
+            posts: postCount,
+            programs: progCount,
+            staff: staffCount,
+            gallery: galCount,
+          },
+        },
+      );
+    }
+
     await query(`UPDATE Media SET deleted_at = NOW(3), updated_at = NOW(3) WHERE id = :id`, {
       id: req.params.id,
     });
-    try {
-      const filePath = path.join(env.uploadDir, row.storage_key);
-      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-    } catch {
-      // ignore fs errors
+
+    if (totalRefs === 0) {
+      try {
+        const filePath = path.join(env.uploadDir, row.storage_key);
+        if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+      } catch {
+        // ignore fs errors
+      }
     }
-    return ok(res, null);
+
+    return ok(res, { id: req.params.id, message: 'Média supprimé avec succès.' });
   }),
 );
 
@@ -953,12 +1094,18 @@ router.patch(
       `UPDATE AdmissionRequest SET
         status = COALESCE(:status, status),
         admin_notes = COALESCE(:notes, admin_notes),
+        class_level = COALESCE(:classLevel, class_level),
+        program_id = COALESCE(:programId, program_id),
+        guardian_phone = COALESCE(:guardianPhone, guardian_phone),
         updated_at = NOW(3)
        WHERE id = :id`,
       {
         id: req.params.id,
         status: req.body?.status ?? null,
         notes: req.body?.admin_notes ?? null,
+        classLevel: req.body?.class_level ?? null,
+        programId: req.body?.program_id ?? null,
+        guardianPhone: req.body?.guardian_phone ?? null,
       },
     );
     const row = await queryOne(`SELECT * FROM AdmissionRequest WHERE id = :id`, { id: req.params.id });

@@ -23,28 +23,50 @@ async function main() {
   await conn.query(sql);
 
   // Migration des nouvelles colonnes si la table existait déjà
-  const alterColumns = [
-    "ADD COLUMN `birth_date` varchar(40) DEFAULT NULL",
-    "ADD COLUMN `gender` varchar(40) DEFAULT NULL",
+  const alterAdmissionColumns = [
+    "ADD COLUMN `first_name` varchar(100) DEFAULT NULL",
+    "ADD COLUMN `last_name` varchar(100) DEFAULT NULL",
+    "ADD COLUMN `birth_date` date DEFAULT NULL",
+    "ADD COLUMN `age` int DEFAULT NULL",
+    "ADD COLUMN `gender` varchar(20) DEFAULT NULL",
+    "ADD COLUMN `class_level` varchar(120) DEFAULT NULL",
     "ADD COLUMN `education_level` varchar(120) DEFAULT NULL",
     "ADD COLUMN `address` varchar(255) DEFAULT NULL",
     "ADD COLUMN `guardian_name` varchar(160) DEFAULT NULL",
     "ADD COLUMN `guardian_phone` varchar(60) DEFAULT NULL",
+    "ADD COLUMN `guardian_relation` varchar(80) DEFAULT NULL",
+    "ADD COLUMN `guardian_email` varchar(254) DEFAULT NULL",
+    "ADD COLUMN `emergency_phone` varchar(60) DEFAULT NULL",
     "ADD COLUMN `preferred_schedule` varchar(80) DEFAULT NULL",
     "ADD COLUMN `source` varchar(120) DEFAULT NULL",
     "ADD COLUMN `previous_school` varchar(255) DEFAULT NULL",
     "ADD COLUMN `last_grade_result` varchar(120) DEFAULT NULL",
-    "ADD COLUMN `guardian_relation` varchar(80) DEFAULT NULL",
-    "ADD COLUMN `guardian_email` varchar(254) DEFAULT NULL",
-    "ADD COLUMN `emergency_phone` varchar(60) DEFAULT NULL",
     "ADD COLUMN `start_term` varchar(120) DEFAULT NULL",
     "ADD COLUMN `payment_mode_preference` varchar(120) DEFAULT NULL",
     "ADD COLUMN `special_needs` text DEFAULT NULL",
   ];
 
-  for (const colDef of alterColumns) {
+  for (const colDef of alterAdmissionColumns) {
     try {
       await conn.query(`ALTER TABLE \`AdmissionRequest\` ${colDef}`);
+    } catch {
+      // Ignorer si la colonne existe déjà
+    }
+  }
+
+  const alterMediaColumns = [
+    "ADD COLUMN `title` varchar(255) DEFAULT NULL",
+    "ADD COLUMN `alt_text` varchar(255) DEFAULT NULL",
+    "ADD COLUMN `caption` text DEFAULT NULL",
+    "ADD COLUMN `category` varchar(100) DEFAULT 'general'",
+    "ADD COLUMN `folder` varchar(100) DEFAULT 'misc'",
+    "ADD COLUMN `width` int DEFAULT NULL",
+    "ADD COLUMN `height` int DEFAULT NULL",
+  ];
+
+  for (const colDef of alterMediaColumns) {
+    try {
+      await conn.query(`ALTER TABLE \`Media\` ${colDef}`);
     } catch {
       // Ignorer si la colonne existe déjà
     }

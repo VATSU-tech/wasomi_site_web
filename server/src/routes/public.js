@@ -326,10 +326,25 @@ router.post(
 );
 
 const admissionSchema = z.object({
-  name: z.string().min(2),
+  name: z.string().optional().nullable(),
+  first_name: z.string().optional().nullable(),
+  last_name: z.string().optional().nullable(),
+  birth_date: z.string().optional().nullable(),
+  gender: z.string().optional().nullable(),
+  class_level: z.string().optional().nullable(),
+  program_id: z.union([z.string(), z.number()]).optional().nullable(),
   email: z.string().email(),
   phone: z.string().min(6),
-  program_id: z.union([z.string(), z.number()]).optional().nullable(),
+  guardian_name: z.string().optional().nullable(),
+  guardian_relation: z.string().optional().nullable(),
+  guardian_phone: z.string().optional().nullable(),
+  guardian_email: z.string().optional().nullable(),
+  emergency_phone: z.string().optional().nullable(),
+  address: z.string().optional().nullable(),
+  previous_school: z.string().optional().nullable(),
+  last_grade_result: z.string().optional().nullable(),
+  start_term: z.string().optional().nullable(),
+  special_needs: z.string().optional().nullable(),
   message: z.string().optional().nullable(),
 });
 
@@ -343,22 +358,75 @@ router.post(
 
     const id = createId();
     const data = parsed.data;
+
+    const lastName = (data.last_name || '').trim();
+    const firstName = (data.first_name || '').trim();
+    const fullName =
+      (lastName || firstName)
+        ? `${lastName} ${firstName}`.trim()
+        : (data.name || 'Élève').trim();
+
+    let calculatedAge = null;
+    let validBirthDate = null;
+    if (data.birth_date) {
+      const birth = new Date(data.birth_date);
+      if (!isNaN(birth.getTime())) {
+        validBirthDate = data.birth_date.slice(0, 10);
+        const today = new Date();
+        calculatedAge = today.getFullYear() - birth.getFullYear();
+        const m = today.getMonth() - birth.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+          calculatedAge--;
+        }
+      }
+    }
+
+    let normalizedGender = null;
+    if (data.gender) {
+      const g = String(data.gender).toUpperCase();
+      if (g.startsWith('M')) normalizedGender = 'M';
+      else if (g.startsWith('F')) normalizedGender = 'F';
+      else normalizedGender = g.slice(0, 20);
+    }
+
     await query(
       `INSERT INTO AdmissionRequest
-        (id, name, email, phone, program_id, message, status, created_at, updated_at)
+        (id, name, first_name, last_name, birth_date, age, gender, class_level, program_id,
+         email, phone, guardian_name, guardian_relation, guardian_phone, guardian_email,
+         emergency_phone, address, previous_school, last_grade_result, start_term,
+         special_needs, message, status, created_at, updated_at)
        VALUES
-        (:id, :name, :email, :phone, :programId, :message, 'new', NOW(3), NOW(3))`,
+        (:id, :name, :firstName, :lastName, :birthDate, :age, :gender, :classLevel, :programId,
+         :email, :phone, :guardianName, :guardianRelation, :guardianPhone, :guardianEmail,
+         :emergencyPhone, :address, :previousSchool, :lastGradeResult, :startTerm,
+         :specialNeeds, :message, 'new', NOW(3), NOW(3))`,
       {
         id,
-        name: data.name,
+        name: fullName,
+        firstName: firstName || null,
+        lastName: lastName || null,
+        birthDate: validBirthDate,
+        age: calculatedAge,
+        gender: normalizedGender,
+        classLevel: data.class_level || null,
+        programId: data.program_id ? String(data.program_id) : null,
         email: data.email.toLowerCase(),
         phone: data.phone,
-        programId: data.program_id ? String(data.program_id) : null,
+        guardianName: data.guardian_name || null,
+        guardianRelation: data.guardian_relation || null,
+        guardianPhone: data.guardian_phone || null,
+        guardianEmail: data.guardian_email ? data.guardian_email.toLowerCase() : null,
+        emergencyPhone: data.emergency_phone || null,
+        address: data.address || null,
+        previousSchool: data.previous_school || null,
+        lastGradeResult: data.last_grade_result || null,
+        startTerm: data.start_term || null,
+        specialNeeds: data.special_needs || null,
         message: data.message || null,
       },
     );
 
-    return ok(res, { id, message: 'Demande de préinscription enregistrée.' }, undefined, 201);
+    return ok(res, { id, message: 'Demande de préinscription enregistrée avec succès.' }, undefined, 201);
   }),
 );
 
