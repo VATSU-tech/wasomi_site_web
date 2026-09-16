@@ -6,6 +6,7 @@ import { adminService } from '@/services/admin.service';
 import { toast } from 'sonner';
 import { AdmissionRequest, MediaItem } from '@/types/domain';
 import { ImagePickerModal, SelectedMedia } from '@/components/admin/ImagePickerModal';
+import { FeeComponentsEditor, type ProgramFees } from '@/components/admin/FeeComponentsEditor';
 import {
   LayoutDashboard,
   BookOpen,
@@ -72,7 +73,7 @@ export function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [items, setItems] = useState<any[]>([]);
   const [editing, setEditing] = useState<any | null>(null);
-  const [form, setForm] = useState<Record<string, string>>({});
+  const [form, setForm] = useState<Record<string, any>>({});
 
   // Overview stats & Detail modal
   const [stats, setStats] = useState<Stats | null>(null);
@@ -209,7 +210,21 @@ export function AdminPage() {
     if (activeTab === 'posts') {
       setForm({ title: '', summary: '', content: '', category: 'Actualités', cover_image: '' });
     } else if (activeTab === 'programs') {
-      setForm({ title: '', summary: '', duration: '', students: '', image: '', price: '' });
+      setForm({
+        title: '',
+        summary: '',
+        duration: '',
+        students: '',
+        image: '',
+        price: '',
+        fees: {
+          currency: '$',
+          total: '',
+          cycle: '',
+          components: [],
+          installments: [],
+        } satisfies ProgramFees,
+      });
     } else if (activeTab === 'staff') {
       setForm({ name: '', role: '', bio: '', avatar: '', department: '' });
     } else if (activeTab === 'gallery') {
@@ -230,13 +245,41 @@ export function AdminPage() {
         cover_image: item.cover_image || '',
       });
     } else if (activeTab === 'programs') {
+      const fees = (item.fees || {}) as ProgramFees;
+      const components = Array.isArray(fees.components) ? fees.components : [];
+      // Migration douce des anciens champs fixes vers des composantes éditables
+      const legacyComponents =
+        components.length > 0
+          ? components
+          : [
+              fees.connectedFees && { id: 'legacy-connected', label: 'Frais connexes', amount: parseFloat(String(fees.connectedFees)) || 0 },
+              fees.labotech && { id: 'legacy-labotech', label: 'Labotech', amount: parseFloat(String(fees.labotech)) || 0 },
+              fees.infirmary && { id: 'legacy-infirmary', label: 'Infirmerie', amount: parseFloat(String(fees.infirmary)) || 0 },
+            ].filter(Boolean);
+
+      const installments =
+        Array.isArray(fees.installments) && fees.installments.length > 0
+          ? fees.installments
+          : [
+              fees.firstInstallment && { id: 'inst-1', label: '1ère tranche', amount: String(fees.firstInstallment) },
+              fees.secondInstallment && { id: 'inst-2', label: '2ème tranche', amount: String(fees.secondInstallment) },
+              fees.thirdInstallment && { id: 'inst-3', label: '3ème tranche', amount: String(fees.thirdInstallment) },
+            ].filter(Boolean);
+
       setForm({
         title: item.title || '',
         summary: item.summary || '',
         duration: item.duration || '',
         students: item.students || '',
         image: item.image || '',
-        price: String(item.price || ''),
+        price: String(item.price || fees.total || ''),
+        fees: {
+          currency: fees.currency || '$',
+          total: fees.total || item.price || '',
+          cycle: fees.cycle || item.level || '',
+          components: legacyComponents as ProgramFees['components'],
+          installments: installments as ProgramFees['installments'],
+        },
       });
     } else if (activeTab === 'staff') {
       setForm({
@@ -265,10 +308,20 @@ export function AdminPage() {
           await adminService.updatePost(editing.id, form);
         }
       } else if (activeTab === 'programs') {
+        const fees = form.fees as ProgramFees | undefined;
+        const payload = {
+          title: form.title,
+          summary: form.summary,
+          duration: form.duration,
+          students: form.students,
+          image: form.image,
+          price: fees?.total || form.price,
+          fees,
+        };
         if (editing === 'new') {
-          await adminService.createProgram(form);
+          await adminService.createProgram(payload);
         } else {
-          await adminService.updateProgram(editing.id, form);
+          await adminService.updateProgram(editing.id, payload);
         }
       } else if (activeTab === 'staff') {
         if (editing === 'new') {
@@ -718,7 +771,7 @@ export function AdminPage() {
                       <label className="inline-flex items-center gap-2 px-4 py-2 bg-surface-elevated border border-border rounded-xl text-sm font-semibold cursor-pointer hover:border-primary transition-smooth">
                         <Upload className="size-4" />
                         {uploading ? 'Envoi…' : 'Uploader image'}
-                        <input type="file" onChange={handleFileUpload} className="hidden" accept="image/*,pdf" />
+                        <input type="file" onChange={handleFileUpload} className="hidden" accept="image/jpeg,image/png,image/webp,image/gif,application/pdf,.jpg,.jpeg,.png,.webp,.gif,.pdf" />
                       </label>
                     )}
                     {canCreate && (
@@ -737,6 +790,7 @@ export function AdminPage() {
                 {editing && canCreate && (() => {
                   const IMAGE_FIELDS = ['cover_image', 'image', 'avatar', 'image_url'];
                   const TEXTAREA_FIELDS = ['content', 'bio', 'summary', 'description'];
+                  const SKIP_FIELDS = ['fees', 'price'];
                   const FIELD_LABELS: Record<string, string> = {
                     title: 'Titre',
                     summary: 'Résumé',
@@ -761,6 +815,7 @@ export function AdminPage() {
                       <h3 className="font-display font-semibold text-lg">{editing === 'new' ? 'Nouveau Contenu' : 'Modifier le Contenu'}</h3>
                       <div className="grid sm:grid-cols-2 gap-4">
                         {Object.keys(form).map((key) => {
+                          if (SKIP_FIELDS.includes(key)) return null;
                           const isImage = IMAGE_FIELDS.includes(key);
                           const isTextarea = TEXTAREA_FIELDS.includes(key);
                           const label = FIELD_LABELS[key] || key;
@@ -773,7 +828,7 @@ export function AdminPage() {
                                   {/* Thumbnail preview */}
                                   <div className="size-24 rounded-xl border-2 border-dashed border-border bg-muted/30 flex items-center justify-center overflow-hidden shrink-0">
                                     {form[key] ? (
-                                      <img src={form[key]} alt="Aperçu" className="size-full object-cover rounded-xl" />
+                                      <img src={String(form[key])} alt="Aperçu" className="size-full object-cover rounded-xl" />
                                     ) : (
                                       <ImageIcon className="size-8 text-muted-foreground/40" />
                                     )}
@@ -801,7 +856,7 @@ export function AdminPage() {
                                       </button>
                                     )}
                                     {form[key] && (
-                                      <p className="text-[10px] text-muted-foreground truncate max-w-xs" title={form[key]}>{form[key]}</p>
+                                      <p className="text-[10px] text-muted-foreground truncate max-w-xs" title={String(form[key])}>{String(form[key])}</p>
                                     )}
                                   </div>
                                 </div>
@@ -815,13 +870,13 @@ export function AdminPage() {
                               {isTextarea ? (
                                 <textarea
                                   rows={4}
-                                  value={form[key]}
+                                  value={String(form[key] ?? '')}
                                   onChange={(e) => setForm({ ...form, [key]: e.target.value })}
                                   className="w-full mt-1.5 px-3 py-2 rounded-xl border border-border bg-background text-sm focus:border-primary focus:outline-none"
                                 />
                               ) : (
                                 <input
-                                  value={form[key]}
+                                  value={String(form[key] ?? '')}
                                   onChange={(e) => setForm({ ...form, [key]: e.target.value })}
                                   className="w-full mt-1.5 px-3 py-2 rounded-xl border border-border bg-background text-sm focus:border-primary focus:outline-none"
                                 />
@@ -829,6 +884,19 @@ export function AdminPage() {
                             </div>
                           );
                         })}
+
+                        {activeTab === 'programs' && (
+                          <FeeComponentsEditor
+                            value={(form.fees as ProgramFees) || { currency: '$', components: [] }}
+                            onChange={(fees) =>
+                              setForm((f) => ({
+                                ...f,
+                                fees,
+                                price: fees.total || '',
+                              }))
+                            }
+                          />
+                        )}
                       </div>
                       <div className="flex gap-3 pt-2">
                         <button
@@ -890,7 +958,7 @@ export function AdminPage() {
                           {(item.image_url || item.avatar || item.image || item.cover_image || item.public_url) && (
                             <img
                               src={item.image_url || item.avatar || item.image || item.cover_image || item.public_url}
-                              alt=""
+                              alt={item.name || item.title || 'Aperçu'}
                               className="mt-2 h-14 w-20 object-cover rounded-lg border border-border"
                             />
                           )}
@@ -969,6 +1037,7 @@ export function AdminPage() {
               </div>
               <button
                 onClick={() => setSelectedDetail(null)}
+                aria-label="Fermer"
                 className="size-8 rounded-lg border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted"
               >
                 <X className="size-4" />

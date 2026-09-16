@@ -67,6 +67,28 @@ export interface Program {
   icon?: string;
   features?: string[];
   modules?: ProgramModule[];
+  fees?: {
+    currency?: string;
+    total?: string | null;
+    cycle?: string;
+    components?: Array<{
+      id?: string;
+      label: string;
+      amount: number;
+      description?: string;
+      sort_order?: number;
+    }>;
+    installments?: Array<{ id?: string; label: string; amount: string }>;
+    connectedFees?: string;
+    labotech?: string;
+    infirmary?: string;
+    firstInstallment?: string;
+    secondInstallment?: string;
+    thirdInstallment?: string;
+  } | null;
+  schedule?: Record<string, string> | null;
+  students?: string;
+  color?: string;
   createdAt?: string;
   updatedAt?: string;
 }
