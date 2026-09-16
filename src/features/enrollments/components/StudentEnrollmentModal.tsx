@@ -250,6 +250,7 @@ export function StudentEnrollmentModal({
           type="button"
           className="btn btn-sm btn-circle btn-ghost absolute right-3 top-3"
           onClick={onClose}
+          aria-label="Fermer"
         >
           <X className="size-4" />
         </button>
@@ -315,7 +316,10 @@ export function StudentEnrollmentModal({
                       <div className="avatar">
                         <div className="w-14 rounded-full bg-primary text-primary-content">
                           {selectedEleve.photo ? (
-                            <img src={selectedEleve.photo} alt="" />
+                            <img
+                              src={selectedEleve.photo}
+                              alt={`Photo de ${selectedEleve.prenom} ${selectedEleve.nom}`}
+                            />
                           ) : (
                             <span className="text-lg">
                               {selectedEleve.prenom[0]}
@@ -442,6 +446,7 @@ export function StudentEnrollmentModal({
                       type="button"
                       className="btn btn-ghost btn-xs"
                       onClick={() => removeParent(index)}
+                      aria-label={`Retirer ${entry.isNew ? (entry.newData?.prenom ?? '') : (entry.parent?.prenom ?? '')} ${entry.isNew ? (entry.newData?.nom ?? '') : (entry.parent?.nom ?? '')}`}
                     >
                       <X className="size-3" />
                     </button>
