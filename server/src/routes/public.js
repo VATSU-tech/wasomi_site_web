@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { z } from 'zod';
 import { query, queryOne } from '../db.js';
 import { findUserByEmail, issueSession, verifyPassword } from '../middleware/auth.js';
-import { asyncHandler, createId, fail, ok, parseJson } from '../utils/helpers.js';
+import { asyncHandler, createId, fail, normalizeFees, ok, parseJson } from '../utils/helpers.js';
 
 const router = Router();
 
@@ -44,7 +44,7 @@ function mapProgram(row) {
     students: row.students,
     color: row.color,
     features: parseJson(row.features_json, []),
-    fees: parseJson(row.fees_json, null),
+    fees: normalizeFees(parseJson(row.fees_json, null)),
     schedule: parseJson(row.schedule_json, null),
     modules: parseJson(row.modules_json, []),
     createdAt: row.created_at,

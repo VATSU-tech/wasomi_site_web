@@ -9,6 +9,8 @@ import {
   asyncHandler,
   createId,
   fail,
+  feesTotalAsPrice,
+  normalizeFees,
   ok,
   parseJson,
   slugify,
@@ -77,7 +79,7 @@ function mapProgram(row) {
     students: row.students,
     color: row.color,
     features: parseJson(row.features_json, []),
-    fees: parseJson(row.fees_json, null),
+    fees: normalizeFees(parseJson(row.fees_json, null)),
     schedule: parseJson(row.schedule_json, null),
     modules: parseJson(row.modules_json, []),
     sort_order: row.sort_order,
@@ -284,6 +286,8 @@ router.post(
     const body = req.body || {};
     const id = createId();
     const slug = body.slug || slugify(body.title);
+    const fees = normalizeFees(body.fees);
+    const priceFromFees = feesTotalAsPrice(fees);
     await query(
       `INSERT INTO Program
         (id, title, slug, summary, description, duration, level, category, price, image, icon, students, color,
@@ -300,13 +304,13 @@ router.post(
         duration: body.duration || null,
         level: body.level || null,
         category: body.category || null,
-        price: body.price != null ? String(body.price) : null,
+        price: priceFromFees || (body.price != null ? String(body.price) : null),
         image: body.image || null,
         icon: body.icon || null,
         students: body.students || null,
         color: body.color || null,
         features: toJson(body.features || []),
-        fees: toJson(body.fees || null),
+        fees: toJson(fees),
         schedule: toJson(body.schedule || null),
         modules: toJson(body.modules || []),
         sortOrder: Number(body.sort_order || body.order || 0),
@@ -326,6 +330,9 @@ router.patch(
       id: req.params.id,
     });
     if (!existing) return fail(res, 404, 'NOT_FOUND', 'Formation introuvable.');
+
+    const fees = body.fees !== undefined ? normalizeFees(body.fees) : null;
+    const priceFromFees = feesTotalAsPrice(fees);
 
     await query(
       `UPDATE Program SET
@@ -358,13 +365,13 @@ router.patch(
         duration: body.duration ?? null,
         level: body.level ?? null,
         category: body.category ?? null,
-        price: body.price != null ? String(body.price) : null,
+        price: priceFromFees || (body.price != null ? String(body.price) : null),
         image: body.image ?? null,
         icon: body.icon ?? null,
         students: body.students ?? null,
         color: body.color ?? null,
         features: body.features ? toJson(body.features) : null,
-        fees: body.fees ? toJson(body.fees) : null,
+        fees: body.fees !== undefined ? toJson(fees) : null,
         schedule: body.schedule ? toJson(body.schedule) : null,
         modules: body.modules ? toJson(body.modules) : null,
         sortOrder: body.sort_order != null || body.order != null ? Number(body.sort_order ?? body.order) : null,

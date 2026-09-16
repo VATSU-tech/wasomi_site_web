@@ -153,14 +153,27 @@ async function main() {
   const programCount = await queryOne(`SELECT COUNT(*) AS c FROM Program WHERE deleted_at IS NULL`);
   if (Number(programCount?.c || 0) === 0) {
     const sharedFees = {
+      currency: '$',
       total: '530 $',
+      cycle: 'Cycle complet',
+      components: [
+        { id: 'inscription', label: "Frais d'inscription / connexes", amount: 10, description: '' },
+        { id: 'labotech', label: 'Labotech', amount: 50, description: '' },
+        { id: 'infirmary', label: 'Infirmerie', amount: 12, description: '' },
+        { id: 'formation', label: 'Frais de formation', amount: 458, description: '' },
+      ],
+      installments: [
+        { id: 't1', label: '1ère tranche', amount: '200 $' },
+        { id: 't2', label: '2ème tranche', amount: '150 $' },
+        { id: 't3', label: '3ème tranche', amount: '180 $' },
+      ],
+      // Compat lecture ancienne UI
       connectedFees: '10 $',
       labotech: '50 $',
       infirmary: '12 $',
       firstInstallment: '200 $',
       secondInstallment: '150 $',
       thirdInstallment: '180 $',
-      cycle: 'Cycle complet',
     };
     const programs = [
       {
