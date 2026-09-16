@@ -117,7 +117,7 @@ export function Navbar() {
               onClick={toggle}
               aria-label={theme === "dark" ? "Mode clair" : "Mode sombre"}
               className={cn(
-                "size-10 rounded-xl transition-all duration-300 flex items-center justify-center",
+                "size-11 rounded-xl transition-all duration-300 flex items-center justify-center",
                 isTransparent && !scrolled
                   ? "text-white/90 hover:bg-white/10"
                   : "glass hover:shadow-md",
@@ -137,7 +137,7 @@ export function Navbar() {
             </Link>
             <button
               className={cn(
-                "lg:hidden size-10 rounded-xl flex items-center justify-center transition-all duration-300",
+                "lg:hidden size-11 rounded-xl flex items-center justify-center transition-all duration-300",
                 isTransparent && !scrolled
                   ? "text-white hover:bg-white/10"
                   : "glass",
