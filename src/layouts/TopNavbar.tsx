@@ -115,11 +115,12 @@ export function TopNavbar({ onMenuToggle, anneeLabel }: TopNavbarProps) {
             type="button"
             tabIndex={0}
             className="btn btn-ghost btn-sm gap-2 max-w-[200px]"
+            aria-label={`Profil de ${user?.prenom ?? ''} ${user?.nom ?? ''}`}
           >
             <div className="avatar placeholder">
               <div className="bg-primary text-primary-content rounded-full w-8">
                 {user?.photo ? (
-                  <img src={user.photo} alt="" />
+                  <img src={user.photo} alt={`Photo de ${user?.prenom ?? ''} ${user?.nom ?? ''}`} />
                 ) : (
                   <span className="text-xs">
                     {user?.prenom?.[0]}

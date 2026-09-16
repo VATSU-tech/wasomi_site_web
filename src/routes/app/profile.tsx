@@ -22,7 +22,10 @@ function ProfilePage() {
             <div className="avatar placeholder">
               <div className="bg-primary text-primary-content rounded-full w-16">
                 {user?.photo ? (
-                  <img src={user.photo} alt="" />
+                  <img
+                    src={user.photo}
+                    alt={`Photo de ${user.prenom} ${user.nom}`}
+                  />
                 ) : (
                   <span className="text-xl">
                     {user?.prenom?.[0]}
