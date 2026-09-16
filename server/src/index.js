@@ -19,7 +19,19 @@ fs.mkdirSync(env.uploadDir, { recursive: true });
 const app = express();
 
 app.set("trust proxy", 1);
-app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+  }),
+);
+app.use((_req, res, next) => {
+  // Aucune fonctionnalité du site n'a besoin de caméra, micro, GPS ou Bluetooth.
+  res.setHeader(
+    "Permissions-Policy",
+    "camera=(), microphone=(), geolocation=(), bluetooth=(), usb=()",
+  );
+  next();
+});
 app.use(
   cors({
     origin(origin, cb) {
