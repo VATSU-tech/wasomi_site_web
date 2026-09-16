@@ -41,6 +41,9 @@ export const Route = createFileRoute("/")({
       { property: "og:type", content: "website" },
       { property: "og:image", content: "/gallerie/vue-generale-campus-wasomi.jpg" },
     ],
+    links: [
+      { rel: "canonical", href: "https://wasomi.cd/" },
+    ],
   }),
   component: Home,
 });
@@ -329,11 +332,11 @@ function Home() {
 
       {/* ============ BIENVENUE / PRÉSENTATION ============ */}
       <section className="py-14 sm:py-24 container mx-auto px-4 max-w-7xl">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          <div data-aos="fade-right">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+          <div data-aos="fade-up">
             <div className="relative">
-              <div className="absolute -top-5 -left-5 size-32 rounded-3xl bg-primary/10 -z-10" />
-              <div className="absolute -bottom-5 -right-5 size-40 rounded-full bg-secondary/20 -z-10" />
+              <div className="hidden sm:block absolute -top-5 -left-5 size-32 rounded-3xl bg-primary/10 -z-10" />
+              <div className="hidden sm:block absolute -bottom-5 -right-5 size-40 rounded-full bg-secondary/20 -z-10" />
               <div className="rounded-3xl overflow-hidden shadow-xl">
                 <img
                   src="/gallerie/classe-premiere-primaire.jpg"
@@ -358,7 +361,7 @@ function Home() {
             </div>
           </div>
 
-          <div data-aos="fade-left">
+          <div data-aos="fade-up">
             <SectionHeading
               align="left"
               eyebrow="Bienvenue"
@@ -626,7 +629,7 @@ function Home() {
       {/* ============ CTA PRÉINSCRIPTION ============ */}
       <section className="py-14 sm:py-24 container mx-auto px-4 max-w-7xl">
         <div
-          className="relative overflow-hidden rounded-[2rem] p-10 md:p-16 text-center bg-gradient-primary text-primary-foreground shadow-2xl"
+          className="relative overflow-hidden rounded-[2rem] p-8 md:p-16 text-center bg-gradient-primary text-primary-foreground shadow-2xl"
           data-aos="zoom-in"
         >
           <div className="absolute -top-24 -left-24 size-72 rounded-full bg-white/10 blur-2xl" />
