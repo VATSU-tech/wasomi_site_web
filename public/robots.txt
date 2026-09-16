@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /app/
+Disallow: /admin
+
+Sitemap: https://wasomi.cd/sitemap.xml
