@@ -40,10 +40,21 @@ export const Route = createFileRoute("/formations")({
         property: "og:description",
         content: "Des cycles pensés pour chaque âge.",
       },
+      { property: "og:image", content: "/gallerie/formation_maternelle.jpg" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://wasomi.cd/formations" },
     ],
   }),
   component: FormationsPage,
 });
+
+type FeeComponent = {
+  id?: string;
+  label: string;
+  amount: number;
+  description?: string;
+};
 
 type FormationDetail = {
   id: string | number;
@@ -57,7 +68,10 @@ type FormationDetail = {
   color: string;
   fees: {
     total: string;
+    currency?: string;
     cycle: string;
+    components?: FeeComponent[];
+    installments?: { id?: string; label: string; amount: string }[];
     connectedFees: string;
     labotech: string;
     infirmary: string;
@@ -79,12 +93,24 @@ type FormationDetail = {
 
 const sharedFees = {
   total: "530 $",
+  currency: "$",
   connectedFees: "10 $",
   labotech: "50 $",
   infirmary: "12 $",
   firstInstallment: "200 $",
   secondInstallment: "150 $",
   thirdInstallment: "180 $",
+  components: [
+    { id: "ins", label: "Frais d'inscription / connexes", amount: 10 },
+    { id: "lab", label: "Labotech", amount: 50 },
+    { id: "inf", label: "Infirmerie", amount: 12 },
+    { id: "form", label: "Frais de formation", amount: 458 },
+  ],
+  installments: [
+    { id: "t1", label: "1ère tranche", amount: "200 $" },
+    { id: "t2", label: "2ème tranche", amount: "150 $" },
+    { id: "t3", label: "3ème tranche", amount: "180 $" },
+  ],
 };
 
 const fallbackFormations: FormationDetail[] = [
@@ -244,34 +270,52 @@ function FormationsPage() {
   const { data: apiPrograms, isLoading, isError, error } = useProgramsQuery();
 
   const displayFormations: FormationDetail[] = apiPrograms && apiPrograms.length > 0
-    ? apiPrograms.map((p, idx) => ({
-        id: p.id,
-        icon: [Baby, Blocks, BookOpen, GraduationCap, Code2, Microscope][idx % 6],
-        image: p.image || "/gallerie/IMG-20260519-WA0016.jpg",
-        title: p.title,
-        fullName: p.title,
-        duration: p.duration || "1 an",
-        students: (p as { students?: string }).students || "30+",
-        desc: p.summary || p.description || "Formation d'excellence.",
-        color: (p as { color?: string }).color || ["from-indigo-500 to-purple-500", "from-pink-500 to-rose-500", "from-primary to-primary-glow", "from-emerald-500 to-teal-500", "from-primary to-primary-glow", "from-amber-500 to-yellow-500"][idx % 6],
-        fees: {
-          ...sharedFees,
-          ...((p as { fees?: Partial<FormationDetail["fees"]> }).fees || {}),
-          total: (p as { fees?: { total?: string } }).fees?.total || (p.price ? `${p.price}` : sharedFees.total),
-          cycle: (p as { fees?: { cycle?: string } }).fees?.cycle || p.level || "Cycle complet",
-        },
-        schedule: {
-          arrivalTime: "07h00 - 07h30",
-          classStart: "07h30",
-          morningBreak: "09h30 - 09h45",
-          lunchTime: "11h30",
-          middayBreak: "12h00 - 13h00",
-          afternoonResume: "13h00",
-          classEnd: "15h00",
-          specialHours: "Programme modulable.",
-          ...((p as { schedule?: Partial<FormationDetail["schedule"]> }).schedule || {}),
-        },
-      }))
+    ? apiPrograms.map((p, idx) => {
+        const apiFees = (p as { fees?: FormationDetail["fees"] }).fees;
+        const components = Array.isArray(apiFees?.components) ? apiFees!.components! : [];
+        const currency = apiFees?.currency || "$";
+        const computedTotal =
+          components.length > 0
+            ? `${components.reduce((s, c) => s + (Number(c.amount) || 0), 0).toLocaleString("fr-FR")} ${currency}`.trim()
+            : undefined;
+
+        return {
+          id: p.id,
+          icon: [Baby, Blocks, BookOpen, GraduationCap, Code2, Microscope][idx % 6],
+          image: p.image || "/gallerie/IMG-20260519-WA0016.jpg",
+          title: p.title,
+          fullName: p.title,
+          duration: p.duration || "1 an",
+          students: (p as { students?: string }).students || "30+",
+          desc: p.summary || p.description || "Formation d'excellence.",
+          color: (p as { color?: string }).color || ["from-indigo-500 to-purple-500", "from-pink-500 to-rose-500", "from-primary to-primary-glow", "from-emerald-500 to-teal-500", "from-primary to-primary-glow", "from-amber-500 to-yellow-500"][idx % 6],
+          fees: {
+            ...sharedFees,
+            ...(apiFees || {}),
+            components: components.length > 0 ? components : sharedFees.components,
+            installments:
+              Array.isArray(apiFees?.installments) && apiFees!.installments!.length > 0
+                ? apiFees!.installments!
+                : sharedFees.installments,
+            total:
+              computedTotal ||
+              apiFees?.total ||
+              (p.price ? `${p.price}` : sharedFees.total),
+            cycle: apiFees?.cycle || p.level || "Cycle complet",
+          },
+          schedule: {
+            arrivalTime: "07h00 - 07h30",
+            classStart: "07h30",
+            morningBreak: "09h30 - 09h45",
+            lunchTime: "11h30",
+            middayBreak: "12h00 - 13h00",
+            afternoonResume: "13h00",
+            classEnd: "15h00",
+            specialHours: "Programme modulable.",
+            ...((p as { schedule?: Partial<FormationDetail["schedule"]> }).schedule || {}),
+          },
+        };
+      })
     : fallbackFormations;
 
   return (
@@ -331,7 +375,7 @@ function FormationsPage() {
                 data-aos-delay={(i % 3) * 80}
                 className="group relative overflow-hidden rounded-3xl bg-card border border-border shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
               >
-                <div className="relative h-[440px] overflow-hidden">
+                <div className="relative h-[320px] sm:h-[400px] lg:h-[440px] overflow-hidden">
                   <div
                     className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
                     style={{
@@ -369,7 +413,7 @@ function FormationsPage() {
                         <DialogTrigger asChild>
                           <button
                             type="button"
-                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-primary text-primary-foreground text-sm font-bold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+                            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-primary text-primary-foreground text-sm font-bold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
                           >
                             En savoir plus
                             <ArrowRight className="size-4" />
@@ -383,39 +427,74 @@ function FormationsPage() {
                           <div className="grid gap-4 text-sm">
                             <div className="grid gap-2.5 rounded-2xl border border-border bg-surface p-5">
                               <p className="inline-flex items-center gap-2 font-bold text-foreground">
-                                <BadgeDollarSign className="size-4 text-primary" /> Frais scolaires
+                                <BadgeDollarSign className="size-4 text-primary" /> Prix de la formation
                               </p>
-                              <div className="grid sm:grid-cols-2 gap-2">
-                                {[
-                                  { label: "Total annuel", value: f.fees.total, highlight: true },
-                                  { label: "Cycle", value: f.fees.cycle },
-                                  { label: "Frais connexes", value: f.fees.connectedFees },
-                                  { label: "Labotech", value: f.fees.labotech },
-                                  { label: "Infirmerie", value: f.fees.infirmary },
-                                ].map(({ label, value, highlight }) => (
-                                  <div key={label} className="flex items-center justify-between rounded-xl bg-card border border-border px-4 py-2.5">
-                                    <span className="text-muted-foreground">{label}</span>
-                                    <span className={highlight ? "font-bold text-primary" : "font-semibold"}>{value}</span>
+
+                              {f.fees.components && f.fees.components.length > 0 ? (
+                                <div className="space-y-2">
+                                  {f.fees.components.map((c) => (
+                                    <div
+                                      key={c.id || c.label}
+                                      className="flex items-start justify-between gap-3 rounded-xl bg-card border border-border px-4 py-2.5"
+                                    >
+                                      <div className="min-w-0">
+                                        <span className="text-sm text-foreground font-medium">{c.label}</span>
+                                        {c.description ? (
+                                          <p className="text-xs text-muted-foreground mt-0.5">{c.description}</p>
+                                        ) : null}
+                                      </div>
+                                      <span className="shrink-0 font-semibold tabular-nums">
+                                        {Number(c.amount).toLocaleString("fr-FR")} {f.fees.currency || "$"}
+                                      </span>
+                                    </div>
+                                  ))}
+                                  <div className="flex items-center justify-between rounded-xl bg-primary/10 border border-primary/20 px-4 py-3 mt-1">
+                                    <span className="font-bold uppercase tracking-wide text-xs">Total</span>
+                                    <span className="font-bold text-primary text-base tabular-nums">{f.fees.total}</span>
                                   </div>
-                                ))}
-                              </div>
-                              <div className="rounded-xl bg-primary/10 border border-primary/20 px-4 py-3 mt-1">
-                                <p className="text-xs text-muted-foreground mb-2 font-semibold uppercase tracking-wide">
-                                  Paiement en 3 tranches
-                                </p>
-                                <div className="flex flex-wrap gap-2">
+                                  {f.fees.cycle ? (
+                                    <p className="text-xs text-muted-foreground px-1">Cycle : {f.fees.cycle}</p>
+                                  ) : null}
+                                </div>
+                              ) : (
+                                <div className="grid sm:grid-cols-2 gap-2">
                                   {[
-                                    ["1ère", f.fees.firstInstallment],
-                                    ["2ème", f.fees.secondInstallment],
-                                    ["3ème", f.fees.thirdInstallment],
-                                  ].map(([label, value]) => (
-                                    <span key={label as string} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card border border-border text-xs font-semibold">
-                                      <Check className="size-3 text-emerald-500" />
-                                      {label}: {value}
-                                    </span>
+                                    { label: "Total annuel", value: f.fees.total, highlight: true },
+                                    { label: "Cycle", value: f.fees.cycle },
+                                    { label: "Frais connexes", value: f.fees.connectedFees },
+                                    { label: "Labotech", value: f.fees.labotech },
+                                    { label: "Infirmerie", value: f.fees.infirmary },
+                                  ].map(({ label, value, highlight }) => (
+                                    <div key={label} className="flex items-center justify-between rounded-xl bg-card border border-border px-4 py-2.5">
+                                      <span className="text-muted-foreground">{label}</span>
+                                      <span className={highlight ? "font-bold text-primary" : "font-semibold"}>{value}</span>
+                                    </div>
                                   ))}
                                 </div>
-                              </div>
+                              )}
+
+                              {(f.fees.installments?.length || f.fees.firstInstallment) && (
+                                <div className="rounded-xl bg-primary/10 border border-primary/20 px-4 py-3 mt-1">
+                                  <p className="text-xs text-muted-foreground mb-2 font-semibold uppercase tracking-wide">
+                                    Paiement en tranches
+                                  </p>
+                                  <div className="flex flex-wrap gap-2">
+                                    {(f.fees.installments && f.fees.installments.length > 0
+                                      ? f.fees.installments.map((inst) => [inst.label, inst.amount] as const)
+                                      : [
+                                          ["1ère", f.fees.firstInstallment],
+                                          ["2ème", f.fees.secondInstallment],
+                                          ["3ème", f.fees.thirdInstallment],
+                                        ]
+                                    ).map(([label, value]) => (
+                                      <span key={label as string} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card border border-border text-xs font-semibold">
+                                        <Check className="size-3 text-emerald-500" />
+                                        {label}: {value}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
                             </div>
 
                             <div className="grid gap-2.5 rounded-2xl border border-border bg-surface p-5">
