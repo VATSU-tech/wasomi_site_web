@@ -69,14 +69,14 @@ export function HistoryFullText({
 
   if (loading) {
     return (
-      <div className="py-24 text-center">
+      <div className="py-14 text-center md:py-24">
         <p className="text-muted-foreground">Chargement de l'historique...</p>
       </div>
     );
   }
 
   return (
-    <section className="relative py-24 min-h-screen">
+    <section className="relative py-14 md:py-24 min-h-screen">
       {/* Background Image with Overlay */}
       <div
         className="absolute inset-0 bg-cover bg-center"

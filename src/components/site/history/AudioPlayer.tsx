@@ -84,7 +84,7 @@ export function AudioPlayer({ audioSrc, cues, onCueChange }: AudioPlayerProps) {
         {/* Mute Button */}
         <button
           onClick={toggleMute}
-          className="flex items-center justify-center size-10 rounded-lg hover:bg-slate-700 transition-colors"
+          className="flex items-center justify-center size-11 rounded-lg hover:bg-slate-700 transition-colors"
           aria-label={state.isMuted ? "Unmute" : "Mute"}
         >
           {state.isMuted ? (
@@ -97,17 +97,17 @@ export function AudioPlayer({ audioSrc, cues, onCueChange }: AudioPlayerProps) {
 
       {/* Progress Bar */}
       <div
-        className="relative h-2 rounded-full bg-slate-700 cursor-pointer group"
+        className="relative h-4 flex items-center cursor-pointer group"
         onClick={handleProgressClick}
         onMouseMove={handleProgressMouseMove}
         onMouseDown={handleProgressMouseDown}
       >
-        {/* Buffered/Background */}
-        <div className="absolute inset-0 rounded-full bg-slate-700" />
+        {/* Buffered/Background track */}
+        <div className="absolute inset-x-0 h-1.5 rounded-full bg-slate-700" />
 
         {/* Progress */}
         <div
-          className="absolute left-0 top-0 h-full bg-gradient-primary rounded-full transition-all duration-100"
+          className="absolute left-0 h-1.5 bg-gradient-primary rounded-full transition-all duration-100"
           style={{ width: `${progress}%` }}
         />
 

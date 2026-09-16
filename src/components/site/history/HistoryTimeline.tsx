@@ -37,7 +37,7 @@ export function HistoryTimeline({ config }: HistoryTimelineProps) {
                 <div
                   key={item.year}
                   className="relative"
-                  data-aos={isEven ? "fade-right" : "fade-left"}
+                  data-aos="fade-up"
                   data-aos-delay={index * 100}
                 >
                   <div className={`grid md:grid-cols-2 gap-8 items-center`}>
@@ -89,7 +89,7 @@ export function HistoryTimeline({ config }: HistoryTimelineProps) {
                   </div>
 
                   {/* Mobile center dot */}
-                  <div className="md:hidden absolute -left-6 top-2 size-4 rounded-full bg-gradient-primary shadow-glow border-4 border-background" />
+                  <div className="md:hidden absolute -left-4 top-2 size-4 rounded-full bg-gradient-primary shadow-glow border-4 border-background" />
                 </div>
               );
             })}
