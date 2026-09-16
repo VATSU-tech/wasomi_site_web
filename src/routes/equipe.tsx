@@ -14,6 +14,10 @@ export const Route = createFileRoute("/equipe")({
       },
       { property: "og:title", content: "Équipe — CS Wasomi" },
       { property: "og:description", content: "L'équipe Wasomi." },
+      { property: "og:image", content: "/gallerie/IMG-20260519-WA0021.jpg" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://wasomi.cd/equipe" },
     ],
   }),
   component: EquipePage,
@@ -106,18 +110,18 @@ function EquipePage() {
                       {member.role}
                     </p>
                     {member.bio && (
-                      <p className="text-sm text-muted-foreground mt-2 max-h-0 opacity-0 group-hover:opacity-100 group-hover:max-h-24 transition-all duration-500 overflow-hidden line-clamp-3">
+                      <p className="text-sm text-muted-foreground mt-2 max-h-none opacity-100 sm:max-h-0 sm:opacity-0 sm:group-hover:opacity-100 sm:group-hover:max-h-24 transition-all duration-500 overflow-hidden line-clamp-3">
                         {member.bio}
                       </p>
                     )}
-                    <div className="flex gap-2 mt-4 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                    <div className="flex gap-2 mt-4 opacity-100 translate-y-0 sm:opacity-0 sm:translate-y-4 sm:group-hover:opacity-100 sm:group-hover:translate-y-0 transition-all duration-300">
                       {member.social_links?.linkedin && (
                         <a
                           href={member.social_links.linkedin}
                           target="_blank"
                           rel="noopener noreferrer"
                           aria-label={`LinkedIn de ${member.name}`}
-                          className="size-9 rounded-xl bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/40 transition-all duration-200"
+                          className="size-11 rounded-xl bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/40 transition-all duration-200"
                         >
                           <Linkedin className="size-4" />
                         </a>
@@ -128,7 +132,7 @@ function EquipePage() {
                           target="_blank"
                           rel="noopener noreferrer"
                           aria-label={`Réseau de ${member.name}`}
-                          className="size-9 rounded-xl bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/40 transition-all duration-200"
+                          className="size-11 rounded-xl bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/40 transition-all duration-200"
                         >
                           <Twitter className="size-4" />
                         </a>
@@ -144,7 +148,7 @@ function EquipePage() {
 
       {/* CTA */}
       <section className="py-16 container mx-auto px-4 max-w-7xl">
-        <div className="rounded-[2rem] bg-surface border border-border p-10 md:p-12 text-center">
+        <div className="rounded-[2rem] bg-surface border border-border p-8 md:p-12 text-center">
           <Users className="size-10 text-primary mx-auto mb-4" />
           <h2 className="font-display text-2xl md:text-3xl font-bold mb-2">
             Envie de rejoindre cette équipe ?
