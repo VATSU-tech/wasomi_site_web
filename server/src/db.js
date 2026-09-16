@@ -11,6 +11,7 @@ export const pool = mysql.createPool({
   connectionLimit: 10,
   namedPlaceholders: true,
   dateStrings: false,
+  ssl: false,
 });
 
 export async function query(sql, params) {
