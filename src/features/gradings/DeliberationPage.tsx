@@ -194,6 +194,7 @@ export function DeliberationPage() {
                         type="button"
                         className="btn btn-ghost btn-xs"
                         title="Télécharger le bulletin"
+                        aria-label="Télécharger le bulletin"
                         onClick={() => handleBulletin(r.inscription_id)}
                       >
                         <FileDown className="size-3" />
