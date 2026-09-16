@@ -96,15 +96,7 @@ export function Gallery({ items, categories }: Props) {
   const getShareUrl = (item: GalleryItem) => `${window.location.origin}${item.src}`;
 
   const onShare = async (item: GalleryItem) => {
-    const shareUrl = getShareUrl(item);
-    if (navigator.share && isMobile) {
-      try {
-        await navigator.share({ title: item.title, text: item.description, url: shareUrl });
-        return;
-      } catch {
-        // fallback modal
-      }
-    }
+    // Panneau manuel uniquement : navigator.share peut déclencher des invites système.
     setShareItem(item);
   };
 
@@ -116,7 +108,7 @@ export function Gallery({ items, categories }: Props) {
             key={cat}
             onClick={() => setFilter(cat)}
             className={cn(
-              "px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 border",
+              "px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-200 border",
               filter === cat
                 ? "bg-gradient-primary text-primary-foreground border-transparent shadow-md scale-105"
                 : "bg-card border-border text-muted-foreground hover:text-foreground hover:border-primary/40 hover:scale-105",
@@ -155,7 +147,7 @@ export function Gallery({ items, categories }: Props) {
                   {/* <button onClick={(e) => e.stopPropagation()} aria-label="Aimer" className="gap-1 px-2 py-1 rounded-full glass flex items-center justify-center hover:bg-primary hover:text-primary-foreground">
                     <Heart className="size-4" /> <span>{item.likes ?? 0}</span>
                   </button> */}
-                  <button onClick={(e) => { e.stopPropagation(); onShare(item); }} aria-label="Partager" className="size-9 rounded-full glass flex items-center justify-center hover:bg-primary hover:text-primary-foreground">
+                  <button onClick={(e) => { e.stopPropagation(); onShare(item); }} aria-label="Partager" className="size-11 rounded-full glass flex items-center justify-center hover:bg-primary hover:text-primary-foreground">
                     <Share2 className="size-4" />
                   </button>
                 </div>
@@ -176,15 +168,39 @@ export function Gallery({ items, categories }: Props) {
       </div>
 
       {lightbox !== null && filtered[lightbox] && (
-        <div role="dialog" aria-modal="true" aria-label={filtered[lightbox].title} className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-xl flex items-center justify-center p-4 animate-in fade-in duration-300" onClick={close}>
-          <button aria-label="Fermer" onClick={close} className="absolute top-4 right-4 size-12 rounded-full glass flex items-center justify-center z-10"><X className="size-5" /></button>
-          <button aria-label="Précédent" onClick={(e) => { e.stopPropagation(); prev(); }} className="absolute left-4 md:left-8 size-12 rounded-full glass flex items-center justify-center z-10"><ChevronLeft className="size-5" /></button>
-          <button aria-label="Suivant" onClick={(e) => { e.stopPropagation(); next(); }} className="absolute right-4 md:right-8 size-12 rounded-full glass flex items-center justify-center z-10"><ChevronRight className="size-5" /></button>
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={filtered[lightbox].title}
+          className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-xl flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-300"
+          onClick={close}
+        >
+          <button aria-label="Fermer" onClick={close} className="absolute top-3 right-3 sm:top-4 sm:right-4 size-11 sm:size-12 rounded-full glass flex items-center justify-center z-10"><X className="size-5" /></button>
+          <button aria-label="Précédent" onClick={(e) => { e.stopPropagation(); prev(); }} className="absolute left-2 sm:left-4 md:left-8 size-11 sm:size-12 rounded-full glass flex items-center justify-center z-10"><ChevronLeft className="size-5" /></button>
+          <button aria-label="Suivant" onClick={(e) => { e.stopPropagation(); next(); }} className="absolute right-2 sm:right-4 md:right-8 size-11 sm:size-12 rounded-full glass flex items-center justify-center z-10"><ChevronRight className="size-5" /></button>
 
-          <div className="max-w-7xl w-full max-h-[92vh] flex flex-col gap-4" onClick={(e) => e.stopPropagation()}>
-            <div className="relative rounded-2xl overflow-auto shadow-glow flex-1 min-h-0 bg-black" onTouchStart={(e) => (touchStartX.current = e.changedTouches[0].clientX)} onTouchEnd={(e) => { const sx = touchStartX.current; if (sx === null) return; const dx = e.changedTouches[0].clientX - sx; if (dx > 60) prev(); if (dx < -60) next(); touchStartX.current = null; }}>
-              <img src={filtered[lightbox].src} alt={filtered[lightbox].title} className={cn("mx-auto h-full w-full object-contain transition-transform duration-300", zoomed && "scale-125 cursor-zoom-out")} onClick={() => setZoomed((z) => !z)} />
-            </div>
+          <div
+            className="w-full max-w-7xl h-[min(92dvh,920px)] flex items-center justify-center"
+            onClick={(e) => e.stopPropagation()}
+            onTouchStart={(e) => (touchStartX.current = e.changedTouches[0].clientX)}
+            onTouchEnd={(e) => {
+              const sx = touchStartX.current;
+              if (sx === null) return;
+              const dx = e.changedTouches[0].clientX - sx;
+              if (dx > 60) prev();
+              if (dx < -60) next();
+              touchStartX.current = null;
+            }}
+          >
+            <img
+              src={filtered[lightbox].src}
+              alt={filtered[lightbox].title}
+              className={cn(
+                "max-w-full max-h-full w-auto h-auto object-contain select-none transition-transform duration-300",
+                zoomed ? "scale-125 cursor-zoom-out origin-center" : "cursor-zoom-in",
+              )}
+              onClick={() => setZoomed((z) => !z)}
+            />
           </div>
         </div>
       )}
@@ -192,7 +208,7 @@ export function Gallery({ items, categories }: Props) {
       {shareItem && (
         <div className="fixed inset-0 z-[120] bg-black/70 flex items-center justify-center p-4" onClick={() => setShareItem(null)}>
           <div className="w-full max-w-md glass rounded-2xl p-5" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between mb-4"><h3 className="font-semibold">Partager l'image</h3><button onClick={() => setShareItem(null)}><X className="size-5" /></button></div>
+            <div className="flex items-center justify-between mb-4"><h3 className="font-semibold">Partager l'image</h3><button onClick={() => setShareItem(null)} aria-label="Fermer"><X className="size-5" /></button></div>
             <div className="flex gap-3 items-center mb-4"><img src={shareItem.src} alt={shareItem.title} className="size-16 rounded-lg object-cover" /><div><p className="font-medium text-sm">{shareItem.title}</p><p className="text-xs text-muted-foreground">{shareItem.category}</p></div></div>
             <div className="text-xs break-all bg-muted rounded-lg p-2 mb-3">{getShareUrl(shareItem)}</div>
             <div className="grid grid-cols-2 gap-2">
