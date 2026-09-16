@@ -46,7 +46,11 @@ export const Route = createRootRoute({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
+      {
+        httpEquiv: "Permissions-Policy",
+        content: "camera=(), microphone=(), geolocation=(), bluetooth=()",
+      },
       { title: "Wasomi — École d'excellence" },
       {
         name: "description",
@@ -86,6 +90,38 @@ function RootShell({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
         <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "School",
+                  name: "Complexe Scolaire Wasomi",
+                  alternateName: "CS Wasomi",
+                  telephone: "+243997742651",
+                  email: "cswasomi@gmail.com",
+                  foundingDate: "2021",
+                  address: {
+                    "@type": "PostalAddress",
+                    streetAddress: "Rue N°5, Q. Résidentiel, C. Bungulu",
+                    addressLocality: "Beni",
+                    addressRegion: "Nord-Kivu",
+                    addressCountry: "CD",
+                  },
+                  url: "https://wasomi.cd/",
+                },
+                {
+                  "@type": "WebSite",
+                  name: "CS Wasomi",
+                  url: "https://wasomi.cd/",
+                  inLanguage: "fr",
+                },
+              ],
+            }),
+          }}
+        />
+        <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');var r=document.documentElement;r.classList.toggle('dark',t==='dark');r.setAttribute('data-theme',t==='dark'?'indigo-midnight':'indigo-light');}catch(e){}})();`,
           }}
@@ -118,11 +154,11 @@ function RootComponent() {
             <a href="#main-content" className="skip-to-content">
               Aller au contenu
             </a>
-            <div className="min-h-screen flex flex-col">
+            <div className="site-shell min-h-screen flex flex-col overflow-x-clip">
               <Navbar />
               <main
                 id="main-content"
-                className={cn("flex-1", pathname === "/" ? "" : "pt-24")}
+                className={cn("flex-1 min-w-0", pathname === "/" ? "" : "pt-24")}
               >
                 <div
                   key={pathname}
