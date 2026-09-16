@@ -188,36 +188,52 @@ function Home() {
   return (
     <>
       {/* ============ HERO ============ */}
+      
       <section className="relative min-h-[92vh] flex items-center overflow-hidden">
+
+        {/* Background vidéo */}
         <div className="absolute inset-0">
-          <img
-            src="/gallerie/vue-generale-campus-wasomi.jpg"
-            alt="Vue du Complexe Scolaire Wasomi"
+
+          <video
+            src="./gallerie/vid.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
             className="size-full object-cover"
-            loading="eager"
-            fetchPriority="high"
+            aria-hidden="true"
           />
+
+          {/* Overlay principal */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/30" />
+
+          {/* Effet lumineux */}
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(37,99,235,0.18),transparent_55%)]" />
+
         </div>
 
+        {/* Contenu */}
         <div className="container mx-auto px-4 max-w-7xl relative pt-28 sm:pt-32 pb-20">
+
           <div className="max-w-3xl">
+
+            {/* Localisation */}
             <div
               className="relative inline-flex items-center gap-2 px-4 py-2 rounded-full
-             border border-white/20 bg-white/10
-             text-white/90 text-xs md:text-sm font-semibold mb-8
-             overflow-hidden"
+        border border-white/20 bg-white/10
+        text-white/90 text-xs md:text-sm font-semibold mb-8
+        overflow-hidden"
               data-aos="fade-up"
             >
-              {/* Background image flouté */}
+
+              {/* Background flouté */}
               <div
                 className="absolute inset-0
-               bg-[url('https://imgs.search.brave.com/Ed9zp9EkGKYIZ10tCxpnmVwIw2M_Oq4S4v1HVhS0ZlI/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA4LzQzLzkzLzE1/LzM2MF9GXzg0Mzkz/MTU0NF90QW5mMTRR/TGJzUWVvMHoxUWRW/UHlQdFZZZ3c2S09u/Qy5qcGc')]
-               bg-cover
-               bg-center
-              
-               scale-110"
+          bg-[url('https://imgs.search.brave.com/Ed9zp9EkGKYIZ10tCxpnmVwIw2M_Oq4S4v1HVhS0Zl/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA4LzQzLzkzLzE1/LzM2MF9GXzg0Mzkz/MTU0NF90QW5mMTRR/TGJzUWVvMHoxUWRW/UHlQdFZZZ3c2S09u/Qy5qcGc')]
+          bg-cover
+          bg-center
+          scale-110"
               />
 
               {/* Overlay */}
@@ -227,24 +243,34 @@ function Home() {
               <a
                 href="https://maps.app.goo.gl/bSDTmFdURd7dP6zz5"
                 target="_blank"
+                rel="noopener noreferrer"
                 className="relative z-10 flex items-center gap-2 shadow-xl"
               >
                 <MapPin className="size-4" />
 
-                <span>Complexe Scolaire Wasomi — Beni, Nord-Kivu</span>
+                <span>
+                  Complexe Scolaire Wasomi — Beni, Nord-Kivu
+                </span>
               </a>
+
             </div>
+
+            {/* Titre */}
             <h1
               className="font-display text-4xl sm:text-5xl md:text-7xl font-bold text-white tracking-tight leading-[1.05]"
               data-aos="fade-up"
               data-aos-delay="80"
             >
               Une école qui fait grandir{" "}
+
               <span className="text-gradient bg-gradient-to-r from-sky-300 to-emerald-300">
                 chaque enfant
               </span>
+
               , du premier pas à la réussite.
             </h1>
+
+            {/* Description */}
             <p
               className="mt-6 text-lg md:text-xl text-white/80 leading-relaxed max-w-2xl"
               data-aos="fade-up"
@@ -254,25 +280,33 @@ function Home() {
               une pédagogie vivante, des ateliers de sciences et un cadre où
               ils se sentent en confiance.
             </p>
+
+            {/* Boutons */}
             <div
               className="mt-10 flex flex-wrap gap-4"
               data-aos="fade-up"
               data-aos-delay="280"
             >
+
               <Link
                 to="/contact"
                 className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-white text-slate-900 font-bold shadow-xl hover:-translate-y-0.5 hover:shadow-2xl active:translate-y-0 transition-all duration-300"
               >
                 Préinscrire mon enfant
+
                 <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
               </Link>
+
               <Link
                 to="/formations"
                 className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/25 text-white font-semibold hover:bg-white/20 hover:-translate-y-0.5 transition-all duration-300"
               >
                 Découvrir nos cycles
               </Link>
+
             </div>
+
+            {/* Catégories */}
             <div
               className="mt-14 flex flex-wrap items-center gap-x-8 gap-y-4"
               data-aos="fade-up"
@@ -283,6 +317,7 @@ function Home() {
                 { icon: BookOpen, label: "Primaire" },
                 { icon: Microscope, label: "Sciences & Numérique" },
               ].map(({ icon: Icon, label }) => (
+
                 <div
                   key={label}
                   className="flex items-center gap-2.5 text-white/80 text-sm font-medium"
@@ -290,20 +325,30 @@ function Home() {
                   <Icon className="size-4 text-emerald-300" />
                   {label}
                 </div>
+
               ))}
             </div>
+
           </div>
+
         </div>
 
+        {/* Indicateur de défilement */}
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/50">
+
           <span className="text-[10px] uppercase tracking-[0.2em] font-semibold">
             Découvrir
           </span>
+
           <div className="size-8 rounded-full border border-white/30 flex items-center justify-center animate-bounce">
             <ArrowRight className="size-3.5 rotate-90" />
           </div>
+
         </div>
+
       </section>
+     
+
 
       {/* ============ STATS BAR ============ */}
       <section className="relative bg-surface border-y border-border">
