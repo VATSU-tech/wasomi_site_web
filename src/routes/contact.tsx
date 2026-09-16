@@ -33,6 +33,10 @@ export const Route = createFileRoute("/contact")({
       },
       { property: "og:title", content: "Contact & Préinscription — Wasomi" },
       { property: "og:description", content: "Contactez-nous ou inscrivez-vous." },
+      { property: "og:image", content: "/gallerie/classe-premiere-primaire.jpg" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://wasomi.cd/contact" },
     ],
   }),
   component: ContactPage,
@@ -239,7 +243,7 @@ function ContactPage() {
 
       {/* Main Content */}
       <section className="py-16 container mx-auto px-4 max-w-6xl">
-        <div className="grid lg:grid-cols-3 gap-12">
+        <div className="grid lg:grid-cols-3 gap-8 lg:gap-12">
           {/* Info Card Sidebar */}
           <div className="space-y-6">
             <div className="card-premium p-8 rounded-3xl bg-card border border-border space-y-6">
@@ -305,7 +309,7 @@ function ContactPage() {
                 type="button"
                 onClick={() => { setTab("contact"); setFormErrors({}); }}
                 className={cn(
-                  "flex-1 py-2.5 text-sm font-semibold rounded-xl transition-all duration-200",
+                  "flex-1 py-3 text-sm font-semibold rounded-xl transition-all duration-200",
                   tab === "contact"
                     ? "bg-card text-foreground shadow-md"
                     : "text-muted-foreground hover:text-foreground"
@@ -317,7 +321,7 @@ function ContactPage() {
                 type="button"
                 onClick={() => { setTab("admission"); setFormErrors({}); }}
                 className={cn(
-                  "flex-1 py-2.5 text-sm font-semibold rounded-xl transition-all duration-200",
+                  "flex-1 py-3 text-sm font-semibold rounded-xl transition-all duration-200",
                   tab === "admission"
                     ? "bg-card text-foreground shadow-md"
                     : "text-muted-foreground hover:text-foreground"
@@ -360,8 +364,9 @@ function ContactPage() {
               ) : (
                 <form onSubmit={handleContactSubmit} className="space-y-4">
                   <div>
-                    <label className="block text-sm font-semibold mb-2">Nom complet <span className="text-primary">*</span></label>
+                    <label className="block text-sm font-semibold mb-2" htmlFor="c-name">Nom complet <span className="text-primary">*</span></label>
                     <input
+                      id="c-name"
                       type="text"
                       required
                       value={contactData.name}
@@ -374,8 +379,9 @@ function ContactPage() {
 
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-semibold mb-2">Email <span className="text-primary">*</span></label>
+                      <label className="block text-sm font-semibold mb-2" htmlFor="c-email">Email <span className="text-primary">*</span></label>
                       <input
+                        id="c-email"
                         type="email"
                         required
                         value={contactData.email}
@@ -387,8 +393,9 @@ function ContactPage() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold mb-2">Téléphone / WhatsApp</label>
+                      <label className="block text-sm font-semibold mb-2" htmlFor="c-phone">Téléphone / WhatsApp</label>
                       <input
+                        id="c-phone"
                         type="tel"
                         value={contactData.phone}
                         onChange={(e) => setContactData({ ...contactData, phone: e.target.value })}
@@ -399,8 +406,9 @@ function ContactPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold mb-2">Sujet</label>
+                    <label className="block text-sm font-semibold mb-2" htmlFor="c-subject">Sujet</label>
                     <input
+                      id="c-subject"
                       type="text"
                       value={contactData.subject}
                       onChange={(e) => setContactData({ ...contactData, subject: e.target.value })}
@@ -410,8 +418,9 @@ function ContactPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold mb-2">Message <span className="text-primary">*</span></label>
+                    <label className="block text-sm font-semibold mb-2" htmlFor="c-message">Message <span className="text-primary">*</span></label>
                     <textarea
+                      id="c-message"
                       rows={5}
                       required
                       value={contactData.message}
@@ -468,16 +477,17 @@ function ContactPage() {
 
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-semibold mb-1.5 text-foreground">
+                        <label className="block text-xs font-semibold mb-1.5 text-foreground" htmlFor="a-last_name">
                           Nom de l'enfant <span className="text-primary">*</span>
                         </label>
                         <input
+                          id="a-last_name"
                           type="text"
                           required
                           value={admissionData.last_name}
                           onChange={(e) => setAdmissionData({ ...admissionData, last_name: e.target.value })}
                           placeholder="Ex: Kasereka"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
+                          className="w-full px-3.5 py-3 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
                         />
                         {formErrors.last_name && (
                           <p className="text-xs text-destructive mt-1">{formErrors.last_name.join(', ')}</p>
@@ -485,16 +495,17 @@ function ContactPage() {
                       </div>
 
                       <div>
-                        <label className="block text-xs font-semibold mb-1.5 text-foreground">
+                        <label className="block text-xs font-semibold mb-1.5 text-foreground" htmlFor="a-first_name">
                           Prénom de l'enfant <span className="text-primary">*</span>
                         </label>
                         <input
+                          id="a-first_name"
                           type="text"
                           required
                           value={admissionData.first_name}
                           onChange={(e) => setAdmissionData({ ...admissionData, first_name: e.target.value })}
                           placeholder="Ex: David"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
+                          className="w-full px-3.5 py-3 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
                         />
                         {formErrors.first_name && (
                           <p className="text-xs text-destructive mt-1">{formErrors.first_name.join(', ')}</p>
@@ -507,10 +518,11 @@ function ContactPage() {
                         <label className="block text-xs font-semibold mb-1.5 text-foreground">
                           Sexe / Genre <span className="text-primary">*</span>
                         </label>
-                        <div className="grid grid-cols-2 gap-2">
+                        <div className="grid grid-cols-2 gap-2" role="radiogroup">
                           <button
                             type="button"
                             onClick={() => setAdmissionData({ ...admissionData, gender: "M" })}
+                            aria-pressed={admissionData.gender === "M"}
                             className={cn(
                               "py-2 px-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2 transition-smooth",
                               admissionData.gender === "M"
@@ -523,6 +535,7 @@ function ContactPage() {
                           <button
                             type="button"
                             onClick={() => setAdmissionData({ ...admissionData, gender: "F" })}
+                            aria-pressed={admissionData.gender === "F"}
                             className={cn(
                               "py-2 px-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2 transition-smooth",
                               admissionData.gender === "F"
@@ -540,7 +553,7 @@ function ContactPage() {
 
                       <div>
                         <div className="flex items-center justify-between mb-1.5">
-                          <label className="text-xs font-semibold text-foreground">
+                          <label className="text-xs font-semibold text-foreground" htmlFor="a-birth_date">
                             Date de naissance <span className="text-primary">*</span>
                           </label>
                           {calculatedAge !== null && (
@@ -551,12 +564,13 @@ function ContactPage() {
                           )}
                         </div>
                         <input
+                          id="a-birth_date"
                           type="date"
                           required
                           max={new Date().toISOString().split("T")[0]}
                           value={admissionData.birth_date}
                           onChange={(e) => setAdmissionData({ ...admissionData, birth_date: e.target.value })}
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
+                          className="w-full px-3.5 py-3 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
                         />
                         {formErrors.birth_date && (
                           <p className="text-xs text-destructive mt-1">{formErrors.birth_date.join(', ')}</p>
@@ -576,10 +590,11 @@ function ContactPage() {
 
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-semibold mb-1.5 text-foreground">
+                        <label className="block text-xs font-semibold mb-1.5 text-foreground" htmlFor="a-class_level">
                           Classe demandée <span className="text-primary">*</span>
                         </label>
                         <select
+                          id="a-class_level"
                           required
                           value={admissionData.class_level}
                           onChange={(e) => {
@@ -595,7 +610,7 @@ function ContactPage() {
                               program_id: matchedProg || admissionData.program_id,
                             });
                           }}
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
+                          className="w-full px-3.5 py-3 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
                         >
                           <option value="">-- Sélectionner la classe --</option>
                           {AVAILABLE_CLASSES.map((grp) => (
@@ -614,13 +629,14 @@ function ContactPage() {
                       </div>
 
                       <div>
-                        <label className="block text-xs font-semibold mb-1.5 text-foreground">
+                        <label className="block text-xs font-semibold mb-1.5 text-foreground" htmlFor="a-program">
                           Programme Wasomi associé
                         </label>
                         <select
+                          id="a-program"
                           value={admissionData.program_id}
                           onChange={(e) => setAdmissionData({ ...admissionData, program_id: e.target.value })}
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
+                          className="w-full px-3.5 py-3 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
                         >
                           <option value="">-- Sélectionner le cycle --</option>
                           {programsData && Array.isArray(programsData) && programsData.map((prog: { id: string | number; title: string; duration?: string }) => (
@@ -647,16 +663,17 @@ function ContactPage() {
 
                     <div className="grid sm:grid-cols-3 gap-4">
                       <div className="sm:col-span-2">
-                        <label className="block text-xs font-semibold mb-1.5 text-foreground">
+                        <label className="block text-xs font-semibold mb-1.5 text-foreground" htmlFor="a-tuteur_nom">
                           Nom complet du tuteur <span className="text-primary">*</span>
                         </label>
                         <input
+                          id="a-tuteur_nom"
                           type="text"
                           required
                           value={admissionData.guardian_name}
                           onChange={(e) => setAdmissionData({ ...admissionData, guardian_name: e.target.value })}
                           placeholder="Nom, Post-nom et Prénom"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
+                          className="w-full px-3.5 py-3 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
                         />
                         {formErrors.guardian_name && (
                           <p className="text-xs text-destructive mt-1">{formErrors.guardian_name.join(', ')}</p>
@@ -664,13 +681,14 @@ function ContactPage() {
                       </div>
 
                       <div>
-                        <label className="block text-xs font-semibold mb-1.5 text-foreground">
+                        <label className="block text-xs font-semibold mb-1.5 text-foreground" htmlFor="a-lien">
                           Lien de parenté
                         </label>
                         <select
+                          id="a-lien"
                           value={admissionData.guardian_relation}
                           onChange={(e) => setAdmissionData({ ...admissionData, guardian_relation: e.target.value })}
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
+                          className="w-full px-3.5 py-3 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
                         >
                           <option value="Père">Père</option>
                           <option value="Mère">Mère</option>
@@ -682,16 +700,17 @@ function ContactPage() {
 
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-semibold mb-1.5 text-foreground">
+                        <label className="block text-xs font-semibold mb-1.5 text-foreground" htmlFor="a-phone">
                           Téléphone WhatsApp principal <span className="text-primary">*</span>
                         </label>
                         <input
+                          id="a-phone"
                           type="tel"
                           required
                           value={admissionData.phone}
                           onChange={(e) => setAdmissionData({ ...admissionData, phone: e.target.value })}
                           placeholder="+243 970 000 000"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
+                          className="w-full px-3.5 py-3 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
                         />
                         {formErrors.phone && (
                           <p className="text-xs text-destructive mt-1">{formErrors.phone.join(', ')}</p>
@@ -699,16 +718,17 @@ function ContactPage() {
                       </div>
 
                       <div>
-                        <label className="block text-xs font-semibold mb-1.5 text-foreground">
+                        <label className="block text-xs font-semibold mb-1.5 text-foreground" htmlFor="a-email">
                           Email de contact <span className="text-primary">*</span>
                         </label>
                         <input
+                          id="a-email"
                           type="email"
                           required
                           value={admissionData.email}
                           onChange={(e) => setAdmissionData({ ...admissionData, email: e.target.value })}
                           placeholder="parent@exemple.com"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
+                          className="w-full px-3.5 py-3 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
                         />
                         {formErrors.email && (
                           <p className="text-xs text-destructive mt-1">{formErrors.email.join(', ')}</p>
@@ -718,28 +738,30 @@ function ContactPage() {
 
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-semibold mb-1.5 text-foreground">
+                        <label className="block text-xs font-semibold mb-1.5 text-foreground" htmlFor="a-urgence">
                           Téléphone alternatif / Urgence
                         </label>
                         <input
+                          id="a-urgence"
                           type="tel"
                           value={admissionData.emergency_phone}
                           onChange={(e) => setAdmissionData({ ...admissionData, emergency_phone: e.target.value })}
                           placeholder="+243..."
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
+                          className="w-full px-3.5 py-3 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-xs font-semibold mb-1.5 text-foreground">
+                        <label className="block text-xs font-semibold mb-1.5 text-foreground" htmlFor="a-adresse">
                           Adresse de résidence (Beni)
                         </label>
                         <input
+                          id="a-adresse"
                           type="text"
                           value={admissionData.address}
                           onChange={(e) => setAdmissionData({ ...admissionData, address: e.target.value })}
                           placeholder="Quartier, Commune, Avenue..."
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
+                          className="w-full px-3.5 py-3 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
                         />
                       </div>
                     </div>
@@ -756,37 +778,40 @@ function ContactPage() {
 
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-semibold mb-1.5 text-foreground">
+                        <label className="block text-xs font-semibold mb-1.5 text-foreground" htmlFor="a-prev_school">
                           École de provenance (si applicable)
                         </label>
                         <input
+                          id="a-prev_school"
                           type="text"
                           value={admissionData.previous_school}
                           onChange={(e) => setAdmissionData({ ...admissionData, previous_school: e.target.value })}
                           placeholder="Nom de l'école précédente"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
+                          className="w-full px-3.5 py-3 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-xs font-semibold mb-1.5 text-foreground">
+                        <label className="block text-xs font-semibold mb-1.5 text-foreground" htmlFor="a-prev_percent">
                           Dernier pourcentage / Mention
                         </label>
                         <input
+                          id="a-prev_percent"
                           type="text"
                           value={admissionData.last_grade_result}
                           onChange={(e) => setAdmissionData({ ...admissionData, last_grade_result: e.target.value })}
                           placeholder="Ex: 68%, Distinction..."
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
+                          className="w-full px-3.5 py-3 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold mb-1.5 text-foreground">
+                      <label className="block text-xs font-semibold mb-1.5 text-foreground" htmlFor="a-remarks">
                         Remarques ou besoins particuliers (santé, régime, etc.)
                       </label>
                       <textarea
+                        id="a-remarks"
                         rows={3}
                         value={admissionData.message}
                         onChange={(e) => setAdmissionData({ ...admissionData, message: e.target.value })}
