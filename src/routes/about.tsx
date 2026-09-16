@@ -23,6 +23,10 @@ export const Route = createFileRoute("/about")({
         property: "og:description",
         content: "Notre histoire et notre mission.",
       },
+      { property: "og:image", content: "/gallerie/vue-generale-campus-wasomi.jpg" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://wasomi.cd/about" },
     ],
   }),
   component: AboutPage,
@@ -65,10 +69,10 @@ function AboutPage() {
 
       {/* Mission */}
       <section className="py-16 container mx-auto px-4 max-w-7xl">
-        <div className="grid lg:grid-cols-2 gap-14 items-center">
-          <div data-aos="fade-right">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-14 items-center">
+          <div data-aos="fade-up">
             <div className="relative">
-              <div className="absolute -top-5 -right-5 size-32 rounded-3xl bg-secondary/20 -z-10" />
+              <div className="hidden sm:block absolute -top-5 -right-5 size-32 rounded-3xl bg-secondary/20 -z-10" />
               <div className="rounded-3xl overflow-hidden shadow-xl">
                 <img
                   src="/gallerie/realisation.jpg"
@@ -92,7 +96,7 @@ function AboutPage() {
               </div>
             </div>
           </div>
-          <div data-aos="fade-left">
+          <div data-aos="fade-up">
             <SectionHeading
               align="left"
               eyebrow="Notre mission"
@@ -154,7 +158,7 @@ function AboutPage() {
 
       {/* CTA visite */}
       <section className="py-20 container mx-auto px-4 max-w-7xl">
-        <div className="rounded-[2rem] bg-surface border border-border p-10 md:p-14 text-center">
+        <div className="rounded-[2rem] bg-surface border border-border p-8 md:p-14 text-center">
           <h2 className="font-display text-3xl md:text-4xl font-bold mb-3">
             Venez découvrir notre école
           </h2>
