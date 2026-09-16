@@ -13,6 +13,10 @@ export const Route = createFileRoute("/blog")({
       },
       { property: "og:title", content: "Blog — CS Wasomi" },
       { property: "og:description", content: "Actualités et conseils." },
+      { property: "og:image", content: "/gallerie/IMG-20260519-WA0002.jpg" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://wasomi.cd/blog" },
     ],
   }),
   component: BlogPage,

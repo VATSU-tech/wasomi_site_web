@@ -14,6 +14,10 @@ export const Route = createFileRoute("/galerie")({
       },
       { property: "og:title", content: "Galerie — Wasomi" },
       { property: "og:description", content: "La vie chez Wasomi en images." },
+      { property: "og:image", content: "/gallerie/labo_1.jpg" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://wasomi.cd/galerie" },
     ],
   }),
   component: GaleriePage,
