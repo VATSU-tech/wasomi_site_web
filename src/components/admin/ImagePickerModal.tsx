@@ -268,7 +268,9 @@ export function ImagePickerModal({
             </div>
 
             <button
+              type="button"
               onClick={onClose}
+              aria-label="Fermer"
               className="size-8 rounded-lg border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted ml-2"
             >
               <X className="size-4" />
@@ -300,6 +302,7 @@ export function ImagePickerModal({
                       onClick={loadMedia}
                       disabled={loading}
                       title="Actualiser la liste"
+                      aria-label="Actualiser la liste"
                       className="size-9 rounded-xl border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted"
                     >
                       <RefreshCw className={cn('size-4', loading && 'animate-spin')} />
@@ -482,6 +485,7 @@ export function ImagePickerModal({
                             onClick={() => handleDeleteMedia(selectedItem)}
                             className="size-8 rounded-lg border border-destructive/30 text-destructive hover:bg-destructive/10 flex items-center justify-center transition-smooth"
                             title="Supprimer l'image"
+                            aria-label="Supprimer l'image"
                           >
                             <Trash2 className="size-3.5" />
                           </button>
@@ -562,7 +566,7 @@ export function ImagePickerModal({
                 <div className="border-2 border-dashed border-border rounded-2xl p-6 text-center bg-surface hover:bg-surface-elevated transition-smooth relative cursor-pointer">
                   <input
                     type="file"
-                    accept="image/*"
+                    accept="image/jpeg,image/png,image/webp,image/gif,.jpg,.jpeg,.png,.webp,.gif"
                     onChange={handleFileChange}
                     className="absolute inset-0 opacity-0 cursor-pointer"
                   />
