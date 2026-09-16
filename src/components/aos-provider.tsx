@@ -17,7 +17,9 @@ export function AosProvider({ children }: { children: React.ReactNode }) {
       offset: 70,
       delay: 0,
       disable: prefersReduced,
-      startEvent: "DOMContentLoaded",
+      // Évite que fade-left/right dépassent le viewport au démarrage
+      mirror: false,
+      anchorPlacement: "top-bottom",
     });
 
     // Safety net: never leave content invisible. If AOS hasn't revealed

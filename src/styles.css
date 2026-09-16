@@ -254,6 +254,8 @@
 
   html {
     scroll-behavior: smooth;
+    overflow-x: clip;
+    max-width: 100%;
   }
 
   body {
@@ -264,6 +266,29 @@
       background-color 400ms ease,
       color 400ms ease;
     -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+    max-width: 100%;
+  }
+
+  /* Empêche les transforms AOS (fade-left/right) de créer un scroll horizontal global */
+  #root,
+  .site-shell {
+    overflow-x: clip;
+    max-width: 100%;
+  }
+
+  img,
+  video,
+  canvas,
+  svg {
+    max-width: 100%;
+  }
+
+  /* Zones volontairement scrollables horizontalement */
+  .overflow-x-auto,
+  .overflow-x-scroll {
+    max-width: 100%;
+    -webkit-overflow-scrolling: touch;
   }
 
   h1,
@@ -879,6 +904,35 @@ opacity: 0;
 }
 .animate-page-in {
   animation: page-in 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Entry animations (used with animate-in / fade-in / zoom-in-95) */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes zoom-in-95 {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.animate-in {
+  animation: fade-in 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.fade-in {
+  animation: fade-in 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.zoom-in-95 {
+  animation: zoom-in-95 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 /* Reduce motion */
