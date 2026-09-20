@@ -525,6 +525,7 @@ function FormationsPage() {
 
                             <Link
                               to="/contact"
+                              search={{ tab: "admission" }}
                               className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl bg-gradient-primary text-primary-foreground font-bold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
                             >
                               Préinscrire mon enfant
@@ -535,6 +536,7 @@ function FormationsPage() {
                       </Dialog>
                       <Link
                         to="/contact"
+                        search={{ tab: "admission" }}
                         className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary link-underline"
                       >
                         S'inscrire

@@ -288,6 +288,7 @@ function Home() {
 
               <Link
                 to="/contact"
+                search={{ tab: "admission" }}
                 className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-white text-slate-900 font-bold shadow-xl hover:-translate-y-0.5 hover:shadow-2xl active:translate-y-0 transition-all duration-300"
               >
                 Préinscrire mon enfant
@@ -696,6 +697,7 @@ function Home() {
             <div className="mt-9 flex flex-wrap justify-center gap-4">
               <Link
                 to="/contact"
+                search={{ tab: "admission" }}
                 className="group inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-white text-primary font-bold shadow-lg hover:-translate-y-1 hover:shadow-2xl transition-all duration-300"
               >
                 Préinscription en ligne

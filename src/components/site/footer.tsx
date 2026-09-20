@@ -29,8 +29,16 @@ export function Footer() {
   ];
 
   const quickAccess = [
-    { to: "/contact" as const, label: "Contact" },
-    { to: "/contact" as const, label: "Préinscription" },
+    {
+      to: "/contact" as const,
+      search: { tab: "contact" as const },
+      label: "Contact",
+    },
+    {
+      to: "/contact" as const,
+      search: { tab: "admission" as const },
+      label: "Préinscription",
+    },
     { to: "/formations" as const, label: "Frais scolaires" },
     { to: "/app/login" as const, label: "Espace famille" },
   ];
@@ -104,6 +112,7 @@ export function Footer() {
                 <li key={l.label}>
                   <Link
                     to={l.to}
+                    search={l.search}
                     className="text-muted-foreground hover:text-foreground inline-flex items-center gap-2 transition-colors"
                   >
                     <ArrowRight className="size-3 text-primary/60" />

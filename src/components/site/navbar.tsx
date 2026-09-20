@@ -17,6 +17,7 @@ const links = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [cta, setCta] = useState<"admission" | "contact">("admission");
   const { theme, toggle } = useTheme();
   const location = useLocation();
 
@@ -31,6 +32,15 @@ export function Navbar() {
     setOpen(false);
   }, [location.pathname]);
 
+  useEffect(() => {
+    if (authStore.hasRole("super_admin")) return;
+    const id = setInterval(() => {
+      setCta((c) => (c === "admission" ? "contact" : "admission"));
+    }, 4000);
+    return () => clearInterval(id);
+  }, []);
+
+  const isAdmin = authStore.hasRole("super_admin");
   const isHome = location.pathname === "/";
   const isTransparent = isHome && !scrolled;
 
@@ -123,10 +133,34 @@ export function Navbar() {
               )}
             </button>
             <Link
-              to={authStore.hasRole("super_admin") ? "/admin" : "/contact"}
-              className="hidden md:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-primary text-primary-foreground text-sm font-semibold shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
+              to={isAdmin ? "/admin" : "/contact"}
+              search={isAdmin ? undefined : { tab: cta }}
+              className="hidden md:inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-primary text-primary-foreground text-sm font-semibold shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
             >
-              {authStore.hasRole("super_admin") ? "Administration" : "S'inscrire"}
+              {isAdmin ? (
+                "Administration"
+              ) : (
+                <span className="grid">
+                  <span
+                    aria-hidden={cta !== "admission"}
+                    className={cn(
+                      "col-start-1 row-start-1 transition-opacity duration-300",
+                      cta === "admission" ? "opacity-100" : "opacity-0",
+                    )}
+                  >
+                    S'inscrire
+                  </span>
+                  <span
+                    aria-hidden={cta !== "contact"}
+                    className={cn(
+                      "col-start-1 row-start-1 transition-opacity duration-300",
+                      cta === "contact" ? "opacity-100" : "opacity-0",
+                    )}
+                  >
+                    Nous contacter
+                  </span>
+                </span>
+              )}
             </Link>
             <button
               className={cn(
@@ -191,6 +225,7 @@ export function Navbar() {
             <li className="pt-2">
               <Link
                 to="/contact"
+                search={{ tab: "admission" }}
                 className="flex items-center justify-center gap-2 w-full px-4 py-3.5 rounded-xl bg-gradient-primary text-primary-foreground text-sm font-semibold shadow-lg active:scale-[0.98] transition-transform"
               >
                 <Phone className="size-4" />

@@ -442,6 +442,7 @@ export function AdminPage() {
         </p>
         <Link
           to="/contact"
+          search={{ tab: "contact" }}
           className="mt-6 px-6 py-2.5 bg-gradient-primary text-primary-foreground font-semibold rounded-xl shadow-elegant"
         >
           Aller au formulaire Contact

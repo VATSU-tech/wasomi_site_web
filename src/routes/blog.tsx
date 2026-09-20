@@ -171,6 +171,7 @@ function BlogPage() {
                     </p>
                     <Link
                       to="/contact"
+                      search={{ tab: "contact" }}
                       className="inline-flex items-center gap-2 font-semibold text-primary link-underline self-start"
                     >
                       En savoir plus
@@ -214,6 +215,7 @@ function BlogPage() {
                     </p>
                     <Link
                       to="/contact"
+                      search={{ tab: "contact" }}
                       className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary link-underline"
                     >
                       Lire la suite

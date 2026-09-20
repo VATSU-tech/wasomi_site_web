@@ -158,6 +158,7 @@ function EquipePage() {
           </p>
           <Link
             to="/contact"
+            search={{ tab: "contact" }}
             className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-primary text-primary-foreground font-bold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
           >
             <Mail className="size-4" />

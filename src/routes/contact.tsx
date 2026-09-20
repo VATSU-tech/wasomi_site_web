@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Mail,
   Phone,
@@ -22,7 +22,12 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
 
+const contactSearchSchema = z.object({
+  tab: z.enum(["contact", "admission"]).optional(),
+});
+
 export const Route = createFileRoute("/contact")({
+  validateSearch: contactSearchSchema.parse,
   head: () => ({
     meta: [
       { title: "Contact & Préinscription — Wasomi" },
@@ -110,9 +115,16 @@ function computeAge(birthDateStr: string): number | null {
 function ContactPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [tab, setTab] = useState<"contact" | "admission">("contact");
+  const { tab: tabParam } = Route.useSearch();
+  const [tab, setTab] = useState<"contact" | "admission">(
+    tabParam === "admission" ? "admission" : "contact",
+  );
   const [sentContact, setSentContact] = useState(false);
   const [sentAdmission, setSentAdmission] = useState(false);
+
+  useEffect(() => {
+    setTab(tabParam === "admission" ? "admission" : "contact");
+  }, [tabParam]);
 
   // Form states
   const [contactData, setContactData] = useState({ name: "", email: "", subject: "", message: "", phone: "" });
