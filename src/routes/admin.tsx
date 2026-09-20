@@ -477,9 +477,6 @@ export function AdminPage() {
       {/* Top Bar */}
       <div className="border-b border-border bg-surface px-6 py-4 flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="bg-gradient-primary p-2.5 rounded-xl shadow-glow">
-            <GraduationCap className="size-6 text-primary-foreground" />
-          </div>
           <div>
             <h1 className="font-display font-bold text-xl leading-tight">Administration Wasomi</h1>
             <p className="text-xs text-muted-foreground">
@@ -804,7 +801,7 @@ export function AdminPage() {
                     role: 'Rôle / Fonction',
                     bio: 'Biographie',
                     department: 'Département',
-                    duration: 'Durée',
+                    duration: 'Tranche d\'age',
                     students: 'Étudiants',
                     price: 'Prix',
                     description: 'Description',
@@ -1153,7 +1150,7 @@ export function AdminPage() {
                   <div className="p-3 rounded-xl bg-surface border border-border">
                     <span className="text-xs text-muted-foreground font-semibold uppercase block">Genre</span>
                     <span className="font-semibold text-foreground mt-0.5 block">
-                      {selectedDetail.data.gender === 'M' ? '👦 Garçon' : selectedDetail.data.gender === 'F' ? '👧 Fille' : selectedDetail.data.gender}
+                      {selectedDetail.data.gender === 'M' ? 'Garçon' : selectedDetail.data.gender === 'F' ? 'Fille' : selectedDetail.data.gender}
                     </span>
                   </div>
                 )}

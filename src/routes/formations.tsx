@@ -7,13 +7,14 @@ import {
   Baby,
   Blocks,
   BookOpen,
-  GraduationCap,
   Microscope,
   BadgeDollarSign,
   CalendarClock,
   AlertCircle,
   X,
   Check,
+  Pyramid,
+  Rocket,
 } from "lucide-react";
 import {
   Dialog,
@@ -191,7 +192,7 @@ const fallbackFormations: FormationDetail[] = [
   },
   {
     id: 4,
-    icon: GraduationCap,
+    icon: Pyramid,
     image: "/gallerie/realisation.jpg",
     title: "Education de base",
     fullName: "Éducation de base – 7ème et 8ème année",
@@ -281,7 +282,7 @@ function FormationsPage() {
 
         return {
           id: p.id,
-          icon: [Baby, Blocks, BookOpen, GraduationCap, Code2, Microscope][idx % 6],
+          icon: [Baby, Blocks, BookOpen, Rocket, Code2, Microscope][idx % 6],
           image: p.image || "/gallerie/IMG-20260519-WA0016.jpg",
           title: p.title,
           fullName: p.title,
@@ -474,7 +475,7 @@ function FormationsPage() {
                               )}
 
                               {(f.fees.installments?.length || f.fees.firstInstallment) && (
-                                <div className="rounded-xl bg-primary/10 border border-primary/20 px-4 py-3 mt-1">
+                                <div className="rounded-xl hidden bg-primary/10 border border-primary/20 px-4 py-3 mt-1">
                                   <p className="text-xs text-muted-foreground mb-2 font-semibold uppercase tracking-wide">
                                     Paiement en tranches
                                   </p>

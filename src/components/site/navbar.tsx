@@ -55,17 +55,10 @@ export function Navbar() {
           <Link to="/" className="flex items-center gap-2.5 group">
             <div className="relative">
               <img
-                src="./icon-cercle.png" 
+                src="./icon-cercle.png"
                 className="h-10"
-                alt="icon de l'ecode" />
-              {/* <div className="absolute inset-0 bg-gradient-primary rounded-xl blur-md opacity-60 group-hover:opacity-90 transition-opacity duration-300" />
-              <div className="relative bg-gradient-primary rounded-xl p-2">
-                <GraduationCap
-                  className={cn(
-                    "size-5 text-white transition-transform group-hover:-rotate-6 duration-300",
-                  )}
-                />
-              </div> */}
+                alt="icon de l'ecode"
+              />
             </div>
             <span
               className={cn(

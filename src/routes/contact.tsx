@@ -288,7 +288,7 @@ function ContactPage() {
               </div>
             </div>
 
-            <div className="p-6 rounded-3xl bg-gradient-primary text-primary-foreground space-y-3 shadow-xl">
+            <div className="p-6 rounded-3xl hidden bg-gradient-primary text-primary-foreground space-y-3 shadow-xl">
               <div className="flex items-center gap-3">
                 <GraduationCap className="size-7" />
                 <h3 className="font-display font-bold text-lg">Inscriptions ouvertes</h3>

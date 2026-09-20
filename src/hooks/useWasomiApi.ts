@@ -1,19 +1,19 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { queryKeys } from '@/constants/query-keys';
-import { healthService } from '@/services/health.service';
-import { settingsService } from '@/services/settings.service';
-import { programService } from '@/services/program.service';
-import { staffService } from '@/services/staff.service';
-import { galleryService, GalleryQueryParams } from '@/services/gallery.service';
-import { postService, PostQueryParams } from '@/services/post.service';
-import { pageService } from '@/services/page.service';
-import { contactService } from '@/services/contact.service';
-import { admissionService } from '@/services/admission.service';
-import { ContactMessagePayload, AdmissionRequestPayload, StaffMember, GalleryCategory, GalleryItem, Post } from '@/types/domain';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "@/constants/query-keys";
+import { healthService } from "@/services/health.service";
+import { settingsService } from "@/services/settings.service";
+import { programService } from "@/services/program.service";
+import { staffService } from "@/services/staff.service";
+import { galleryService, GalleryQueryParams } from "@/services/gallery.service";
+import { postService, PostQueryParams } from "@/services/post.service";
+import { pageService } from "@/services/page.service";
+import { contactService } from "@/services/contact.service";
+import { admissionService } from "@/services/admission.service";
+import { ContactMessagePayload, AdmissionRequestPayload, StaffMember, GalleryCategory, GalleryItem, Post } from "@/types/domain";
 
 // Fallback static data imports
-import { staffMembers as fallbackStaff } from '@/data/staff';
-import { galleryCategories as fallbackGalleryCategories, galleryItems as fallbackGalleryItems } from '@/data/gallery';
+import { staffMembers as fallbackStaff } from "@/data/staff";
+import { galleryCategories as fallbackGalleryCategories, galleryItems as fallbackGalleryItems } from "@/data/gallery";
 
 // 1. Health
 export function useHealthQuery() {
@@ -35,16 +35,16 @@ export function usePublicSettingsQuery() {
       } catch {
         // TODO remove fallback when backend API is live
         return {
-          app_name: 'Wasomi',
-          title: 'Wasomi — École d’excellence',
-          email: 'contact@wasomi.cd',
-          phone: '+243 81 000 0000',
-          address: 'Kinshasa, République Démocratique du Congo',
+          app_name: "Wasomi",
+          title: "Wasomi — École d’excellence",
+          email: "contact@wasomi.cd",
+          phone: "+243 81 000 0000",
+          address: "Rue N°5,Q.Residentiel, C.Bungulu, Beni, Nord-Kivu, RDC",
           social_links: {
-            facebook: '#',
-            twitter: '#',
-            instagram: '#',
-            linkedin: '#',
+            facebook: "#",
+            twitter: "#",
+            instagram: "#",
+            linkedin: "#",
           },
         };
       }
@@ -87,7 +87,7 @@ export function useStaffQuery() {
       try {
         const res = await staffService.list();
         if (res.data && res.data.length > 0) return res.data;
-        throw new Error('Empty');
+        throw new Error("Empty");
       } catch {
         // TODO remove fallback when backend API is live
         return fallbackStaff.map((s) => ({
@@ -114,15 +114,15 @@ export function useGalleryCategoriesQuery() {
       try {
         const res = await galleryService.getCategories();
         if (res.data && res.data.length > 0) return res.data;
-        throw new Error('Empty');
+        throw new Error("Empty");
       } catch {
         // TODO remove fallback when backend API is live
         return fallbackGalleryCategories
-          .filter((c) => c !== 'Tous')
+          .filter((c) => c !== "Tous")
           .map((c, idx) => ({
             id: idx + 1,
             name: c,
-            slug: c.toLowerCase().replace(/\s+/g, '-'),
+            slug: c.toLowerCase().replace(/\s+/g, "-"),
           }));
       }
     },
@@ -136,11 +136,11 @@ export function useGalleryQuery(params?: GalleryQueryParams) {
       try {
         const res = await galleryService.getItems(params);
         if (res.data && res.data.length > 0) return res.data;
-        throw new Error('Empty');
+        throw new Error("Empty");
       } catch {
         // TODO remove fallback when backend API is live
         let items = fallbackGalleryItems;
-        if (params?.category && params.category !== 'all' && params.category !== 'Tous') {
+        if (params?.category && params.category !== "all" && params.category !== "Tous") {
           items = items.filter((item) => item.category === params.category);
         }
         return items.map((i) => ({

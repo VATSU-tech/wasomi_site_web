@@ -7,7 +7,7 @@ import { SectionHeading } from "@/components/site/section-heading";
 import { useVTTData } from "@/hooks/useVTTData";
 import { schoolHistoryConfig } from "@/data/school-history";
 import { usePageQuery } from "@/hooks/useWasomiApi";
-import { ArrowRight, GraduationCap, Heart, BookOpen, Users } from "lucide-react";
+import { ArrowRight, Heart, BookOpen, Users, Rocket } from "lucide-react";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -83,7 +83,7 @@ function AboutPage() {
               </div>
               <div className="absolute -bottom-6 left-6 bg-card border border-border rounded-2xl px-5 py-4 shadow-lg flex items-center gap-3">
                 <div className="size-11 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <GraduationCap className="size-6 text-primary" />
+                  <Rocket className="size-6 text-primary" />
                 </div>
                 <div>
                   <div className="font-display font-bold text-lg leading-none">
