@@ -4,7 +4,6 @@ import {
   BookOpen,
   Baby,
   Blocks,
-  GraduationCap,
   HeartHandshake,
   Lightbulb,
   MapPin,
@@ -15,6 +14,7 @@ import {
   Star,
   Trophy,
   Users,
+  Pyramid,
 } from "lucide-react";
 import { SectionHeading } from "@/components/site/section-heading";
 import { Gallery } from "@/components/site/gallery";
@@ -22,6 +22,7 @@ import { galleryItems, galleryCategories } from "@/data/gallery";
 import { CountUp } from "@/components/site/count-up";
 import { usePostsQuery } from "@/hooks/useWasomiApi";
 import { Calendar } from "lucide-react";
+import { CalendarDay } from "react-day-picker";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -77,7 +78,7 @@ const cycles = [
     stat: "Bases solides",
   },
   {
-    icon: GraduationCap,
+    icon: Pyramid,
     title: "Éducation de base",
     subtitle: "7ème & 8ème année",
     desc: "Consolider les fondamentaux, développer l'autonomie et préparer la suite du parcours avec un appui personnalisé.",
@@ -226,18 +227,17 @@ function Home() {
         overflow-hidden"
               data-aos="fade-up"
             >
-
               {/* Background flouté */}
               <div
                 className="absolute inset-0
-          bg-[url('https://imgs.search.brave.com/Ed9zp9EkGKYIZ10tCxpnmVwIw2M_Oq4S4v1HVhS0Zl/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA4LzQzLzkzLzE1/LzM2MF9GXzg0Mzkz/MTU0NF90QW5mMTRR/TGJzUWVvMHoxUWRW/UHlQdFZZZ3c2S09u/Qy5qcGc')]
+          bg-[url('https://www.shutterstock.com/image-photo/red-gps-map-260nw-2494094029.jpg')]
           bg-cover
-          bg-center
-          scale-110"
+          scale-110
+          bg-[position:60%_50%]"
               />
 
               {/* Overlay */}
-              <div className="absolute inset-0 bg-black/30" />
+              <div className="absolute inset-0 bg-black/40" />
 
               {/* Contenu net */}
               <a
@@ -266,8 +266,6 @@ function Home() {
               <span className="text-gradient bg-gradient-to-r from-sky-300 to-emerald-300">
                 chaque enfant
               </span>
-
-              , du premier pas à la réussite.
             </h1>
 
             {/* Description */}
@@ -276,7 +274,7 @@ function Home() {
               data-aos="fade-up"
               data-aos-delay="180"
             >
-              De la crèche à la 8ème année, nous accompagnons vos enfants avec
+              De la crèche aux humanite, nous accompagnons vos enfants avec
               une pédagogie vivante, des ateliers de sciences et un cadre où
               ils se sentent en confiance.
             </p>
@@ -392,7 +390,7 @@ function Home() {
               </div>
               <div className="absolute -bottom-6 -left-4 sm:-left-6 bg-card border border-border rounded-2xl px-5 py-4 shadow-lg flex items-center gap-3">
                 <div className="size-11 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <GraduationCap className="size-6 text-primary" />
+                  <Calendar className="size-6 text-primary" />
                 </div>
                 <div>
                   <div className="font-display font-bold text-lg leading-none">
@@ -672,7 +670,7 @@ function Home() {
       </section>
 
       {/* ============ CTA PRÉINSCRIPTION ============ */}
-      <section className="py-14 sm:py-24 container mx-auto px-4 max-w-7xl">
+      <section className="py-14 sm:py-24 container hidden mx-auto px-4 max-w-7xl">
         <div
           className="relative overflow-hidden rounded-[2rem] p-8 md:p-16 text-center bg-gradient-primary text-primary-foreground shadow-2xl"
           data-aos="zoom-in"
