@@ -18,8 +18,7 @@ export function Footer() {
   const email = settings?.email ?? "cswasomi@gmail.com";
   const address =
     settings?.address ?? "5 Rue Sivirwa Q. Résidentiel, C. Bungulu, Beni";
-  const hours =
-    "Lun. – Ven. : 07h30 – 16h00 · Sam. : 08h00 – 12h00";
+  const hours = "Lun. – Jeu. : 07h00 – 15h00 · Ven. : 07h00 – 13h00";
 
   const navigation = [
     { to: "/formations" as const, label: "Nos cycles" },
@@ -44,8 +43,12 @@ export function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <Link to="/" className="flex items-center gap-2.5">
-              <div className="bg-gradient-primary text-primary-foreground rounded-xl p-2">
-                <GraduationCap className="size-5 text-white" />
+              <div className="relative">
+                <img
+                  src="./icon-cercle.png"
+                  className="h-10"
+                  alt="icon de l'ecode"
+                />
               </div>
               <span className="font-display font-bold text-lg">
                 {settings?.app_name ?? "CS Wasomi"}
@@ -151,7 +154,7 @@ export function Footer() {
             {settings?.app_name ?? "CS Wasomi"}. Tous droits réservés.
           </p>
           <p className="flex items-center gap-1.5">
-            Fait avec soin à Beni, Nord-Kivu · RD Congo
+            VATSU-tech
           </p>
         </div>
       </div>
