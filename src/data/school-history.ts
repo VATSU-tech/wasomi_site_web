@@ -89,7 +89,7 @@ export const schoolHistoryConfig: SchoolHistoryConfig = {
       title: "Environnement naturel",
       description:
         "Bâtiment dans un milieu naturel favorisant l'épanouissement",
-      stats: "Premium",
+      stats: "Propre",
     },
     {
       icon: Microscope,

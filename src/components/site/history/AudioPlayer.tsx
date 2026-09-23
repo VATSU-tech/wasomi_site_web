@@ -1,7 +1,3 @@
-/**
- * Modern audio player component with premium styling
- */
-
 import { useEffect, useState } from "react";
 import { Play, Pause, Volume2, VolumeX } from "lucide-react";
 import { useAudioSync } from "@/hooks/useAudioSync";
