@@ -6,3 +6,4 @@ server/uploads/**
 !server/uploads/.gitkeep
 server/node_modules
 data.txt
+.env
