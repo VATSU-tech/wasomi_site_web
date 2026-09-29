@@ -13,6 +13,7 @@ import {
   Calendar,
   Sparkles,
   ShieldCheck,
+  Check,
 } from "lucide-react";
 import { useContactMutation, useAdmissionMutation, usePublicSettingsQuery, useProgramsQuery } from "@/hooks/useWasomiApi";
 import { authStore } from "@/store/auth-store";
@@ -839,7 +840,7 @@ function ContactPage() {
                     className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-gradient-primary text-primary-foreground font-bold shadow-elegant hover:shadow-glow transition-spring disabled:opacity-50 text-base"
                   >
                     {admissionMutation.isPending ? "Transmission du dossier en cours..." : "Valider et Soumettre le Dossier de Préinscription"}
-                    <GraduationCap className="size-5" />
+                    <Check className="size-5" />
                   </button>
                 </form>
               )
