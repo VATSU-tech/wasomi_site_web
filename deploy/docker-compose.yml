@@ -1,0 +1,135 @@
+# ============================================================================
+# Stack Wasomi — frontend + API + MySQL
+# ============================================================================
+# Demarrage :  docker compose up -d --build
+# Logs :       docker compose logs -f
+# Arret :      docker compose down
+#
+# Les variables sont lues dans deploy/.env (copiez .env.example).
+# Topographie : internet -> [web: Caddy :80/:443] -> [api: Express :3000] -> [db: MySQL]
+# Seul le service `web` est expose sur l'hote.
+# ============================================================================
+
+name: wasomi
+
+services:
+
+  # ----------------------------- Base de donnees -----------------------------
+  db:
+    image: mysql:8.4
+    restart: unless-stopped
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD est requis dans deploy/.env}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-wasomi}
+      MYSQL_USER: ${MYSQL_USER:-wasomi}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?MYSQL_PASSWORD est requis dans deploy/.env}
+      TZ: ${TZ:-Africa/Kinshasa}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - mysqladmin ping -h 127.0.0.1 -u root -p"$$MYSQL_ROOT_PASSWORD" --silent
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 40s
+    # Decommentez pour ouvrir MySQL sur l'hote (DBeaver, adminer, backup).
+    # ports:
+    #   - "127.0.0.1:3306:3306"
+
+  # ----------------------------------- API -----------------------------------
+  api:
+    build:
+      # Le Dockerfile doit etre A L'INTERIEUR du contexte de build.
+      # L'API est un depot Git separe, situe A COTE de wasomi_site_web.
+      # Chemins resolus depuis le dossier deploy/ : d'ou le double "../".
+      # Si vous deplacez le depot backend, adjustez BACKEND_PATH dans .env.
+      context: ${BACKEND_PATH:-../../wasomi_site_web_backend}
+      dockerfile: Dockerfile
+    image: wasomi/api:latest
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      API_PREFIX: /api/v1
+
+      # L'API et le front sont accessibles via le meme nom de service Docker.
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: ${MYSQL_USER:-wasomi}
+      DB_PASSWORD: ${MYSQL_PASSWORD:?MYSQL_PASSWORD est requis dans deploy/.env}
+      DB_NAME: ${MYSQL_DATABASE:-wasomi}
+
+      # Meme origine (Caddy proxifie /api) -> CORS n'est plus necessaire.
+      # FRONTEND_ORIGINS reste configurable pour le debug cross-site.
+      FRONTEND_ORIGINS: ${FRONTEND_ORIGINS:-https://localhost}
+      # true -> cookies Secure + SameSite=None : requis UNIQUEMENT si le front
+      # est heberge sur un AUTRE domaine que l'API.
+      # false -> SameSite=lax, suffisant car Caddy sert les deux sur le meme
+      # domaine. C'est le cas recommande.
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      COOKIE_DOMAIN: ${COOKIE_DOMAIN:-}
+
+      ACCESS_TOKEN_SECRET: ${ACCESS_TOKEN_SECRET:?ACCESS_TOKEN_SECRET est requis}
+      REFRESH_TOKEN_SECRET: ${REFRESH_TOKEN_SECRET:?REFRESH_TOKEN_SECRET est requis}
+      CSRF_SECRET: ${CSRF_SECRET:?CSRF_SECRET est requis}
+      ACCESS_TOKEN_TTL: ${ACCESS_TOKEN_TTL:-15m}
+      REFRESH_TOKEN_TTL: ${REFRESH_TOKEN_TTL:-7d}
+
+      UPLOAD_DIR: /app/uploads
+      PUBLIC_UPLOAD_URL: /uploads
+
+      # Mettez RUN_SEED=true pour le PREMIER demarrage uniquement (cree les
+      # roles, permissions et le compte admin). Remettez false ensuite.
+      RUN_SEED: ${RUN_SEED:-false}
+      BOOTSTRAP_ADMIN_EMAIL: ${BOOTSTRAP_ADMIN_EMAIL:-admin@wasomi.cd}
+      BOOTSTRAP_ADMIN_PASSWORD: ${BOOTSTRAP_ADMIN_PASSWORD:?BOOTSTRAP_ADMIN_PASSWORD est requis}
+      BOOTSTRAP_ADMIN_NAME: ${BOOTSTRAP_ADMIN_NAME:-Administrateur Wasomi}
+    volumes:
+      # Les fichiers televerses (images, PDF) doivent survivre aux
+      # redeploiements : ils vivent dans un volume, pas dans l'image.
+      - api_uploads:/app/uploads
+
+  # --------------------------------- Frontend ---------------------------------
+  # Sert le build statique ET reverse-proxy vers l'API : un seul domaine,
+  # donc plus aucun probleme de CORS / cookies cross-site.
+  web:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+      args:
+        # URL ABSOLUE obligatoire : src/config/env.ts valide avec
+        # z.string().url(). Une valeur relative ("/api/v1") fait echouer
+        # le build.
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:?VITE_API_BASE_URL est requis (URL absolue)}
+        VITE_SCHOOL_API_BASE_URL: ${VITE_SCHOOL_API_BASE_URL:-}
+        VITE_APP_NAME: ${VITE_APP_NAME:-Wasomi}
+        VITE_API_TIMEOUT_MS: ${VITE_API_TIMEOUT_MS:-15000}
+    image: wasomi/web:latest
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      DOMAIN: ${DOMAIN:-http://localhost:8080}
+      ACME_EMAIL: ${ACME_EMAIL:-admin@wasomi.cd}
+    ports:
+      - "${HTTP_PORT:-80}:80"
+      - "${HTTPS_PORT:-443}:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  db_data:
+  api_uploads:
+  caddy_data:
+  caddy_config:

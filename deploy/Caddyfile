@@ -1,0 +1,94 @@
+# ============================================================================
+# Caddy — reverse proxy unique pour le site Wasomi
+# ============================================================================
+# Tout est servi sur UN SEUL DOMAINE. C'est le point le plus important de
+# cette configuration : le navigateur ne voit qu'une seule origine, donc
+#   - aucun CORS a configurer,
+#   - les cookies httpOnly (access / refresh) fonctionnent nativement,
+#   - le cookie CSRF non-httpOnly reste lisible par le JS du front,
+#   - SameSite=lax suffit : pas besoin de SameSite=None + Secure.
+# C'est exactement la classe de bugs decrite dans src/api/client.ts.
+#
+# ADRESSE DU SITE : definissez DOMAIN dans deploy/.env
+#   - production : DOMAIN=wasomi.cd             -> HTTPS auto Let's Encrypt
+#   - local      : DOMAIN=http://localhost:8080 -> HTTP simple, sans certificat
+#
+# Note : le prefixe "http://" desactive l'auto-HTTPS de Caddy. C'est
+# volontaire pour pouvoir tester la stack entiere en local sans certificat.
+# ============================================================================
+
+{
+	# Adresse de contact pour Let's Encrypt (preavis d'expiration).
+	email {$ACME_EMAIL:admin@wasomi.cd}
+}
+
+{$DOMAIN:http://localhost:8080} {
+	root * /srv
+
+	encode zstd gzip
+
+	# Limite de taille des requetes. Le backend limite a 12 Mo via multer ;
+	# on garde une marge pour ne pas tronquer un upload valide.
+	# IMPORTANT : au niveau du site (et non dans un handle), sinon les
+	# uploads passant par /api/* contourneraient la limite.
+	request_body {
+		max_size 15MB
+	}
+
+	# ---------------------------------------------------------------------
+	# 1. API Express -> conteneur `api`
+	# ---------------------------------------------------------------------
+	# Tout ce qui est sous /api ou /uploads part vers le backend et ne
+	# doit JAMAIS atteindre le file_server statique.
+	handle /api* {
+		reverse_proxy api:3000 {
+			transport http {
+				dial_timeout 10s
+				response_header_timeout 60s
+			}
+		}
+	}
+
+	handle /uploads* {
+		reverse_proxy api:3000
+	}
+
+	# Sonde de sante publique (utile pour un moniteur externe).
+	handle /health {
+		reverse_proxy api:3000
+	}
+
+	# ---------------------------------------------------------------------
+	# 2. Frontend — fichiers statiques
+	# ---------------------------------------------------------------------
+	handle {
+		# Les assets sont hashes dans leur nom -> cache immuable 1 an.
+		@immutable path /assets/*
+		header @immutable Cache-Control "public, max-age=31536000, immutable"
+
+		# index.html ne doit JAMAIS etre cache : sans cela les visiteurs
+		# restent bloques sur d'anciens bundles apres un deploiement.
+		@html path *.html
+		header @html Cache-Control "no-cache, must-revalidate"
+
+		# Fallback SPA : si le fichier n'existe pas (/app/dashboard, /blog…)
+		# on sert index.html et le routeur client prend le relais.
+		#
+		# NE PAS utiliser `rewrite @spa /index.html` ici : cela casserait
+		# /robots.txt, /sitemap.xml et toutes les images de public/.
+		try_files {path} {path}/ /index.html
+		file_server
+	}
+
+	header {
+		X-Content-Type-Options nosniff
+		X-Frame-Options SAMEORIGIN
+		Referrer-Policy strict-origin-when-cross-origin
+		-Server
+	}
+
+	log {
+		output stdout
+		format console
+	}
+}
