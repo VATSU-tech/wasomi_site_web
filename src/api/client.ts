@@ -28,11 +28,18 @@ export function getCsrfToken(): string | null {
   return csrfToken || getCsrfFromCookie();
 }
 
-export async function fetchCsrfToken(): Promise<string | null> {
+export async function fetchCsrfToken(force = false): Promise<string | null> {
+  // En cross-site (frontend localhost → backend onrender.com), document.cookie
+  // ne peut pas voir les cookies du domaine backend → getCsrfFromCookie() retourne null.
+  // On se base donc sur la variable JS csrfToken, sauf quand force=true (ex: après login).
   const cookieToken = getCsrfFromCookie();
   if (cookieToken) {
     csrfToken = cookieToken;
     return cookieToken;
+  }
+
+  if (!force && csrfToken) {
+    return csrfToken;
   }
 
   if (csrfPromise) {

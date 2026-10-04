@@ -1,9 +1,16 @@
 node_modules
 dist
+dist-spa-test
+.wrangler
+.tanstack
+
+# Secrets et variables d'environnement — ne JAMAIS versionner.
 .env
-server/.env
-server/uploads/**
-!server/uploads/.gitkeep
-server/node_modules
+.env.*
+!.env.example
+deploy/.env
+
+# Ancienne copie du backend (déplacée dans ../wasomi_site_web_backend).
+server/
+
 data.txt
-.env

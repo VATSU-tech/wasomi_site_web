@@ -1,0 +1,54 @@
+# Tout ce qui suit n'est pas nécessaire pour construire l'image frontend.
+# Le SENDRE de ces fichiers évite descontextes de build inutiles et
+# empêche surtout qu'un .env local fuit dans l'image.
+
+node_modules
+dist
+dist-spa-test
+.wrangler
+.tanstack
+.git
+.gitignore
+.github
+
+# Secrets — ne doivent JAMAIS être copiés dans l'image.
+# Les variables VITE_* sont fournies via --build-arg par le compose.
+.env
+.env.*
+!.env.example
+.env.production
+
+# Le backend vit dans un dépôt séparé : ne pas embarquer la copie obsolète.
+server
+
+# Fichiers de dev / config non utiles au build
+.vscode
+.cursor
+.codex
+.qwen
+.tabnine
+.autohand
+agents
+.claude
+.agents
+skills
+skills-lock.json
+
+# Docker & deploy
+Dockerfile
+.dockerignore
+deploy/docker-compose.yml
+deploy/.env
+README.md
+AGENTS.md
+
+# Divers
+*.log
+*.zip
+.DS_Store
+bunfig.toml
+components.json
+
+# NOTE : ne pas exclure les images (*.png, *.jpg, *.svg…).
+# Le dossier public/ contient les visuels du site (gallerie, personnel, logos)
+# et Vite les copie dans dist/client. Les exclure casserait le build.

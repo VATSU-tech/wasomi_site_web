@@ -942,8 +942,8 @@ export function AdminPage() {
                           <p className="text-xs text-muted-foreground line-clamp-2">
                             {item.email && <span className="font-medium text-foreground mr-2"><Mail className="size-4 inline-block mr-1" /> {item.email}</span>}
                             {item.phone && <span className="font-medium text-foreground mr-2"><Phone className="size-4 inline-block mr-1" /> {item.phone}</span>}
-                            {item.preferred_schedule && <span className="text-primary font-medium mr-2">🕒 {item.preferred_schedule}</span>}
-                            {item.class_level && <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[11px] font-bold mr-2">🎓 {item.class_level}</span>}
+                            {item.preferred_schedule && <span className="text-primary font-medium mr-2"> {item.preferred_schedule}</span>}
+                            {item.class_level && <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[11px] font-bold mr-2"> {item.class_level}</span>}
                             {item.summary || item.role || item.category || item.message || item.public_url || ''}
                           </p>
 

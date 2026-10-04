@@ -1,6 +1,7 @@
 import { queryKeys } from '@/constants/query-keys';
 import { authService, LoginDto } from '@/services/auth.service';
 import { authStore } from '@/store/auth-store';
+import { fetchCsrfToken } from '@/api/client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export function useMeQuery() {
@@ -25,10 +26,14 @@ export function useLoginMutation() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (dto: LoginDto) => authService.login(dto),
-    onSuccess: (res) => {
+    onSuccess: async (res) => {
       if (res.data) {
         authStore.setUser(res.data);
       }
+      // Le backend émet un nouveau cookie wasomi_csrf lors du login (issueSession).
+      // En cross-site (localhost → onrender.com), document.cookie ne le voit pas.
+      // force=true ignore le token JS en cache et re-fetche depuis /auth/csrf.
+      await fetchCsrfToken(true);
       qc.invalidateQueries({ queryKey: queryKeys.auth.me });
     },
   });
