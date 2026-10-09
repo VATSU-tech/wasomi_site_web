@@ -17,6 +17,7 @@ import { AosProvider } from "@/components/aos-provider";
 import { Navbar } from "@/components/site/navbar";
 import { Footer } from "@/components/site/footer";
 import { cn } from "@/lib/utils";
+import { AudioStoryWidget } from "@/components/site/AudioStoryWidget";
 
 function NotFoundComponent() {
   return (
@@ -168,6 +169,7 @@ function RootComponent() {
                 </div>
               </main>
               <Footer />
+              <AudioStoryWidget />
               <BackToTop />
               <Toaster />
             </div>
