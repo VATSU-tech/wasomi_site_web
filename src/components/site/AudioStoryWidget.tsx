@@ -161,15 +161,15 @@ export function AudioStoryWidget() {
       {/* ── Label + progress ────────────────────── */}
       <div className="flex flex-col gap-1 min-w-0">
         <div className="flex items-center gap-2">
-          <Volume2 className="size-3.5 text-emerald-400 shrink-0 hidden sm:block" />
+          {/* <Volume2 className="size-3.5 text-emerald-400 shrink-0 hidden sm:block" /> */}
           <span className="text-[13px] sm:text-sm font-semibold text-white whitespace-nowrap">
             {isPlaying ? "Notre histoire" : "Écouter notre histoire"}
           </span>
-          {isPlaying && duration > 0 && (
+          {/* {isPlaying && duration > 0 && (
             <span className="text-[11px] text-slate-400 tabular-nums whitespace-nowrap">
               {formatTime(currentTime)}/{formatTime(duration)}
             </span>
-          )}
+          )} */}
         </div>
 
         {/* Thin progress bar — only visible when playing or partially played */}
