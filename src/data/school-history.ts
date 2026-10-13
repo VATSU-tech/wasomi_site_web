@@ -1,4 +1,4 @@
-import { GraduationCap, Library, LucideIcon, Microscope, Trees } from 'lucide-react';
+import { BadgeCheck, Library, LucideIcon, Microscope, Trees } from 'lucide-react';
 /**
  * School history configuration
  * Centralized metadata for the history section
@@ -72,7 +72,7 @@ export const schoolHistoryConfig: SchoolHistoryConfig = {
   ],
   keyAchievements: [
     {
-      icon: GraduationCap,
+      icon: BadgeCheck,
       title: "Excellence académique",
       description:
         "Tous nos finalistes ont réussi à l'examen nationale de fin d'étude primaire",
