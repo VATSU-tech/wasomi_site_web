@@ -126,7 +126,7 @@ export function WelcomePage() {
     <div className="max-w-5xl mx-auto space-y-8">
       <div>
         <h1 className="text-2xl font-bold text-base-content">
-          Bonjour, {user?.prenom} 👋
+          Bonjour, {user?.prenom}
         </h1>
         <p className="mt-1 text-sm text-base-content/60">
           Bienvenue sur votre portail de gestion scolaire.
