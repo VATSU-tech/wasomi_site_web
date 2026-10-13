@@ -7,13 +7,13 @@ import {
   Send,
   CheckCircle2,
   AlertCircle,
-  GraduationCap,
   User,
-  Baby,
   Calendar,
   Sparkles,
   ShieldCheck,
   Check,
+  School,
+  Plus,
 } from "lucide-react";
 import { useContactMutation, useAdmissionMutation, usePublicSettingsQuery, useProgramsQuery } from "@/hooks/useWasomiApi";
 import { authStore } from "@/store/auth-store";
@@ -303,7 +303,7 @@ function ContactPage() {
 
             <div className="p-6 rounded-3xl hidden bg-gradient-primary text-primary-foreground space-y-3 shadow-xl">
               <div className="flex items-center gap-3">
-                <GraduationCap className="size-7" />
+                <Plus className="size-7" />
                 <h3 className="font-display font-bold text-lg">Inscriptions ouvertes</h3>
               </div>
               <p className="text-xs text-white/90 leading-relaxed">
@@ -482,7 +482,7 @@ function ContactPage() {
                   {/* SECTION 1 : ÉLÈVE */}
                   <div className="p-4 sm:p-5 rounded-2xl bg-surface border border-border space-y-4">
                     <div className="flex items-center gap-2 pb-2 border-b border-border/60">
-                      <Baby className="size-4 text-primary" />
+                      <User className="size-4 text-primary" />
                       <h4 className="text-sm font-bold uppercase tracking-wider text-foreground">
                         1. Identité de l'élève
                       </h4>
@@ -595,7 +595,7 @@ function ContactPage() {
                   {/* SECTION 2 : CLASSE SOUHAITÉE */}
                   <div className="p-4 sm:p-5 rounded-2xl bg-surface border border-border space-y-4">
                     <div className="flex items-center gap-2 pb-2 border-b border-border/60">
-                      <GraduationCap className="size-4 text-primary" />
+                      <School className="size-4 text-primary" />
                       <h4 className="text-sm font-bold uppercase tracking-wider text-foreground">
                         2. Classe & Niveau souhaité
                       </h4>

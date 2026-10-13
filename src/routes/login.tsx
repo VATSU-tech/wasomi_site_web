@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate, Link } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useLoginMutation } from '@/features/auth/hooks';
 import { toast } from 'sonner';
-import { Lock, Mail, GraduationCap, AlertCircle, ArrowRight } from 'lucide-react';
+import { Lock, Mail, AlertCircle, ArrowRight } from 'lucide-react';
 import { loginSchema } from '@/validations/auth';
 
 export const Route = createFileRoute('/login')({ component: LoginPage });
@@ -42,7 +42,7 @@ function LoginPage() {
           <div className="text-center mb-8">
             <Link to="/" className="inline-flex items-center gap-2 mb-4 group">
               <div className="bg-gradient-primary rounded-xl p-2.5 shadow-glow">
-                <GraduationCap className="size-6 text-primary-foreground" />
+                <User className="size-6 text-primary-foreground" />
               </div>
             </Link>
             <h1 className="font-display text-2xl font-bold">Connexion espace Wasomi</h1>

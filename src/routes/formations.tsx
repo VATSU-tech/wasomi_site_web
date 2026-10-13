@@ -4,7 +4,6 @@ import {
   ArrowRight,
   Clock,
   Users,
-  Baby,
   Blocks,
   BookOpen,
   Microscope,
@@ -15,6 +14,7 @@ import {
   Check,
   Pyramid,
   Rocket,
+  BookA,
 } from "lucide-react";
 import {
   Dialog,
@@ -59,7 +59,7 @@ type FeeComponent = {
 
 type FormationDetail = {
   id: string | number;
-  icon: typeof Baby;
+  icon: typeof Code2;
   image: string;
   title: string;
   fullName: string;
@@ -117,7 +117,7 @@ const sharedFees = {
 const fallbackFormations: FormationDetail[] = [
   {
     id: 1,
-    icon: Baby,
+    icon: BookA,
     image: "/gallerie/IMG-20260519-WA0016.jpg",
     title: "Creche",
     fullName: "Crèche – Pré-éveil et socialisation",
@@ -282,7 +282,7 @@ function FormationsPage() {
 
         return {
           id: p.id,
-          icon: [Baby, Blocks, BookOpen, Rocket, Code2, Microscope][idx % 6],
+          icon: [BookA, Blocks, BookOpen, Rocket, Code2, Microscope][idx % 6],
           image: p.image || "/gallerie/IMG-20260519-WA0016.jpg",
           title: p.title,
           fullName: p.title,
