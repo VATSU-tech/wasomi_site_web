@@ -189,7 +189,7 @@ function BlogPage() {
                   key={p.id || p.title}
                   data-aos="fade-up"
                   data-aos-delay={(i % 3) * 80}
-                  className="group rounded-3xl overflow-hidden bg-card border border-border shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                  className="group rounded-3xl overflow-hidden bg-card border border-border shadow-sm hover:shadow-xl hover:rotate-1 transition-all duration-300"
                 >
                   <div className="relative aspect-[16/10] overflow-hidden">
                     <img

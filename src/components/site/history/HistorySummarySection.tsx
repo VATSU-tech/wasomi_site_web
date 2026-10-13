@@ -45,7 +45,7 @@ export function HistorySummarySection({ config }: HistorySummarySectionProps) {
               key={value.label}
               data-aos="fade-up"
               data-aos-delay={i * 100}
-              className="p-8 rounded-3xl bg-card border border-border hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
+              className="p-8 rounded-xl bg-card border border-border hover:shadow-xl transition-all duration-500 group"
             >
               <div className="size-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary transition-colors duration-300">
                 <span className="font-display text-xl font-bold text-primary group-hover:text-primary-foreground transition-colors">
@@ -76,7 +76,7 @@ export function HistorySummarySection({ config }: HistorySummarySectionProps) {
                 key={achievement.title}
                 data-aos="zoom-in"
                 data-aos-delay={i * 100}
-                className="p-7 rounded-3xl bg-card border border-border hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group text-center"
+                className="p-7 rounded-3xl bg-card border border-border hover:shadow-xl hover:rotate-2 transition-all duration-300 group text-center"
               >
                 <div className={`size-16 mx-auto rounded-2xl bg-gradient-to-br ${color.bg} flex items-center justify-center shadow-lg mb-4 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-300`}>
                   <IconComponent className="size-8 text-white" />
