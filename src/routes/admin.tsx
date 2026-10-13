@@ -37,6 +37,7 @@ import {
   HelpCircle,
   Sparkles,
   Info,
+  NotebookPen,
 } from 'lucide-react';
 
 export const Route = createFileRoute('/admin')({ component: AdminPage });
@@ -252,19 +253,19 @@ export function AdminPage() {
         components.length > 0
           ? components
           : [
-              fees.connectedFees && { id: 'legacy-connected', label: 'Frais connexes', amount: parseFloat(String(fees.connectedFees)) || 0 },
-              fees.labotech && { id: 'legacy-labotech', label: 'Labotech', amount: parseFloat(String(fees.labotech)) || 0 },
-              fees.infirmary && { id: 'legacy-infirmary', label: 'Infirmerie', amount: parseFloat(String(fees.infirmary)) || 0 },
-            ].filter(Boolean);
+            fees.connectedFees && { id: 'legacy-connected', label: 'Frais connexes', amount: parseFloat(String(fees.connectedFees)) || 0 },
+            fees.labotech && { id: 'legacy-labotech', label: 'Labotech', amount: parseFloat(String(fees.labotech)) || 0 },
+            fees.infirmary && { id: 'legacy-infirmary', label: 'Infirmerie', amount: parseFloat(String(fees.infirmary)) || 0 },
+          ].filter(Boolean);
 
       const installments =
         Array.isArray(fees.installments) && fees.installments.length > 0
           ? fees.installments
           : [
-              fees.firstInstallment && { id: 'inst-1', label: '1ère tranche', amount: String(fees.firstInstallment) },
-              fees.secondInstallment && { id: 'inst-2', label: '2ème tranche', amount: String(fees.secondInstallment) },
-              fees.thirdInstallment && { id: 'inst-3', label: '3ème tranche', amount: String(fees.thirdInstallment) },
-            ].filter(Boolean);
+            fees.firstInstallment && { id: 'inst-1', label: '1ère tranche', amount: String(fees.firstInstallment) },
+            fees.secondInstallment && { id: 'inst-2', label: '2ème tranche', amount: String(fees.secondInstallment) },
+            fees.thirdInstallment && { id: 'inst-3', label: '3ème tranche', amount: String(fees.thirdInstallment) },
+          ].filter(Boolean);
 
       setForm({
         title: item.title || '',
@@ -517,8 +518,8 @@ export function AdminPage() {
                   key={item.id}
                   onClick={() => setActiveTab(item.id)}
                   className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold text-left transition-smooth ${isActive
-                      ? 'bg-gradient-primary text-primary-foreground shadow-elegant'
-                      : 'text-muted-foreground hover:bg-surface-elevated hover:text-foreground'
+                    ? 'bg-gradient-primary text-primary-foreground shadow-elegant'
+                    : 'text-muted-foreground hover:bg-surface-elevated hover:text-foreground'
                     }`}
                 >
                   <div className="flex items-center gap-3">
@@ -528,8 +529,8 @@ export function AdminPage() {
                   {Boolean(item.badge && item.badge > 0) && (
                     <span
                       className={`px-2 py-0.5 rounded-full text-xs font-bold ${isActive
-                          ? 'bg-white/20 text-white'
-                          : 'bg-primary/20 text-primary'
+                        ? 'bg-white/20 text-white'
+                        : 'bg-primary/20 text-primary'
                         }`}
                     >
                       {item.badge}
@@ -561,6 +562,21 @@ export function AdminPage() {
                   </button>
                 </div>
 
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                  <div className="p-4 rounded-xl bg-surface-elevated border border-border">
+                    <p className="text-xs uppercase text-muted-foreground font-semibold">Formations</p>
+                    <p className="text-2xl font-bold mt-1 font-display">{stats?.total_programs ?? 0}</p>
+                  </div>
+                  <div className="p-4 rounded-xl bg-surface-elevated border border-border">
+                    <p className="text-xs uppercase text-muted-foreground font-semibold">Articles publiés</p>
+                    <p className="text-2xl font-bold mt-1 font-display">{stats?.total_posts ?? 0}</p>
+                  </div>
+                  <div className="p-4 rounded-xl bg-surface-elevated border border-border col-span-2 sm:col-span-1">
+                    <p className="text-xs uppercase text-muted-foreground font-semibold">Membres d’équipe</p>
+                    <p className="text-2xl font-bold mt-1 font-display">{stats?.total_staff ?? 0}</p>
+                  </div>
+                </div>
+
                 {/* Highlighted Alerts (Messages & Admissions non Lus) */}
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div
@@ -569,10 +585,10 @@ export function AdminPage() {
                   >
                     <div className="flex items-center justify-between">
                       <div className="size-12 rounded-xl bg-gradient-primary text-primary-foreground flex items-center justify-center shadow-glow">
-                        <GraduationCap className="size-6" />
+                        <Pencil className="size-6" />
                       </div>
                       {stats && stats.pending_admissions > 0 ? (
-                        <span className="px-3 py-1 rounded-full bg-amber-500/20 text-amber-500 font-bold text-xs animate-pulse">
+                        <span className="px-3 py-1 rounded-full bg-amber-500/20 text-amber-500 font-bold text-xs ">
                           {stats.pending_admissions} non ouverte{stats.pending_admissions > 1 ? 's' : ''} !
                         </span>
                       ) : (
@@ -603,7 +619,7 @@ export function AdminPage() {
                         <MessageSquare className="size-6" />
                       </div>
                       {stats && stats.unread_messages > 0 ? (
-                        <span className="px-3 py-1 rounded-full bg-amber-500/20 text-amber-500 font-bold text-xs animate-pulse">
+                        <span className="px-3 py-1 rounded-full bg-amber-500/20 text-amber-500 font-bold text-xs ">
                           {stats.unread_messages} non lu{stats.unread_messages > 1 ? 's' : ''} !
                         </span>
                       ) : (
@@ -640,7 +656,7 @@ export function AdminPage() {
                         <div className="space-y-3 p-4 rounded-2xl bg-surface border border-border">
                           <div className="flex items-center justify-between">
                             <h4 className="font-semibold text-sm flex items-center gap-2">
-                              <GraduationCap className="size-4 text-primary" />
+                              <NotebookPen className="size-4 text-primary" />
                               Préinscriptions ({stats?.recent_unopened_admissions?.length || 0})
                             </h4>
                             <button
@@ -708,25 +724,8 @@ export function AdminPage() {
                       </div>
                     </div>
                   )}
-
-                {/* Secondary Counters */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                  <div className="p-4 rounded-xl bg-surface-elevated border border-border">
-                    <p className="text-xs uppercase text-muted-foreground font-semibold">Formations</p>
-                    <p className="text-2xl font-bold mt-1 font-display">{stats?.total_programs ?? 0}</p>
-                  </div>
-                  <div className="p-4 rounded-xl bg-surface-elevated border border-border">
-                    <p className="text-xs uppercase text-muted-foreground font-semibold">Articles publiés</p>
-                    <p className="text-2xl font-bold mt-1 font-display">{stats?.total_posts ?? 0}</p>
-                  </div>
-                  <div className="p-4 rounded-xl bg-surface-elevated border border-border col-span-2 sm:col-span-1">
-                    <p className="text-xs uppercase text-muted-foreground font-semibold">Membres d’équipe</p>
-                    <p className="text-2xl font-bold mt-1 font-display">{stats?.total_staff ?? 0}</p>
-                  </div>
-                </div>
-
                 {/* Info Card */}
-                <div className="p-5 rounded-2xl bg-surface border border-border space-y-2 text-sm">
+                <div className="p-5 hidden rounded-2xl bg-surface border border-border space-y-2 text-sm">
                   <div className="flex items-center gap-2 font-semibold text-primary">
                     <Sparkles className="size-4" />
                     <span>Prise de contact rapide avec les étudiants</span>
@@ -1356,8 +1355,8 @@ export function AdminPage() {
         defaultFolder={
           pickerTargetField === 'cover_image' ? 'blog'
             : pickerTargetField === 'image' ? 'programs'
-            : pickerTargetField === 'avatar' ? 'staff'
-            : 'gallery'
+              : pickerTargetField === 'avatar' ? 'staff'
+                : 'gallery'
         }
       />
     </div>
