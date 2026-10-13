@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
-import { Menu, X, Moon, Sun, GraduationCap, Phone } from "lucide-react";
+import { Menu, X, Moon, Sun, Phone } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
 import { authStore } from "@/store/auth-store";
