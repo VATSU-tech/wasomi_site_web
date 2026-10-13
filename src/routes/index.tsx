@@ -593,7 +593,7 @@ function Home() {
               key={p.id}
               data-aos="fade-up"
               data-aos-delay={i * 90}
-              className="group rounded-3xl overflow-hidden bg-card border border-border hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+              className="group rounded-3xl overflow-hidden bg-card border border-border hover:shadow-xl transition-all duration-300"
             >
               <div className="relative aspect-[16/10] overflow-hidden">
                 <img
@@ -663,51 +663,6 @@ function Home() {
                 </figcaption>
               </figure>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ============ CTA PRÉINSCRIPTION ============ */}
-      <section className="py-14 sm:py-24 container hidden mx-auto px-4 max-w-7xl">
-        <div
-          className="relative overflow-hidden rounded-[2rem] p-8 md:p-16 text-center bg-gradient-primary text-primary-foreground shadow-2xl"
-          data-aos="zoom-in"
-        >
-          <div className="absolute -top-24 -left-24 size-72 rounded-full bg-white/10 blur-2xl" />
-          <div className="absolute -bottom-32 -right-16 size-80 rounded-full bg-white/10 blur-3xl" />
-          <div className="absolute top-10 right-16 hidden lg:block text-white/10 font-display text-8xl font-bold">
-            Wasomi
-          </div>
-          <div className="relative">
-            <div className="inline-flex px-4 py-1.5 rounded-full bg-white/15 border border-white/20 text-white/90 text-xs font-semibold tracking-widest uppercase mb-6">
-              Inscriptions ouvertes
-            </div>
-            <h2 className="font-display text-3xl md:text-5xl font-bold text-white tracking-tight leading-tight max-w-2xl mx-auto">
-              Prêt à confier l'avenir de votre enfant à une équipe qui croit en
-              lui ?
-            </h2>
-            <p className="mt-5 text-white/85 max-w-xl mx-auto text-base md:text-lg">
-              Remplissez une préinscription en quelques minutes. Notre équipe
-              d'admission vous recontacte rapidement pour un échange
-              personnalisé.
-            </p>
-            <div className="mt-9 flex flex-wrap justify-center gap-4">
-              <Link
-                to="/contact"
-                search={{ tab: "admission" }}
-                className="group inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-white text-primary font-bold shadow-lg hover:-translate-y-1 hover:shadow-2xl transition-all duration-300"
-              >
-                Préinscription en ligne
-                <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
-              <a
-                href="tel:+243997742651"
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-white/10 border border-white/25 text-white font-semibold hover:bg-white/20 hover:-translate-y-1 transition-all duration-300"
-              >
-                <Phone className="size-4" />
-                Nous appeler
-              </a>
-            </div>
           </div>
         </div>
       </section>
