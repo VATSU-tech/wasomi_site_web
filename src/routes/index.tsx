@@ -190,7 +190,7 @@ function Home() {
     <>
       {/* ============ HERO ============ */}
       
-      <section className="relative min-h-[92vh] flex items-center overflow-hidden">
+      <section className="relative min-h-[100vh] flex items-center overflow-hidden">
 
         {/* Background vidéo */}
         <div className="absolute inset-0">
@@ -344,10 +344,7 @@ function Home() {
           </div>
 
         </div>
-
       </section>
-     
-
 
       {/* ============ STATS BAR ============ */}
       <section className="relative bg-surface border-y border-border">
@@ -418,12 +415,12 @@ function Home() {
               pourquoi nous mettons l'accent sur l'éveil, les fondamentaux et
               la confiance.
             </p>
-            <p className="text-muted-foreground leading-relaxed mb-8">
+            {/* <p className="text-muted-foreground leading-relaxed mb-8">
               De la crèche à la 8ème année, nos enseignants accompagnent les
               élèves dans un parcours cohérent — avec des ateliers de sciences,
               une initiation aux technologies et une vie scolaire riche en
               activités.
-            </p>
+            </p> */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
                 "Effectifs raisonnables, suivi individualisé",
