@@ -15,6 +15,7 @@ import {
   Pyramid,
   Rocket,
   BookA,
+  Timer,
 } from "lucide-react";
 import {
   Dialog,
@@ -475,22 +476,73 @@ function FormationsPage() {
                               )}
 
                               {(f.fees.installments?.length || f.fees.firstInstallment) && (
-                                <div className="rounded-xl hidden bg-primary/10 border border-primary/20 px-4 py-3 mt-1">
-                                  <p className="text-xs text-muted-foreground mb-2 font-semibold uppercase tracking-wide">
-                                    Paiement en tranches
-                                  </p>
+                                <div className="rounded-2xl border border-primary/25 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent px-4 py-4 mt-2 space-y-3">
+                                  <div className="flex flex-wrap items-center justify-between gap-2">
+                                    <p className="inline-flex items-center gap-2 text-sm font-bold text-foreground">
+                                      <Timer className="size-4 text-primary" />
+                                      Échéances &amp; tranches de paiement
+                                    </p>
+                                    <span className="px-2.5 py-1 rounded-full bg-card border border-border text-[11px] font-semibold text-muted-foreground uppercase tracking-wide">
+                                      Flexible
+                                    </span>
+                                  </div>
+                                  <div className="overflow-hidden rounded-xl border border-border bg-card">
+                                    <table className="w-full text-sm">
+                                      <thead>
+                                        <tr className="border-b border-border bg-surface/80 text-left text-[11px] uppercase tracking-wide text-muted-foreground">
+                                          <th className="px-4 py-2.5 font-semibold">Échéance</th>
+                                          <th className="px-4 py-2.5 font-semibold text-right">Montant</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {(f.fees.installments && f.fees.installments.length > 0
+                                          ? f.fees.installments.map((inst, idx) => ({
+                                              key: inst.id || inst.label,
+                                              label: inst.label,
+                                              amount: inst.amount,
+                                              idx,
+                                            }))
+                                          : [
+                                              { key: "t1", label: "1ère tranche", amount: f.fees.firstInstallment, idx: 0 },
+                                              { key: "t2", label: "2ème tranche", amount: f.fees.secondInstallment, idx: 1 },
+                                              { key: "t3", label: "3ème tranche", amount: f.fees.thirdInstallment, idx: 2 },
+                                            ].filter((row) => Boolean(row.amount))
+                                        ).map((row) => (
+                                          <tr key={row.key} className="border-b border-border last:border-0">
+                                            <td className="px-4 py-3">
+                                              <span className="inline-flex items-center gap-2 font-medium text-foreground">
+                                                <span className="inline-flex size-6 items-center justify-center rounded-full bg-primary/15 text-[11px] font-bold text-primary">
+                                                  {row.idx + 1}
+                                                </span>
+                                                {row.label}
+                                              </span>
+                                            </td>
+                                            <td className="px-4 py-3 text-right">
+                                              <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-3 py-1 text-xs font-bold tabular-nums text-emerald-700 dark:text-emerald-400">
+                                                <Check className="size-3" />
+                                                {row.amount}
+                                              </span>
+                                            </td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </div>
                                   <div className="flex flex-wrap gap-2">
                                     {(f.fees.installments && f.fees.installments.length > 0
-                                      ? f.fees.installments.map((inst) => [inst.label, inst.amount] as const)
+                                      ? f.fees.installments
                                       : [
-                                          ["1ère", f.fees.firstInstallment],
-                                          ["2ème", f.fees.secondInstallment],
-                                          ["3ème", f.fees.thirdInstallment],
-                                        ]
-                                    ).map(([label, value]) => (
-                                      <span key={label as string} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card border border-border text-xs font-semibold">
+                                          { id: "t1", label: "1ère", amount: f.fees.firstInstallment },
+                                          { id: "t2", label: "2ème", amount: f.fees.secondInstallment },
+                                          { id: "t3", label: "3ème", amount: f.fees.thirdInstallment },
+                                        ].filter((inst) => Boolean(inst.amount))
+                                    ).map((inst) => (
+                                      <span
+                                        key={inst.id || inst.label}
+                                        className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card/80 px-3 py-1.5 text-xs font-semibold shadow-sm"
+                                      >
                                         <Check className="size-3 text-emerald-500" />
-                                        {label}: {value}
+                                        {inst.label}: {inst.amount}
                                       </span>
                                     ))}
                                   </div>
