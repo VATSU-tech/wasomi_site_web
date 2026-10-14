@@ -84,6 +84,17 @@ export interface ClassTree {
   sections: ClassTreeSection[];
 }
 
+export interface SiteKpiItem {
+  key: string;
+  label: string;
+  value: number;
+  suffix?: string;
+}
+
+export interface SiteKpis {
+  items: SiteKpiItem[];
+}
+
 export interface PublicSettings {
   app_name?: string;
   title?: string;
@@ -98,8 +109,19 @@ export interface PublicSettings {
   hero_title?: string;
   hero_subtitle?: string;
   social_links?: SocialLinks;
+  /** Compteurs publics affichés sur l'accueil */
+  site_kpis?: SiteKpis;
   [key: string]: unknown;
 }
+
+export const DEFAULT_SITE_KPIS: SiteKpis = {
+  items: [
+    { key: 'students', label: 'Élèves accompagnés', value: 150, suffix: '+' },
+    { key: 'options', label: 'Options / cycles', value: 4, suffix: '' },
+    { key: 'teachers', label: 'Enseignants & agents', value: 10, suffix: '+' },
+    { key: 'success_rate', label: 'Taux de réussite', value: 98, suffix: '%' },
+  ],
+};
 
 export interface ProgramModule {
   id?: string | number;

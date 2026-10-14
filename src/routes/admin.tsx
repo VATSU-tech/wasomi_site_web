@@ -12,6 +12,7 @@ import { StatusFilterPills } from '@/components/admin/StatusFilterPills';
 import { AdminHeroPanel } from '@/components/admin/AdminHeroPanel';
 import { AdminReviewsPanel } from '@/components/admin/AdminReviewsPanel';
 import { AdminClassesPanel } from '@/components/admin/AdminClassesPanel';
+import { AdminKpisPanel } from '@/components/admin/AdminKpisPanel';
 import {
   LayoutDashboard,
   BookOpen,
@@ -48,6 +49,7 @@ import {
   School,
   GripVertical,
   Timer,
+  BarChart3,
 } from 'lucide-react';
 
 export const Route = createFileRoute('/admin')({ component: AdminPage });
@@ -63,7 +65,8 @@ type Tab =
   | 'messages'
   | 'hero'
   | 'reviews'
-  | 'classes';
+  | 'classes'
+  | 'kpis';
 
 interface Stats {
   unread_messages: number;
@@ -517,7 +520,7 @@ export function AdminPage() {
     );
   }
 
-  const cmsPanelTabs: Tab[] = ['hero', 'reviews', 'classes'];
+  const cmsPanelTabs: Tab[] = ['hero', 'reviews', 'classes', 'kpis'];
   const isCmsPanel = cmsPanelTabs.includes(activeTab);
   const canCreate = ['posts', 'programs', 'staff', 'gallery'].includes(activeTab);
 
@@ -612,6 +615,7 @@ export function AdminPage() {
                 { id: 'posts' as const, label: 'Articles Blog', icon: FileText, badge: undefined },
                 { id: 'reviews' as const, label: 'Avis Publics', icon: Star, badge: undefined },
                 { id: 'classes' as const, label: 'Classes ouvertes', icon: School, badge: undefined },
+                { id: 'kpis' as const, label: 'Compteurs site', icon: BarChart3, badge: undefined },
                 { id: 'gallery' as const, label: 'Galerie', icon: ImageIcon, badge: undefined },
                 { id: 'staff' as const, label: 'Équipe', icon: Users, badge: undefined },
                 { id: 'media' as const, label: 'Médias', icon: Upload, badge: undefined },
@@ -846,6 +850,7 @@ export function AdminPage() {
             {activeTab === 'hero' && <AdminHeroPanel />}
             {activeTab === 'reviews' && <AdminReviewsPanel />}
             {activeTab === 'classes' && <AdminClassesPanel />}
+            {activeTab === 'kpis' && <AdminKpisPanel />}
 
             {/* OTHER TABS */}
             {activeTab !== 'overview' && !isCmsPanel && (

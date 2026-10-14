@@ -122,6 +122,14 @@ async function main() {
     phone: '+243 997 742 651',
     address: '5 Rue Sivirwa Q.Residentiel, C.Bungulu, Beni',
     social_links: { facebook: '#', twitter: '#', instagram: '#', linkedin: '#' },
+    site_kpis: {
+      items: [
+        { key: 'students', label: 'Élèves accompagnés', value: 150, suffix: '+' },
+        { key: 'options', label: 'Options / cycles', value: 4, suffix: '' },
+        { key: 'teachers', label: 'Enseignants & agents', value: 10, suffix: '+' },
+        { key: 'success_rate', label: 'Taux de réussite', value: 98, suffix: '%' },
+      ],
+    },
   };
   for (const [key, value] of Object.entries(defaultSettings)) {
     const existing = await queryOne(`SELECT id FROM Setting WHERE \`key\` = :key`, { key });
@@ -321,6 +329,59 @@ async function main() {
     }
   } catch (e) {
     console.warn('Seed HeroSlide ignoré (table absente ?):', e.message);
+  }
+
+  // Avis publics validés
+  try {
+    const reviewCount = await queryOne(`SELECT COUNT(*) AS c FROM Review WHERE deleted_at IS NULL`);
+    if (Number(reviewCount?.c || 0) === 0) {
+      const reviews = [
+        {
+          author_name: 'Maman de Naomi',
+          author_role: 'Maternelle — Grande section',
+          content:
+            'Ma fille rayonne depuis qu’elle est à Wasomi. Les éducatrices sont attentives, l’école est bien organisée, et je vois ses progrès chaque semaine.',
+          rating: 5,
+          featured: 1,
+        },
+        {
+          author_name: 'Papa de Jonathan',
+          author_role: '3ème primaire',
+          content:
+            'Ce que j’apprécie, c’est la proximité : on connaît les enseignants, on est informé de la vie de l’école, et les résultats en classe parlent d’eux-mêmes.',
+          rating: 5,
+          featured: 1,
+        },
+        {
+          author_name: 'Tante de Grace',
+          author_role: '1ère année primaire',
+          content:
+            'Les ateliers de sciences et le cadre sécurisé ont fait toute la différence pour notre famille. Je recommande Wasomi sans hésiter.',
+          rating: 5,
+          featured: 1,
+        },
+      ];
+      for (let i = 0; i < reviews.length; i++) {
+        const r = reviews[i];
+        await query(
+          `INSERT INTO Review
+            (id, author_name, author_role, content, rating, status, is_featured, sort_order, created_at, updated_at)
+           VALUES
+            (:id, :authorName, :authorRole, :content, :rating, 'approved', :featured, :sortOrder, NOW(3), NOW(3))`,
+          {
+            id: createId(),
+            authorName: r.author_name,
+            authorRole: r.author_role,
+            content: r.content,
+            rating: r.rating,
+            featured: r.featured,
+            sortOrder: i,
+          },
+        );
+      }
+    }
+  } catch (e) {
+    console.warn('Seed Review ignoré (table absente ?):', e.message);
   }
 
   // Article blog de démonstration

@@ -6,11 +6,8 @@ import {
   Blocks,
   HeartHandshake,
   Lightbulb,
-  Microscope,
   ShieldCheck,
-  Sparkles,
   Trophy,
-  Users,
   Pyramid,
   Calendar,
 } from "lucide-react";
@@ -21,6 +18,8 @@ import { CountUp } from "@/components/site/count-up";
 import { HeroCarousel } from "@/components/site/HeroCarousel";
 import { NewsFeatured } from "@/components/site/NewsFeatured";
 import { ReviewsSection } from "@/components/site/ReviewsSection";
+import { usePublicSettingsQuery } from "@/hooks/useWasomiApi";
+import { normalizeSiteKpis } from "@/lib/site-kpis";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -109,14 +108,10 @@ const values = [
   },
 ];
 
-const stats = [
-  { val: 150, suf: "+", label: "Élèves accompagnés", icon: Users },
-  { val: 4, suf: "", label: "Cycles d'enseignement", icon: BookOpen },
-  { val: 2, suf: "", label: "Ateliers scientifiques", icon: Microscope },
-  { val: 10, suf: "+", label: "Enseignants & éducateurs", icon: Sparkles },
-];
-
 function Home() {
+  const { data: settings } = usePublicSettingsQuery();
+  const stats = normalizeSiteKpis(settings?.site_kpis).items;
+
   return (
     <>
       <HeroCarousel />
@@ -128,14 +123,14 @@ function Home() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {stats.map((s, i) => (
               <div
-                key={s.label}
+                key={s.key}
                 className="text-center"
                 data-aos="fade-up"
                 data-aos-delay={i * 80}
               >
                 <CountUp
-                  end={s.val}
-                  suffix={s.suf}
+                  end={s.value}
+                  suffix={s.suffix || ""}
                   className="font-display text-4xl md:text-5xl font-bold text-primary"
                 />
                 <div className="text-sm text-muted-foreground mt-2 font-medium">
