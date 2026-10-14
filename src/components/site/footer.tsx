@@ -39,7 +39,7 @@ export function Footer() {
       label: "Préinscription",
     },
     { to: "/formations" as const, label: "Frais scolaires" },
-    { to: "/app/login" as const, label: "Espace famille" },
+    { to: "/login" as const, label: "Administration" },
   ];
 
   return (

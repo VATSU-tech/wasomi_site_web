@@ -138,44 +138,31 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const isAppPortal = pathname.startsWith('/app');
 
   return (
     <ThemeProvider>
       <AppQueryProvider>
-      <AosProvider>
-        {isAppPortal ? (
-          <div data-theme="school" className="min-h-screen">
-            <Outlet />
+        <AosProvider>
+          <div className="scroll-progress" />
+          <a href="#main-content" className="skip-to-content">
+            Aller au contenu
+          </a>
+          <div className="site-shell min-h-screen flex flex-col overflow-x-clip">
+            <Navbar />
+            <main
+              id="main-content"
+              className={cn("flex-1 min-w-0", pathname === "/" ? "" : "pt-24")}
+            >
+              <div key={pathname} className="animate-page-in">
+                <Outlet />
+              </div>
+            </main>
+            <Footer />
+            <AudioStoryWidget />
+            <BackToTop />
             <Toaster />
           </div>
-        ) : (
-          <>
-            <div className="scroll-progress" />
-            <a href="#main-content" className="skip-to-content">
-              Aller au contenu
-            </a>
-            <div className="site-shell min-h-screen flex flex-col overflow-x-clip">
-              <Navbar />
-              <main
-                id="main-content"
-                className={cn("flex-1 min-w-0", pathname === "/" ? "" : "pt-24")}
-              >
-                <div
-                  key={pathname}
-                  className="animate-page-in"
-                >
-                  <Outlet />
-                </div>
-              </main>
-              <Footer />
-              <AudioStoryWidget />
-              <BackToTop />
-              <Toaster />
-            </div>
-          </>
-        )}
-      </AosProvider>
+        </AosProvider>
       </AppQueryProvider>
     </ThemeProvider>
   );

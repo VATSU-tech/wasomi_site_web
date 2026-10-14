@@ -1,8 +1,8 @@
 import { createFileRoute, useNavigate, Link } from '@tanstack/react-router';
 import { useState } from 'react';
-import { useLoginMutation } from '@/features/auth/hooks';
+import { useLoginMutation } from '@/hooks/useAuth';
 import { toast } from 'sonner';
-import { Lock, Mail, AlertCircle, ArrowRight } from 'lucide-react';
+import { Lock, Mail, AlertCircle, ArrowRight, User } from 'lucide-react';
 import { loginSchema } from '@/validations/auth';
 
 export const Route = createFileRoute('/login')({ component: LoginPage });
