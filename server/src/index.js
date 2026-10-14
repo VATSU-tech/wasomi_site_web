@@ -11,6 +11,7 @@ import { csrfProtection } from "./middleware/csrf.js";
 import authRoutes from "./routes/auth.js";
 import publicRoutes from "./routes/public.js";
 import adminRoutes from "./routes/admin.js";
+import { publicCmsRouter, adminCmsRouter } from "./routes/cms-extensions.js";
 import { createId } from "./utils/helpers.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -60,7 +61,9 @@ const api = express.Router();
 api.use(csrfProtection);
 api.use("/auth", authRoutes);
 api.use(publicRoutes);
+api.use(publicCmsRouter);
 api.use("/admin", adminRoutes);
+api.use("/admin", adminCmsRouter);
 
 app.use(env.apiPrefix, api);
 

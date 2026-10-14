@@ -260,6 +260,69 @@ async function main() {
     }
   }
 
+  // Classes ouvertes (cascade inscription)
+  try {
+    const classCount = await queryOne(`SELECT COUNT(*) AS c FROM SchoolClass WHERE deleted_at IS NULL`);
+    if (Number(classCount?.c || 0) === 0) {
+      const classes = [
+        { section: 'Crèche', option_name: null, class_name: 'Crèche (Pré-éveil)', label: 'Crèche (Pré-éveil & Garderie)' },
+        { section: 'Maternelle', option_name: null, class_name: '1ère Maternelle', label: '1ère Maternelle (Petite Section)' },
+        { section: 'Maternelle', option_name: null, class_name: '2ème Maternelle', label: '2ème Maternelle (Moyenne Section)' },
+        { section: 'Maternelle', option_name: null, class_name: '3ème Maternelle', label: '3ème Maternelle (Grande Section)' },
+        { section: 'Primaire', option_name: null, class_name: '1ère Primaire', label: '1ère Année Primaire' },
+        { section: 'Primaire', option_name: null, class_name: '2ème Primaire', label: '2ème Année Primaire' },
+        { section: 'Primaire', option_name: null, class_name: '3ème Primaire', label: '3ème Année Primaire' },
+        { section: 'Primaire', option_name: null, class_name: '4ème Primaire', label: '4ème Année Primaire' },
+        { section: 'Primaire', option_name: null, class_name: '5ème Primaire', label: '5ème Année Primaire' },
+        { section: 'Primaire', option_name: null, class_name: '6ème Primaire', label: '6ème Année Primaire' },
+        { section: 'Éducation de base', option_name: null, class_name: '7ème Année', label: '7ème Année — Éducation de base' },
+        { section: 'Éducation de base', option_name: null, class_name: '8ème Année', label: '8ème Année — Éducation de base' },
+      ];
+      for (let i = 0; i < classes.length; i++) {
+        const c = classes[i];
+        await query(
+          `INSERT INTO SchoolClass
+            (id, section, option_name, class_name, label, is_open, sort_order, created_at, updated_at)
+           VALUES
+            (:id, :section, :optionName, :className, :label, 1, :sortOrder, NOW(3), NOW(3))`,
+          {
+            id: createId(),
+            section: c.section,
+            optionName: c.option_name,
+            className: c.class_name,
+            label: c.label,
+            sortOrder: i,
+          },
+        );
+      }
+    }
+  } catch (e) {
+    console.warn('Seed SchoolClass ignoré (table absente ?):', e.message);
+  }
+
+  // Hero slide par défaut
+  try {
+    const heroCount = await queryOne(`SELECT COUNT(*) AS c FROM HeroSlide WHERE deleted_at IS NULL`);
+    if (Number(heroCount?.c || 0) === 0) {
+      await query(
+        `INSERT INTO HeroSlide
+          (id, title, subtitle, video_url, cta_label, cta_href, sort_order, is_active, created_at, updated_at)
+         VALUES
+          (:id, :title, :subtitle, :videoUrl, :ctaLabel, :ctaHref, 0, 1, NOW(3), NOW(3))`,
+        {
+          id: createId(),
+          title: 'Une école qui fait grandir chaque enfant',
+          subtitle: 'De la crèche aux humanités, pédagogie vivante et cadre de confiance.',
+          videoUrl: '/gallerie/vid.mp4',
+          ctaLabel: 'Préinscrire mon enfant',
+          ctaHref: '/contact?tab=admission',
+        },
+      );
+    }
+  } catch (e) {
+    console.warn('Seed HeroSlide ignoré (table absente ?):', e.message);
+  }
+
   // Article blog de démonstration
   const postCount = await queryOne(`SELECT COUNT(*) AS c FROM Post WHERE deleted_at IS NULL`);
   if (Number(postCount?.c || 0) === 0) {
