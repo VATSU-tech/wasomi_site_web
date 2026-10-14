@@ -1,6 +1,9 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
+import { createFileRoute } from "@tanstack/react-router";
 import { Calendar, AlertCircle, ArrowRight } from "lucide-react";
 import { usePostsQuery } from "@/hooks/useWasomiApi";
+import { PostDetailModal } from "@/components/site/PostDetailModal";
+import type { Post } from "@/types/domain";
 
 export const Route = createFileRoute("/blog")({
   head: () => ({
@@ -22,82 +25,110 @@ export const Route = createFileRoute("/blog")({
   component: BlogPage,
 });
 
-const fallbackPosts = [
+const fallbackPosts: Post[] = [
   {
     id: "1",
     title: "Rentrée 2026 : ce qui change cette année",
-    date: "12 Septembre 2026",
-    category: "Actualités",
-    excerpt:
+    slug: "rentree-2026",
+    summary:
       "Nouveaux aménagements, nouvelle dynamique : bienvenue à tous pour une belle année scolaire.",
-    img: "/gallerie/IMG-20260519-WA0002.jpg",
+    content:
+      "Nouveaux aménagements, nouvelle dynamique : bienvenue à tous pour une belle année scolaire.\n\nCette rentrée marque plusieurs nouveautés au Complexe Scolaire Wasomi : espaces rénovés, ateliers renforcés et une communication encore plus fluide avec les familles.",
+    category: "Actualités",
+    cover_image: "/gallerie/IMG-20260519-WA0002.jpg",
+    published_at: "2026-09-12",
+    reading_time: "3 min",
   },
   {
     id: "2",
     title: "5 conseils pour réussir son année scolaire",
-    date: "28 Mars 2026",
+    slug: "conseils-reussite",
+    summary: "Méthode, organisation et état d'esprit : nos meilleures pratiques.",
+    content:
+      "Méthode, organisation et état d'esprit : nos meilleures pratiques pour accompagner chaque enfant vers la réussite.\n\n1. Un rythme de travail régulier\n2. Un espace calme pour les devoirs\n3. Un dialogue ouvert avec les enseignants\n4. Des pauses et du sommeil suffisants\n5. La célébration des petits progrès",
     category: "Conseils",
-    excerpt:
-      "Méthode, organisation et état d'esprit : nos meilleures pratiques.",
-    img: "/gallerie/IMG-20260519-WA0021.jpg",
+    cover_image: "/gallerie/IMG-20260519-WA0021.jpg",
+    published_at: "2026-03-28",
+    reading_time: "4 min",
   },
   {
     id: "3",
     title: "Lipanda Fiesta : la fête de l'indépendance chez Wasomi",
-    date: "30 Juin 2026",
-    category: "Événement",
-    excerpt:
+    slug: "lipanda-fiesta",
+    summary:
       "Compétitions, jeux et culture : un moment fort qui rassemble toute l'école.",
-    img: "/gallerie/festival lipanda fiesta.jpg",
+    content:
+      "Compétitions, jeux et culture : un moment fort qui rassemble toute l'école.\n\nLa Lipanda Fiesta célèbre l'indépendance dans la joie, avec des ateliers, des présentations et des activités sportives pour tous les cycles.",
+    category: "Événement",
+    cover_image: "/gallerie/festival lipanda fiesta.jpg",
+    published_at: "2026-06-30",
+    reading_time: "2 min",
   },
   {
     id: "4",
     title: "Notre laboratoire de sciences, un espace pour expérimenter",
-    date: "2 Mars 2026",
-    category: "Événement",
-    excerpt:
+    slug: "labo-sciences",
+    summary:
       "Un espace équipé pour permettre aux élèves des expériences pratiques dès le primaire.",
-    img: "/gallerie/IMG-20260519-WA0067.jpg",
+    content:
+      "Un espace équipé pour permettre aux élèves des expériences pratiques dès le primaire.\n\nChimie, observation et curiosité : le laboratoire Wasomi transforme les notions abstraites en découvertes concrètes.",
+    category: "Événement",
+    cover_image: "/gallerie/IMG-20260519-WA0067.jpg",
+    published_at: "2026-03-02",
+    reading_time: "3 min",
   },
   {
     id: "5",
     title: "Visite à l'aéroport de Mavivi : une expérience inoubliable",
-    date: "20 Février 2026",
-    category: "Visite",
-    excerpt:
+    slug: "visite-mavivi",
+    summary:
       "Nos élèves ont découvert les coulisses de l'aviation et les métiers du secteur.",
-    img: "/gallerie/sortie visite aeroport mavivi.jpg",
+    content:
+      "Nos élèves ont découvert les coulisses de l'aviation et les métiers du secteur lors d'une sortie pédagogique à l'aéroport de Mavivi.",
+    category: "Visite",
+    cover_image: "/gallerie/sortie visite aeroport mavivi.jpg",
+    published_at: "2026-02-20",
+    reading_time: "2 min",
   },
   {
     id: "6",
     title: "Colonie de vacances : s'amuser et apprendre",
-    date: "10 Août 2026",
-    category: "Vacances",
-    excerpt:
+    slug: "colonie-vacances",
+    summary:
       "Une expérience enrichissante où les enfants s'amusent tout en développant de nouvelles compétences.",
-    img: "/gallerie/colonie de vaccances.jpg",
+    content:
+      "Une expérience enrichissante où les enfants s'amusent tout en développant de nouvelles compétences, dans un cadre sécurisé et bienveillant.",
+    category: "Vacances",
+    cover_image: "/gallerie/colonie de vaccances.jpg",
+    published_at: "2026-08-10",
+    reading_time: "2 min",
   },
 ];
 
+function formatDate(iso?: string) {
+  if (!iso) return "Date récente";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleDateString("fr-FR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
 function BlogPage() {
   const { data, isLoading, isError, error } = usePostsQuery();
+  const [selected, setSelected] = useState<Post | null>(null);
 
-  const posts = data?.items && data.items.length > 0
-    ? data.items.map((p) => ({
-        id: String(p.id),
-        title: p.title,
-        date: p.published_at ? new Date(p.published_at).toLocaleDateString('fr-FR', { day: "numeric", month: "long", year: "numeric" }) : "Date récente",
-        category: p.category || "Actualités",
-        excerpt: p.summary || p.content?.slice(0, 140) || "",
-        img: p.cover_image || "/gallerie/IMG-20260519-WA0002.jpg",
-      }))
-    : fallbackPosts;
+  const posts = useMemo(() => {
+    if (data?.items && data.items.length > 0) return data.items;
+    return fallbackPosts;
+  }, [data]);
 
   const [featured, ...rest] = posts;
 
   return (
     <>
-      {/* Hero */}
       <section className="relative bg-surface overflow-hidden">
         <div className="container mx-auto px-4 max-w-7xl py-14 text-center">
           <span className="badge-soft">La vie de l'école</span>
@@ -137,7 +168,6 @@ function BlogPage() {
 
         {!isLoading && posts.length > 0 && (
           <>
-            {/* Featured post */}
             {featured && (
               <article
                 data-aos="fade-up"
@@ -146,7 +176,7 @@ function BlogPage() {
                 <div className="grid lg:grid-cols-2">
                   <div className="relative aspect-[16/10] lg:aspect-auto overflow-hidden">
                     <img
-                      src={featured.img}
+                      src={featured.cover_image || "/gallerie/IMG-20260519-WA0002.jpg"}
                       alt={featured.title}
                       loading="lazy"
                       className="size-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -158,70 +188,71 @@ function BlogPage() {
                   <div className="p-8 lg:p-12 flex flex-col justify-center">
                     <div className="inline-flex items-center gap-2 text-xs text-muted-foreground mb-4">
                       <Calendar className="size-3.5 text-primary" />
-                      {featured.date}
+                      {formatDate(featured.published_at || featured.created_at)}
                       <span className="px-2.5 py-0.5 rounded-full bg-primary/10 text-primary text-[11px] font-bold uppercase tracking-wide">
-                        {featured.category}
+                        {featured.category || "Actualités"}
                       </span>
                     </div>
                     <h2 className="font-display text-2xl md:text-3xl font-bold leading-snug mb-4 group-hover:text-primary transition-colors">
                       {featured.title}
                     </h2>
                     <p className="text-muted-foreground leading-relaxed mb-7">
-                      {featured.excerpt}
+                      {featured.summary || featured.content?.slice(0, 160)}
                     </p>
-                    <Link
-                      to="/contact"
-                      search={{ tab: "contact" }}
+                    <button
+                      type="button"
+                      onClick={() => setSelected(featured)}
                       className="inline-flex items-center gap-2 font-semibold text-primary link-underline self-start"
                     >
                       En savoir plus
                       <ArrowRight className="size-4" />
-                    </Link>
+                    </button>
                   </div>
                 </div>
               </article>
             )}
 
-            {/* Rest of posts */}
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {rest.map((p, i) => (
                 <article
-                  key={p.id || p.title}
+                  key={String(p.id || p.slug || p.title)}
                   data-aos="fade-up"
                   data-aos-delay={(i % 3) * 80}
                   className="group rounded-3xl overflow-hidden bg-card border border-border shadow-sm hover:shadow-xl hover:rotate-1 transition-all duration-300"
                 >
-                  <div className="relative aspect-[16/10] overflow-hidden">
-                    <img
-                      src={p.img}
-                      alt={p.title}
-                      loading="lazy"
-                      className="size-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                    <span className="absolute top-4 left-4 px-3 py-1 rounded-full bg-card/90 backdrop-blur text-xs font-semibold text-foreground shadow">
-                      {p.category}
-                    </span>
-                  </div>
-                  <div className="p-6">
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
-                      <Calendar className="size-3.5" />
-                      {p.date}
+                  <button
+                    type="button"
+                    onClick={() => setSelected(p)}
+                    className="block w-full text-left"
+                  >
+                    <div className="relative aspect-[16/10] overflow-hidden">
+                      <img
+                        src={p.cover_image || "/gallerie/IMG-20260519-WA0002.jpg"}
+                        alt={p.title}
+                        loading="lazy"
+                        className="size-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                      <span className="absolute top-4 left-4 px-3 py-1 rounded-full bg-card/90 backdrop-blur text-xs font-semibold text-foreground shadow">
+                        {p.category || "Actualités"}
+                      </span>
                     </div>
-                    <h3 className="font-display text-lg font-bold leading-snug mb-2 group-hover:text-primary transition-colors">
-                      {p.title}
-                    </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 mb-4">
-                      {p.excerpt}
-                    </p>
-                    <Link
-                      to="/contact"
-                      search={{ tab: "contact" }}
-                      className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary link-underline"
-                    >
-                      Lire la suite
-                      <ArrowRight className="size-3.5" />
-                    </Link>
-                  </div>
+                    <div className="p-6">
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
+                        <Calendar className="size-3.5" />
+                        {formatDate(p.published_at || p.created_at)}
+                      </div>
+                      <h3 className="font-display text-lg font-bold leading-snug mb-2 group-hover:text-primary transition-colors">
+                        {p.title}
+                      </h3>
+                      <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 mb-4">
+                        {p.summary || p.content?.slice(0, 120)}
+                      </p>
+                      <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary link-underline">
+                        Lire la suite
+                        <ArrowRight className="size-3.5" />
+                      </span>
+                    </div>
+                  </button>
                 </article>
               ))}
             </div>
@@ -234,6 +265,14 @@ function BlogPage() {
           </div>
         )}
       </section>
+
+      <PostDetailModal
+        post={selected}
+        open={Boolean(selected)}
+        onOpenChange={(open) => {
+          if (!open) setSelected(null);
+        }}
+      />
     </>
   );
 }
