@@ -48,19 +48,27 @@ export function HeroCarousel() {
             >
               {s.video_url ? (
                 <video
+                  key={`media-${s.id}-${active ? "on" : "off"}`}
                   src={s.video_url}
                   autoPlay
                   muted
                   loop
                   playsInline
                   preload={active ? "auto" : "none"}
-                  className="size-full object-cover slide-in-home"
+                  className={cn(
+                    "size-full object-cover",
+                    active && "slide-in-home",
+                  )}
                 />
               ) : (
                 <img
+                  key={`media-${s.id}-${active ? "on" : "off"}`}
                   src={s.image_url || "/gallerie/vue-generale-campus-wasomi.jpg"}
                   alt=""
-                  className="size-full object-cover slide-in-home"
+                  className={cn(
+                    "size-full object-cover",
+                    active && "slide-in-home",
+                  )}
                 />
               )}
             </div>
