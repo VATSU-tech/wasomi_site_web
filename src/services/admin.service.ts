@@ -93,4 +93,33 @@ export const adminService = {
 
   // Audit Logs
   getAuditLogs: () => apiClient.get<ApiResponse<unknown[]>>('/admin/audit-logs'),
+
+  // CMS extensions (hero, reviews, classes, reorder)
+  getHeroSlides: () => apiClient.get<ApiResponse<unknown[]>>('/admin/hero-slides'),
+  createHeroSlide: (data: unknown) => apiClient.post<ApiResponse<unknown>>('/admin/hero-slides', data),
+  updateHeroSlide: (id: string | number, data: unknown) =>
+    apiClient.patch<ApiResponse<unknown>>(`/admin/hero-slides/${id}`, data),
+  deleteHeroSlide: (id: string | number) =>
+    apiClient.delete<ApiResponse<null>>(`/admin/hero-slides/${id}`),
+  reorderHeroSlides: (ids: Array<string | number>) =>
+    apiClient.post<ApiResponse<{ reordered: number }>>('/admin/hero-slides/reorder', { ids }),
+
+  getReviews: (status?: string) =>
+    apiClient.get<ApiResponse<unknown[]>>(
+      `/admin/reviews${status ? `?status=${encodeURIComponent(status)}` : ''}`,
+    ),
+  updateReview: (id: string | number, data: unknown) =>
+    apiClient.patch<ApiResponse<unknown>>(`/admin/reviews/${id}`, data),
+  deleteReview: (id: string | number) =>
+    apiClient.delete<ApiResponse<null>>(`/admin/reviews/${id}`),
+
+  getClasses: () => apiClient.get<ApiResponse<unknown[]>>('/admin/classes'),
+  createClass: (data: unknown) => apiClient.post<ApiResponse<unknown>>('/admin/classes', data),
+  updateClass: (id: string | number, data: unknown) =>
+    apiClient.patch<ApiResponse<unknown>>(`/admin/classes/${id}`, data),
+  deleteClass: (id: string | number) =>
+    apiClient.delete<ApiResponse<null>>(`/admin/classes/${id}`),
+
+  reorderPrograms: (ids: Array<string | number>) =>
+    apiClient.post<ApiResponse<{ reordered: number }>>('/admin/programs/reorder', { ids }),
 };

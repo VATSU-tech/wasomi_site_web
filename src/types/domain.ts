@@ -27,6 +27,61 @@ export interface SocialLinks {
   instagram?: string;
   linkedin?: string;
   youtube?: string;
+  whatsapp?: string;
+}
+
+export interface HeroSlide {
+  id: string | number;
+  title?: string | null;
+  subtitle?: string | null;
+  image_url?: string | null;
+  video_url?: string | null;
+  cta_label?: string | null;
+  cta_href?: string | null;
+  sort_order?: number;
+  is_active?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface Review {
+  id: string | number;
+  author_name: string;
+  author_role?: string | null;
+  content: string;
+  rating: number;
+  status?: 'pending' | 'approved' | 'rejected' | string;
+  is_featured?: boolean;
+  sort_order?: number;
+  admin_notes?: string | null;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface SchoolClass {
+  id: string | number;
+  section: string;
+  option_name?: string | null;
+  class_name: string;
+  label?: string | null;
+  is_open?: boolean;
+  sort_order?: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface ClassTreeOption {
+  name: string | null;
+  classes: SchoolClass[];
+}
+
+export interface ClassTreeSection {
+  name: string;
+  options: ClassTreeOption[];
+}
+
+export interface ClassTree {
+  sections: ClassTreeSection[];
 }
 
 export interface PublicSettings {
@@ -89,6 +144,7 @@ export interface Program {
   schedule?: Record<string, string> | null;
   students?: string;
   color?: string;
+  sort_order?: number;
   createdAt?: string;
   updatedAt?: string;
 }

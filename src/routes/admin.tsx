@@ -1,12 +1,17 @@
 import { createFileRoute, useNavigate, Link } from '@tanstack/react-router';
 import { useState, useEffect, useCallback } from 'react';
-import { useMeQuery, useLogoutMutation } from '@/features/auth/hooks';
+import { useMeQuery, useLogoutMutation } from '@/hooks/useAuth';
 import { authStore } from '@/store/auth-store';
 import { adminService } from '@/services/admin.service';
 import { toast } from 'sonner';
 import { AdmissionRequest, MediaItem } from '@/types/domain';
 import { ImagePickerModal, SelectedMedia } from '@/components/admin/ImagePickerModal';
 import { FeeComponentsEditor, type ProgramFees } from '@/components/admin/FeeComponentsEditor';
+import { ScheduleEditor, type ProgramSchedule } from '@/components/admin/ScheduleEditor';
+import { StatusFilterPills } from '@/components/admin/StatusFilterPills';
+import { AdminHeroPanel } from '@/components/admin/AdminHeroPanel';
+import { AdminReviewsPanel } from '@/components/admin/AdminReviewsPanel';
+import { AdminClassesPanel } from '@/components/admin/AdminClassesPanel';
 import {
   LayoutDashboard,
   BookOpen,
@@ -38,6 +43,11 @@ import {
   Sparkles,
   Info,
   NotebookPen,
+  Images,
+  Star,
+  School,
+  GripVertical,
+  Timer,
 } from 'lucide-react';
 
 export const Route = createFileRoute('/admin')({ component: AdminPage });
@@ -50,7 +60,10 @@ type Tab =
   | 'staff'
   | 'media'
   | 'admissions'
-  | 'messages';
+  | 'messages'
+  | 'hero'
+  | 'reviews'
+  | 'classes';
 
 interface Stats {
   unread_messages: number;
@@ -88,6 +101,10 @@ export function AdminPage() {
   // Image Picker state
   const [pickerOpen, setPickerOpen] = useState(false);
   const [pickerTargetField, setPickerTargetField] = useState<string>('cover_image');
+
+  // CRM status filter + programs drag reorder
+  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [dragProgramId, setDragProgramId] = useState<string | null>(null);
 
   useEffect(() => {
     if (meQuery.isError) {
@@ -156,6 +173,7 @@ export function AdminPage() {
       loadStats();
       setEditing(null);
       setForm({});
+      setStatusFilter('all');
     }
   }, [activeTab, meQuery.data, loadTabData, loadStats]);
 
@@ -225,9 +243,28 @@ export function AdminPage() {
           components: [],
           installments: [],
         } satisfies ProgramFees,
+        schedule: {
+          arrivalTime: '',
+          classStart: '',
+          morningBreak: '',
+          lunchTime: '',
+          middayBreak: '',
+          afternoonResume: '',
+          classEnd: '',
+          specialHours: '',
+        } satisfies ProgramSchedule,
       });
     } else if (activeTab === 'staff') {
-      setForm({ name: '', role: '', bio: '', avatar: '', department: '' });
+      setForm({
+        name: '',
+        role: '',
+        bio: '',
+        avatar: '',
+        department: '',
+        linkedin: '',
+        facebook: '',
+        whatsapp: '',
+      });
     } else if (activeTab === 'gallery') {
       setForm({ title: '', image_url: '', category: 'Vie scolaire', description: '' });
     } else {
@@ -267,6 +304,7 @@ export function AdminPage() {
             fees.thirdInstallment && { id: 'inst-3', label: '3ème tranche', amount: String(fees.thirdInstallment) },
           ].filter(Boolean);
 
+      const schedule = (item.schedule || {}) as ProgramSchedule;
       setForm({
         title: item.title || '',
         summary: item.summary || '',
@@ -281,14 +319,28 @@ export function AdminPage() {
           components: legacyComponents as ProgramFees['components'],
           installments: installments as ProgramFees['installments'],
         },
+        schedule: {
+          arrivalTime: schedule.arrivalTime || '',
+          classStart: schedule.classStart || '',
+          morningBreak: schedule.morningBreak || '',
+          lunchTime: schedule.lunchTime || '',
+          middayBreak: schedule.middayBreak || '',
+          afternoonResume: schedule.afternoonResume || '',
+          classEnd: schedule.classEnd || '',
+          specialHours: schedule.specialHours || '',
+        },
       });
     } else if (activeTab === 'staff') {
+      const social = item.social_links || {};
       setForm({
         name: item.name || '',
         role: item.role || '',
         bio: item.bio || '',
         avatar: item.avatar || '',
         department: item.department || '',
+        linkedin: social.linkedin || '',
+        facebook: social.facebook || '',
+        whatsapp: social.whatsapp || '',
       });
     } else if (activeTab === 'gallery') {
       setForm({
@@ -318,6 +370,7 @@ export function AdminPage() {
           image: form.image,
           price: fees?.total || form.price,
           fees,
+          schedule: form.schedule as ProgramSchedule,
         };
         if (editing === 'new') {
           await adminService.createProgram(payload);
@@ -325,10 +378,22 @@ export function AdminPage() {
           await adminService.updateProgram(editing.id, payload);
         }
       } else if (activeTab === 'staff') {
+        const staffPayload = {
+          name: form.name,
+          role: form.role,
+          bio: form.bio,
+          avatar: form.avatar,
+          department: form.department,
+          social_links: {
+            linkedin: form.linkedin || undefined,
+            facebook: form.facebook || undefined,
+            whatsapp: form.whatsapp || undefined,
+          },
+        };
         if (editing === 'new') {
-          await adminService.createStaff(form);
+          await adminService.createStaff(staffPayload);
         } else {
-          await adminService.updateStaff(editing.id, form);
+          await adminService.updateStaff(editing.id, staffPayload);
         }
       } else if (activeTab === 'gallery') {
         if (editing === 'new') {
@@ -452,7 +517,45 @@ export function AdminPage() {
     );
   }
 
+  const cmsPanelTabs: Tab[] = ['hero', 'reviews', 'classes'];
+  const isCmsPanel = cmsPanelTabs.includes(activeTab);
   const canCreate = ['posts', 'programs', 'staff', 'gallery'].includes(activeTab);
+
+  const filteredItems =
+    (activeTab === 'messages' || activeTab === 'admissions') && statusFilter !== 'all'
+      ? items.filter((it) => (it.status || 'new') === statusFilter)
+      : items;
+
+  const statusCounts = (statuses: string[]) => {
+    const counts: Record<string, number> = { all: items.length };
+    for (const s of statuses) counts[s] = items.filter((it) => (it.status || 'new') === s).length;
+    return counts;
+  };
+
+  const reorderPrograms = async (targetId: string) => {
+    if (!dragProgramId || dragProgramId === targetId) {
+      setDragProgramId(null);
+      return;
+    }
+    const from = items.findIndex((i) => String(i.id) === dragProgramId);
+    const to = items.findIndex((i) => String(i.id) === targetId);
+    if (from < 0 || to < 0) {
+      setDragProgramId(null);
+      return;
+    }
+    const next = [...items];
+    const [moved] = next.splice(from, 1);
+    next.splice(to, 0, moved);
+    setItems(next);
+    setDragProgramId(null);
+    try {
+      await adminService.reorderPrograms(next.map((i) => i.id));
+      toast.success('Ordre des formations mis à jour');
+    } catch (err: any) {
+      toast.error(err?.message ?? 'Réordonnancement impossible');
+      await loadTabData('programs');
+    }
+  };
 
   // Status helper badges
   const getStatusBadge = (status: string) => {
@@ -505,7 +608,10 @@ export function AdminPage() {
                 { id: 'admissions' as const, label: 'Préinscriptions', icon: GraduationCap, badge: stats?.pending_admissions },
                 { id: 'messages' as const, label: 'Messages', icon: MessageSquare, badge: stats?.unread_messages },
                 { id: 'programs' as const, label: 'Formations', icon: BookOpen, badge: undefined },
+                { id: 'hero' as const, label: 'Carousel Accueil', icon: Images, badge: undefined },
                 { id: 'posts' as const, label: 'Articles Blog', icon: FileText, badge: undefined },
+                { id: 'reviews' as const, label: 'Avis Publics', icon: Star, badge: undefined },
+                { id: 'classes' as const, label: 'Classes ouvertes', icon: School, badge: undefined },
                 { id: 'gallery' as const, label: 'Galerie', icon: ImageIcon, badge: undefined },
                 { id: 'staff' as const, label: 'Équipe', icon: Users, badge: undefined },
                 { id: 'media' as const, label: 'Médias', icon: Upload, badge: undefined },
@@ -737,8 +843,12 @@ export function AdminPage() {
               </div>
             )}
 
+            {activeTab === 'hero' && <AdminHeroPanel />}
+            {activeTab === 'reviews' && <AdminReviewsPanel />}
+            {activeTab === 'classes' && <AdminClassesPanel />}
+
             {/* OTHER TABS */}
-            {activeTab !== 'overview' && (
+            {activeTab !== 'overview' && !isCmsPanel && (
               <>
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <h2 className="text-xl font-bold font-display capitalize">
@@ -787,7 +897,7 @@ export function AdminPage() {
                 {editing && canCreate && (() => {
                   const IMAGE_FIELDS = ['cover_image', 'image', 'avatar', 'image_url'];
                   const TEXTAREA_FIELDS = ['content', 'bio', 'summary', 'description'];
-                  const SKIP_FIELDS = ['fees', 'price'];
+                  const SKIP_FIELDS = ['fees', 'price', 'schedule'];
                   const FIELD_LABELS: Record<string, string> = {
                     title: 'Titre',
                     summary: 'Résumé',
@@ -805,6 +915,9 @@ export function AdminPage() {
                     students: 'Étudiants',
                     price: 'Prix',
                     description: 'Description',
+                    linkedin: 'LinkedIn (URL)',
+                    facebook: 'Facebook (URL)',
+                    whatsapp: 'WhatsApp (téléphone ou lien)',
                   };
 
                   return (
@@ -883,16 +996,22 @@ export function AdminPage() {
                         })}
 
                         {activeTab === 'programs' && (
-                          <FeeComponentsEditor
-                            value={(form.fees as ProgramFees) || { currency: '$', components: [] }}
-                            onChange={(fees) =>
-                              setForm((f) => ({
-                                ...f,
-                                fees,
-                                price: fees.total || '',
-                              }))
-                            }
-                          />
+                          <>
+                            <FeeComponentsEditor
+                              value={(form.fees as ProgramFees) || { currency: '$', components: [] }}
+                              onChange={(fees) =>
+                                setForm((f) => ({
+                                  ...f,
+                                  fees,
+                                  price: fees.total || '',
+                                }))
+                              }
+                            />
+                            <ScheduleEditor
+                              value={(form.schedule as ProgramSchedule) || {}}
+                              onChange={(schedule) => setForm((f) => ({ ...f, schedule }))}
+                            />
+                          </>
                         )}
                       </div>
                       <div className="flex gap-3 pt-2">
@@ -913,23 +1032,68 @@ export function AdminPage() {
                   );
                 })()}
 
+                {(activeTab === 'messages' || activeTab === 'admissions') && (() => {
+                  const statuses =
+                    activeTab === 'messages'
+                      ? ['new', 'read', 'replied', 'archived']
+                      : ['new', 'read', 'in_progress', 'accepted', 'rejected'];
+                  const labels: Record<string, string> = {
+                    new: 'Nouveaux',
+                    read: 'Ouverts',
+                    replied: 'Répondus',
+                    archived: 'Archivés',
+                    in_progress: 'En cours',
+                    accepted: 'Acceptés',
+                    rejected: 'Rejetés',
+                  };
+                  const counts = statusCounts(statuses);
+                  return (
+                    <StatusFilterPills
+                      value={statusFilter}
+                      onChange={setStatusFilter}
+                      options={[
+                        { id: 'all', label: 'Tous', count: counts.all },
+                        ...statuses.map((s) => ({
+                          id: s,
+                          label: labels[s] || s,
+                          count: counts[s] || 0,
+                        })),
+                      ]}
+                    />
+                  );
+                })()}
+
+                {activeTab === 'programs' && !editing && (
+                  <p className="text-xs text-muted-foreground -mt-2">
+                    Glissez-déposez les formations pour définir l’ordre d’affichage public.
+                  </p>
+                )}
+
                 {/* Items List */}
                 {loading ? (
                   <div className="py-12 text-center text-sm text-muted-foreground flex flex-col items-center gap-2">
                     <div className="size-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
                     Chargement des éléments...
                   </div>
-                ) : items.length === 0 ? (
+                ) : filteredItems.length === 0 ? (
                   <div className="p-12 border border-dashed border-border rounded-2xl text-center text-sm text-muted-foreground">
                     Aucun enregistrement trouvé.
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    {items.map((item) => (
+                    {filteredItems.map((item) => (
                       <div
                         key={item.id}
-                        className="group flex flex-wrap items-center justify-between gap-4 p-4 rounded-xl border border-border bg-surface-elevated hover:border-primary/40 transition-smooth"
+                        draggable={activeTab === 'programs'}
+                        onDragStart={() => activeTab === 'programs' && setDragProgramId(String(item.id))}
+                        onDragOver={(e) => activeTab === 'programs' && e.preventDefault()}
+                        onDrop={() => activeTab === 'programs' && reorderPrograms(String(item.id))}
+                        className={`group flex flex-wrap items-center justify-between gap-4 p-4 rounded-xl border border-border bg-surface-elevated hover:border-primary/40 transition-smooth ${dragProgramId === String(item.id) ? 'opacity-60' : ''
+                          }`}
                       >
+                        {activeTab === 'programs' && (
+                          <GripVertical className="size-4 text-muted-foreground shrink-0 cursor-grab" />
+                        )}
                         <div className="min-w-0 flex-1 space-y-1">
                           <div className="flex items-center gap-2 flex-wrap">
                             <p className="font-semibold truncate text-foreground">
@@ -941,8 +1105,8 @@ export function AdminPage() {
                           <p className="text-xs text-muted-foreground line-clamp-2">
                             {item.email && <span className="font-medium text-foreground mr-2"><Mail className="size-4 inline-block mr-1" /> {item.email}</span>}
                             {item.phone && <span className="font-medium text-foreground mr-2"><Phone className="size-4 inline-block mr-1" /> {item.phone}</span>}
-                            {item.preferred_schedule && <span className="text-primary font-medium mr-2">🕒 {item.preferred_schedule}</span>}
-                            {item.class_level && <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[11px] font-bold mr-2">🎓 {item.class_level}</span>}
+                            {item.preferred_schedule && <span className="text-primary font-medium mr-2"><Timer className="size-4 inline-clock mr-1" /> {item.preferred_schedule}</span>}
+                            {item.class_level && <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[11px] font-bold mr-2">{item.class_level}</span>}
                             {item.summary || item.role || item.category || item.message || item.public_url || ''}
                           </p>
 
