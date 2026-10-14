@@ -82,7 +82,7 @@ function EquipePage() {
                 key={member.id}
                 data-aos="fade-up"
                 data-aos-delay={(i % 3) * 80}
-                className="group relative rounded-3xl overflow-hidden bg-card border border-border shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
+                className="group relative rounded-3xl overflow-hidden bg-card border border-border shadow-sm hover:shadow-2xl transition-all duration-500 hover:rotate-1 hover:scale-[1.02]"
               >
                 <div className="relative aspect-[4/5] overflow-hidden">
                   <img

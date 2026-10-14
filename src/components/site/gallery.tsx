@@ -128,7 +128,7 @@ export function Gallery({ items, categories }: Props) {
               data-aos="fade-up"
               data-aos-delay={(idx % 6) * 60}
               className={cn(
-                "group relative overflow-hidden rounded-2xl bg-card cursor-pointer shadow-elegant transition-spring hover:-translate-y-2",
+                "group relative overflow-hidden rounded-2xl bg-card cursor-pointer shadow-elegant transition-spring hover:rotate-1",
                 item.featured && "sm:col-span-2 lg:col-span-2 lg:row-span-2",
               )}
               onClick={() => {
