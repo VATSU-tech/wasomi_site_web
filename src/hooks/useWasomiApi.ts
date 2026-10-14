@@ -9,7 +9,18 @@ import { postService, PostQueryParams } from "@/services/post.service";
 import { pageService } from "@/services/page.service";
 import { contactService } from "@/services/contact.service";
 import { admissionService } from "@/services/admission.service";
-import { ContactMessagePayload, AdmissionRequestPayload, StaffMember, GalleryCategory, GalleryItem, Post } from "@/types/domain";
+import { cmsService } from "@/services/cms.service";
+import {
+  ContactMessagePayload,
+  AdmissionRequestPayload,
+  StaffMember,
+  GalleryCategory,
+  GalleryItem,
+  Post,
+  HeroSlide,
+  Review,
+  ClassTree,
+} from "@/types/domain";
 
 // Fallback static data imports
 import { staffMembers as fallbackStaff } from "@/data/staff";
@@ -99,6 +110,7 @@ export function useStaffQuery() {
           social_links: {
             linkedin: s.linkedin,
             facebook: s.facebook,
+            whatsapp: s.whatsapp,
           },
         }));
       }
@@ -212,6 +224,75 @@ export function useAdmissionMutation() {
     mutationFn: (payload: AdmissionRequestPayload) => admissionService.submit(payload),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: queryKeys.admin.admissionRequests });
+    },
+  });
+}
+
+// 10. Hero slides
+export function useHeroSlidesQuery() {
+  return useQuery({
+    queryKey: queryKeys.hero.slides,
+    queryFn: async (): Promise<HeroSlide[]> => {
+      try {
+        const res = await cmsService.getHeroSlides();
+        return res.data ?? [];
+      } catch {
+        return [];
+      }
+    },
+  });
+}
+
+// 11. Reviews
+export function useFeaturedReviewsQuery() {
+  return useQuery({
+    queryKey: queryKeys.reviews.featured,
+    queryFn: async (): Promise<Review[]> => {
+      try {
+        const res = await cmsService.getReviews({ featured: true, limit: 7 });
+        return res.data ?? [];
+      } catch {
+        return [];
+      }
+    },
+  });
+}
+
+export function useApprovedReviewsQuery() {
+  return useQuery({
+    queryKey: queryKeys.reviews.all,
+    queryFn: async (): Promise<Review[]> => {
+      try {
+        const res = await cmsService.getReviews({ limit: 50 });
+        return res.data ?? [];
+      } catch {
+        return [];
+      }
+    },
+  });
+}
+
+export function useSubmitReviewMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: cmsService.submitReview,
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: queryKeys.reviews.all });
+    },
+  });
+}
+
+// 12. Classes tree
+export function useClassesTreeQuery() {
+  return useQuery({
+    queryKey: queryKeys.classes.tree,
+    queryFn: async (): Promise<ClassTree | null> => {
+      try {
+        const res = await cmsService.getClassesTree();
+        return res.data ?? null;
+      } catch {
+        return null;
+      }
     },
   });
 }

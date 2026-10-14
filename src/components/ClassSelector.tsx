@@ -1,273 +1,219 @@
-import { useEffect, useState } from 'react';
-import { schoolService } from '@/features/school/school.service';
-import type { Classe, Cycle, Domaine, Niveau, Option } from '@/api/types';
+import { useEffect, useMemo, useState } from 'react';
+import { cmsService } from '@/services/cms.service';
+import type { ClassTree, SchoolClass } from '@/types/domain';
+import { cn } from '@/lib/utils';
 
-export interface ClassSelection {
-  cycleId: number | null;
-  domaineId: number | null;
-  niveauId: number | null;
-  optionId: number | null;
-  classeId: number | null;
+export interface ClassCascadeSelection {
+  section: string;
+  option: string;
+  classId: string;
+  classLabel: string;
 }
 
 interface ClassSelectorProps {
-  value: ClassSelection;
-  onChange: (selection: ClassSelection, classe?: Classe) => void;
+  value?: string;
+  onChange: (classLabel: string, selection?: ClassCascadeSelection) => void;
   disabled?: boolean;
+  className?: string;
 }
 
-export function ClassSelector({ value, onChange, disabled }: ClassSelectorProps) {
-  const [cycles, setCycles] = useState<Cycle[]>([]);
-  const [domaines, setDomaines] = useState<Domaine[]>([]);
-  const [niveaux, setNiveaux] = useState<Niveau[]>([]);
-  const [options, setOptions] = useState<Option[]>([]);
-  const [classes, setClasses] = useState<Classe[]>([]);
-  const [loading, setLoading] = useState({
-    cycles: false,
-    domaines: false,
-    niveaux: false,
-    options: false,
-    classes: false,
-  });
+const FALLBACK_TREE: ClassTree = {
+  sections: [
+    {
+      name: 'Crèche',
+      options: [
+        {
+          name: null,
+          classes: [
+            {
+              id: 'creche',
+              section: 'Crèche',
+              class_name: 'Crèche (Pré-éveil)',
+              label: 'Crèche (Pré-éveil & Garderie)',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'Maternelle',
+      options: [
+        {
+          name: null,
+          classes: [
+            { id: 'm1', section: 'Maternelle', class_name: '1ère Maternelle', label: '1ère Maternelle (Petite Section)' },
+            { id: 'm2', section: 'Maternelle', class_name: '2ème Maternelle', label: '2ème Maternelle (Moyenne Section)' },
+            { id: 'm3', section: 'Maternelle', class_name: '3ème Maternelle', label: '3ème Maternelle (Grande Section)' },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'Primaire',
+      options: [
+        {
+          name: null,
+          classes: [1, 2, 3, 4, 5, 6].map((n) => ({
+            id: `p${n}`,
+            section: 'Primaire',
+            class_name: `${n}ème Primaire`.replace('1ème', '1ère'),
+            label: `${n}ème Année Primaire`.replace('1ème', '1ère'),
+          })),
+        },
+      ],
+    },
+  ],
+};
+
+export function ClassSelector({ value = '', onChange, disabled, className }: ClassSelectorProps) {
+  const [tree, setTree] = useState<ClassTree | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [section, setSection] = useState('');
+  const [option, setOption] = useState('');
+  const [classId, setClassId] = useState('');
 
   useEffect(() => {
-    setLoading((s) => ({ ...s, cycles: true }));
-    schoolService
-      .getCycles()
-      .then(setCycles)
-      .catch(() => setCycles([]))
-      .finally(() => setLoading((s) => ({ ...s, cycles: false })));
+    let cancelled = false;
+    setLoading(true);
+    cmsService
+      .getClassesTree()
+      .then((res) => {
+        if (cancelled) return;
+        if (res.data?.sections?.length) setTree(res.data);
+        else setTree(FALLBACK_TREE);
+      })
+      .catch(() => {
+        if (!cancelled) setTree(FALLBACK_TREE);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
+  const sections = tree?.sections ?? [];
+  const currentSection = useMemo(
+    () => sections.find((s) => s.name === section) ?? null,
+    [sections, section],
+  );
+  const options = currentSection?.options ?? [];
+  const hasNamedOptions = options.some((o) => !!o.name);
+  const currentOption = useMemo(() => {
+    if (!hasNamedOptions) return options[0] ?? null;
+    return options.find((o) => (o.name || '') === option) ?? null;
+  }, [options, option, hasNamedOptions]);
+  const classes: SchoolClass[] = currentOption?.classes ?? [];
+
   useEffect(() => {
-    if (!value.cycleId) {
-      setDomaines([]);
-      return;
-    }
-    setLoading((s) => ({ ...s, domaines: true }));
-    schoolService
-      .getDomaines(value.cycleId)
-      .then((d) => {
-        setDomaines(d);
-        if (d.length === 0) {
-          schoolService
-            .getNiveaux({ cycle: value.cycleId! })
-            .then(setNiveaux)
-            .finally(() => setLoading((s) => ({ ...s, niveaux: false })));
+    if (!value || !tree) return;
+    for (const sec of tree.sections) {
+      for (const opt of sec.options) {
+        const match = opt.classes.find(
+          (c) => c.id === value || c.label === value || c.class_name === value,
+        );
+        if (match) {
+          setSection(sec.name);
+          setOption(opt.name || '');
+          setClassId(String(match.id));
+          return;
         }
-      })
-      .catch(() => setDomaines([]))
-      .finally(() => setLoading((s) => ({ ...s, domaines: false })));
-  }, [value.cycleId]);
+      }
+    }
+  }, [value, tree]);
 
-  useEffect(() => {
-    if (!value.cycleId) {
-      setNiveaux([]);
+  const selectClass =
+    'w-full mt-1.5 px-3 py-2.5 rounded-xl border border-border bg-background text-sm focus:border-primary focus:outline-none disabled:opacity-60';
+
+  const emit = (nextClassId: string, cls?: SchoolClass) => {
+    if (!cls) {
+      onChange('');
       return;
     }
-    if (domaines.length > 0 && !value.domaineId) {
-      setNiveaux([]);
-      return;
-    }
-    setLoading((s) => ({ ...s, niveaux: true }));
-    schoolService
-      .getNiveaux({
-        cycle: value.cycleId,
-        domaine: value.domaineId ?? undefined,
-      })
-      .then(setNiveaux)
-      .catch(() => setNiveaux([]))
-      .finally(() => setLoading((s) => ({ ...s, niveaux: false })));
-  }, [value.cycleId, value.domaineId, domaines.length]);
-
-  useEffect(() => {
-    if (!value.niveauId) {
-      setOptions([]);
-      return;
-    }
-    setLoading((s) => ({ ...s, options: true }));
-    schoolService
-      .getOptions(value.niveauId)
-      .then(setOptions)
-      .catch(() => setOptions([]))
-      .finally(() => setLoading((s) => ({ ...s, options: false })));
-  }, [value.niveauId]);
-
-  useEffect(() => {
-    if (!value.niveauId) {
-      setClasses([]);
-      return;
-    }
-    if (options.length > 0 && !value.optionId) {
-      setClasses([]);
-      return;
-    }
-    setLoading((s) => ({ ...s, classes: true }));
-    schoolService
-      .getClasses({
-        cycle: value.cycleId ?? undefined,
-        domaine: value.domaineId ?? undefined,
-        niveau: value.niveauId,
-        option: value.optionId ?? undefined,
-      })
-      .then(setClasses)
-      .catch(() => setClasses([]))
-      .finally(() => setLoading((s) => ({ ...s, classes: false })));
-  }, [value.cycleId, value.domaineId, value.niveauId, value.optionId, options.length]);
-
-  const hasDomaines = domaines.length > 0;
-  const hasOptions = options.length > 0;
-
-  const update = (patch: Partial<ClassSelection>) => {
-    const next = { ...value, ...patch };
-    if (patch.cycleId !== undefined) {
-      next.domaineId = null;
-      next.niveauId = null;
-      next.optionId = null;
-      next.classeId = null;
-    }
-    if (patch.domaineId !== undefined) {
-      next.niveauId = null;
-      next.optionId = null;
-      next.classeId = null;
-    }
-    if (patch.niveauId !== undefined) {
-      next.optionId = null;
-      next.classeId = null;
-    }
-    if (patch.optionId !== undefined) {
-      next.classeId = null;
-    }
-    const classe = classes.find((c) => c.id === next.classeId);
-    onChange(next, classe);
+    const label = cls.label || cls.class_name;
+    onChange(label, {
+      section,
+      option,
+      classId: String(cls.id),
+      classLabel: label,
+    });
   };
 
-  const selectClass = `
-    select select-bordered w-full text-sm
-    ${disabled ? 'select-disabled' : ''}
-  `;
-
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-      <div className="form-control">
-        <label className="label py-1">
-          <span className="label-text font-medium">Cycle</span>
-          {loading.cycles && <span className="loading loading-spinner loading-xs" />}
+    <div className={cn('grid grid-cols-1 sm:grid-cols-2 gap-3', className)}>
+      <div>
+        <label className="text-xs font-semibold uppercase text-muted-foreground">
+          Section {loading && <span className="normal-case font-normal">…</span>}
         </label>
         <select
           className={selectClass}
-          value={value.cycleId ?? ''}
-          disabled={disabled || loading.cycles}
-          onChange={(e) =>
-            update({ cycleId: e.target.value ? Number(e.target.value) : null })
-          }
+          value={section}
+          disabled={disabled || loading}
+          onChange={(e) => {
+            setSection(e.target.value);
+            setOption('');
+            setClassId('');
+            onChange('');
+          }}
         >
-          <option value="">Sélectionner un cycle</option>
-          {cycles.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.libelle}
+          <option value="">Choisir une section</option>
+          {sections.map((s) => (
+            <option key={s.name} value={s.name}>
+              {s.name}
             </option>
           ))}
         </select>
       </div>
 
-      {hasDomaines && (
-        <div className="form-control">
-          <label className="label py-1">
-            <span className="label-text font-medium">Domaine</span>
-            {loading.domaines && <span className="loading loading-spinner loading-xs" />}
-          </label>
+      {hasNamedOptions && (
+        <div>
+          <label className="text-xs font-semibold uppercase text-muted-foreground">Option</label>
           <select
             className={selectClass}
-            value={value.domaineId ?? ''}
-            disabled={disabled || !value.cycleId || loading.domaines}
-            onChange={(e) =>
-              update({ domaineId: e.target.value ? Number(e.target.value) : null })
-            }
+            value={option}
+            disabled={disabled || !section || loading}
+            onChange={(e) => {
+              setOption(e.target.value);
+              setClassId('');
+              onChange('');
+            }}
           >
-            <option value="">Sélectionner un domaine</option>
-            {domaines.map((d) => (
-              <option key={d.id} value={d.id}>
-                {d.libelle}
-              </option>
-            ))}
+            <option value="">Choisir une option</option>
+            {options
+              .filter((o) => o.name)
+              .map((o) => (
+                <option key={o.name!} value={o.name!}>
+                  {o.name}
+                </option>
+              ))}
           </select>
         </div>
       )}
 
-      <div className="form-control">
-        <label className="label py-1">
-          <span className="label-text font-medium">Niveau</span>
-          {loading.niveaux && <span className="loading loading-spinner loading-xs" />}
-        </label>
+      <div className={hasNamedOptions ? 'sm:col-span-2' : ''}>
+        <label className="text-xs font-semibold uppercase text-muted-foreground">Classe</label>
         <select
           className={selectClass}
-          value={value.niveauId ?? ''}
+          value={classId}
           disabled={
             disabled ||
-            !value.cycleId ||
-            (hasDomaines && !value.domaineId) ||
-            loading.niveaux
+            loading ||
+            !section ||
+            (hasNamedOptions && !option) ||
+            classes.length === 0
           }
-          onChange={(e) =>
-            update({ niveauId: e.target.value ? Number(e.target.value) : null })
-          }
+          onChange={(e) => {
+            const id = e.target.value;
+            setClassId(id);
+            const cls = classes.find((c) => String(c.id) === id);
+            emit(id, cls);
+          }}
         >
-          <option value="">Sélectionner un niveau</option>
-          {niveaux.map((n) => (
-            <option key={n.id} value={n.id}>
-              {n.libelle}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {hasOptions && (
-        <div className="form-control">
-          <label className="label py-1">
-            <span className="label-text font-medium">Option</span>
-            {loading.options && <span className="loading loading-spinner loading-xs" />}
-          </label>
-          <select
-            className={selectClass}
-            value={value.optionId ?? ''}
-            disabled={disabled || !value.niveauId || loading.options}
-            onChange={(e) =>
-              update({ optionId: e.target.value ? Number(e.target.value) : null })
-            }
-          >
-            <option value="">Sélectionner une option</option>
-            {options.map((o) => (
-              <option key={o.id} value={o.id}>
-                {o.libelle}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
-
-      <div className="form-control sm:col-span-2 lg:col-span-1">
-        <label className="label py-1">
-          <span className="label-text font-medium">Classe</span>
-          {loading.classes && <span className="loading loading-spinner loading-xs" />}
-        </label>
-        <select
-          className={selectClass}
-          value={value.classeId ?? ''}
-          disabled={
-            disabled ||
-            !value.niveauId ||
-            (hasOptions && !value.optionId) ||
-            loading.classes
-          }
-          onChange={(e) =>
-            update({ classeId: e.target.value ? Number(e.target.value) : null })
-          }
-        >
-          <option value="">Sélectionner une classe</option>
+          <option value="">Choisir une classe</option>
           {classes.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.libelle}
+            <option key={String(c.id)} value={String(c.id)}>
+              {c.label || c.class_name}
             </option>
           ))}
         </select>

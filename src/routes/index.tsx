@@ -6,23 +6,21 @@ import {
   Blocks,
   HeartHandshake,
   Lightbulb,
-  MapPin,
   Microscope,
-  Phone,
   ShieldCheck,
   Sparkles,
-  Star,
   Trophy,
   Users,
   Pyramid,
+  Calendar,
 } from "lucide-react";
 import { SectionHeading } from "@/components/site/section-heading";
 import { Gallery } from "@/components/site/gallery";
 import { galleryItems, galleryCategories } from "@/data/gallery";
 import { CountUp } from "@/components/site/count-up";
-import { usePostsQuery } from "@/hooks/useWasomiApi";
-import { Calendar } from "lucide-react";
-import { CalendarDay } from "react-day-picker";
+import { HeroCarousel } from "@/components/site/HeroCarousel";
+import { NewsFeatured } from "@/components/site/NewsFeatured";
+import { ReviewsSection } from "@/components/site/ReviewsSection";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -118,233 +116,11 @@ const stats = [
   { val: 10, suf: "+", label: "Enseignants & éducateurs", icon: Sparkles },
 ];
 
-const fallbackPosts = [
-  {
-    id: "1",
-    title: "Rentrée 2026 : ce qui change cette année",
-    date: "12 Septembre 2026",
-    category: "Actualités",
-    excerpt:
-      "Nouveaux aménagements, nouvelle dynamique : bienvenue à tous pour une belle année.",
-    img: "/gallerie/IMG-20260519-WA0002.jpg",
-  },
-  {
-    id: "2",
-    title: "Lipanda Fiesta : la fête de l'indépendance chez Wasomi",
-    date: "30 Juin 2026",
-    category: "Événement",
-    excerpt:
-      "Jeux, culture et compétitions : un moment fort qui rassemble toute la communauté scolaire.",
-    img: "/gallerie/festival lipanda fiesta.jpg",
-  },
-  {
-    id: "3",
-    title: "Sortie à l'aéroport de Mavivi : dés coulisses inoubliables",
-    date: "20 Février 2026",
-    category: "Visite",
-    excerpt:
-      "Nos élèves ont découvert l'aviation de près lors d'une sortie pédagogique unique.",
-    img: "/gallerie/sortie visite aeroport mavivi.jpg",
-  },
-];
-
-const testimonials = [
-  {
-    name: "Maman de Naomi",
-    role: "Maternelle — Grande section",
-    text: "Ma fille rayonne depuis qu'elle est à Wasomi. Les éducatrices sont attentives, l'école est bien organisée, et je vois ses progrès chaque semaine.",
-  },
-  {
-    name: "Papa de Jonathan",
-    role: "3ème primaire",
-    text: "Ce que j'apprécie, c'est la proximité : on connaît les enseignants, on est informé de la vie de l'école, et les résultats en classe parlent d'eux-mêmes.",
-  },
-  {
-    name: "Tante de Grace",
-    role: "1ère année primaire",
-    text: "Les ateliers de sciences et le cadre sécurisé ont fait toute la différence pour notre famille. Je recommande Wasomi sans hésiter.",
-  },
-];
-
 function Home() {
-  const { data: postsData } = usePostsQuery();
-  const posts =
-    postsData?.items && postsData.items.length > 0
-      ? postsData.items.slice(0, 3).map((p) => ({
-        id: String(p.id),
-        title: p.title,
-        date: p.published_at
-          ? new Date(p.published_at).toLocaleDateString("fr-FR", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          })
-          : "Article récent",
-        category: p.category || "Actualités",
-        excerpt: p.summary || p.content?.slice(0, 120) || "",
-        img: p.cover_image || "/gallerie/IMG-20260519-WA0002.jpg",
-      }))
-      : fallbackPosts;
-
   return (
     <>
-      {/* ============ HERO ============ */}
-      
-      <section className="relative min-h-[100vh] flex items-center overflow-hidden">
-
-        {/* Background vidéo */}
-        <div className="absolute inset-0">
-
-          <video
-            src="./gallerie/vid.mp4"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            className="size-full object-cover"
-            aria-hidden="true"
-          />
-
-          {/* Overlay principal */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/30" />
-
-          {/* Effet lumineux */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(37,99,235,0.18),transparent_55%)]" />
-
-        </div>
-
-        {/* Contenu */}
-        <div className="container mx-auto px-4 max-w-7xl relative pt-28 sm:pt-32 pb-20">
-
-          <div className="max-w-3xl">
-
-            {/* Localisation */}
-            <div
-              className="relative inline-flex items-center gap-2 px-4 py-2 rounded-full
-        border border-white/20 bg-white/10
-        text-white/90 text-xs md:text-sm font-semibold mb-8
-        overflow-hidden"
-              data-aos="fade-up"
-            >
-              {/* Background flouté */}
-              <div
-                className="absolute inset-0
-          bg-[url('https://www.shutterstock.com/image-photo/red-gps-map-260nw-2494094029.jpg')]
-          bg-cover
-          scale-110
-          bg-[position:60%_50%]"
-              />
-
-              {/* Overlay */}
-              <div className="absolute inset-0 bg-black/40" />
-
-              {/* Contenu net */}
-              <a
-                href="https://maps.app.goo.gl/bSDTmFdURd7dP6zz5"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="relative z-10 flex items-center gap-2 shadow-xl"
-              >
-                <MapPin className="size-4" />
-
-                <span>
-                  Complexe Scolaire Wasomi — Beni, Nord-Kivu
-                </span>
-              </a>
-
-            </div>
-
-            {/* Titre */}
-            <h1
-              className="font-display text-4xl sm:text-5xl md:text-7xl font-bold text-white tracking-tight leading-[1.05]"
-              data-aos="fade-up"
-              data-aos-delay="80"
-            >
-              Une école qui fait grandir{" "}
-
-              <span className="text-gradient bg-gradient-to-r from-sky-300 to-emerald-300">
-                chaque enfant
-              </span>
-            </h1>
-
-            {/* Description */}
-            <p
-              className="mt-6 text-lg md:text-xl text-white/80 leading-relaxed max-w-2xl"
-              data-aos="fade-up"
-              data-aos-delay="180"
-            >
-              De la crèche aux humanite, nous accompagnons vos enfants avec
-              une pédagogie vivante, des ateliers de sciences et un cadre où
-              ils se sentent en confiance.
-            </p>
-
-            {/* Boutons */}
-            <div
-              className="mt-10 flex flex-wrap gap-4"
-              data-aos="fade-up"
-              data-aos-delay="280"
-            >
-
-              <Link
-                to="/contact"
-                search={{ tab: "admission" }}
-                className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-white text-slate-900 font-bold shadow-xl hover:-translate-y-0.5 hover:shadow-2xl active:translate-y-0 transition-all duration-300"
-              >
-                Préinscrire mon enfant
-
-                <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
-
-              <Link
-                to="/formations"
-                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/25 text-white font-semibold hover:bg-white/20 hover:-translate-y-0.5 transition-all duration-300"
-              >
-                Découvrir nos cycles
-              </Link>
-
-            </div>
-
-            {/* Catégories */}
-            <div
-              className="mt-14 flex flex-wrap items-center gap-x-8 gap-y-4"
-              data-aos="fade-up"
-              data-aos-delay="380"
-            >
-              {[
-                { icon: Baby, label: "Crèche & Maternelle" },
-                { icon: BookOpen, label: "Primaire" },
-                { icon: Microscope, label: "Sciences & Numérique" },
-              ].map(({ icon: Icon, label }) => (
-
-                <div
-                  key={label}
-                  className="flex items-center gap-2.5 text-white/80 text-sm font-medium"
-                >
-                  <Icon className="size-4 text-emerald-300" />
-                  {label}
-                </div>
-
-              ))}
-            </div>
-
-          </div>
-
-        </div>
-
-        {/* Indicateur de défilement */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/50">
-
-          <span className="text-[10px] uppercase tracking-[0.2em] font-semibold">
-            Découvrir
-          </span>
-
-          <div className="size-8 rounded-full border border-white/30 flex items-center justify-center animate-bounce">
-            <ArrowRight className="size-3.5 rotate-90" />
-          </div>
-
-        </div>
-      </section>
+      <HeroCarousel />
+      <NewsFeatured />
 
       {/* ============ STATS BAR ============ */}
       <section className="relative bg-surface border-y border-border">
@@ -462,7 +238,7 @@ function Home() {
                 key={c.title}
                 data-aos="fade-up"
                 data-aos-delay={i * 90}
-                className="group relative rounded-3xl overflow-hidden bg-card border border-border shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
+                className="group relative rounded-3xl overflow-hidden bg-card border border-border shadow-sm hover:shadow-2xl transition-all duration-500 hover:rotate-1"
               >
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <img
@@ -570,102 +346,7 @@ function Home() {
         </div>
       </section>
 
-      {/* ============ ACTUALITÉS ============ */}
-      <section className="py-14 sm:py-24 container mx-auto px-4 max-w-7xl">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12">
-          <SectionHeading
-            align="left"
-            eyebrow="Actualités"
-            title="Les dernières nouvelles de l'école"
-            className="mb-0"
-          />
-          <Link
-            to="/blog"
-            className="inline-flex items-center gap-2 font-semibold text-primary link-underline shrink-0"
-          >
-            Tout le blog
-            <ArrowRight className="size-4" />
-          </Link>
-        </div>
-        <div className="grid md:grid-cols-3 gap-6">
-          {posts.map((p, i) => (
-            <article
-              key={p.id}
-              data-aos="fade-up"
-              data-aos-delay={i * 90}
-              className="group rounded-3xl overflow-hidden bg-card border border-border hover:shadow-xl transition-all duration-300"
-            >
-              <div className="relative aspect-[16/10] overflow-hidden">
-                <img
-                  src={p.img}
-                  alt={p.title}
-                  loading="lazy"
-                  className="size-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <span className="absolute top-4 left-4 px-3 py-1 rounded-full bg-card/90 backdrop-blur text-xs font-semibold text-foreground shadow">
-                  {p.category}
-                </span>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
-                  <Calendar className="size-3.5" />
-                  {p.date}
-                </div>
-                <h3 className="font-display text-lg font-bold leading-snug mb-2 group-hover:text-primary transition-colors">
-                  {p.title}
-                </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">
-                  {p.excerpt}
-                </p>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      {/* ============ TÉMOIGNAGES ============ */}
-      <section className="py-14 sm:py-24 bg-surface border-y border-border">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <SectionHeading
-            eyebrow="Paroles de familles"
-            title="Ils nous confient leurs enfants"
-            description="Ce que nous racontent les parents et tuteurs qui ont choisi Wasomi."
-          />
-          <div className="grid md:grid-cols-3 gap-6">
-            {testimonials.map((t, i) => (
-              <figure
-                key={t.name}
-                data-aos="fade-up"
-                data-aos-delay={i * 90}
-                className="rounded-3xl p-7 bg-card border border-border hover:border-primary/25 hover:shadow-xl transition-all duration-300 flex flex-col"
-              >
-                <div className="flex gap-0.5 mb-4">
-                  {Array.from({ length: 5 }).map((_, j) => (
-                    <Star
-                      key={j}
-                      className="size-4 fill-amber-400 text-amber-400"
-                    />
-                  ))}
-                </div>
-                <blockquote className="text-sm leading-relaxed text-foreground flex-1 italic">
-                  “{t.text}”
-                </blockquote>
-                <figcaption className="flex items-center gap-3 mt-6 pt-5 border-t border-border">
-                  <div className="size-11 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-primary-foreground font-bold">
-                    {t.name.charAt(0)}
-                  </div>
-                  <div>
-                    <div className="font-semibold text-sm">{t.name}</div>
-                    <div className="text-xs text-muted-foreground">
-                      {t.role}
-                    </div>
-                  </div>
-                </figcaption>
-              </figure>
-            ))}
-          </div>
-        </div>
-      </section>
+      <ReviewsSection />
     </>
   );
 }

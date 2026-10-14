@@ -22,6 +22,7 @@ import { queryKeys } from "@/constants/query-keys";
 import { toast } from "sonner";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
+import { ClassSelector } from "@/components/ClassSelector";
 
 const contactSearchSchema = z.object({
   tab: z.enum(["contact", "admission"]).optional(),
@@ -73,32 +74,6 @@ const admissionSchema = z.object({
   last_grade_result: z.string().optional(),
   message: z.string().optional(),
 });
-
-const AVAILABLE_CLASSES = [
-  {
-    cycle: "Crèche",
-    items: [{ id: "Crèche (Pré-éveil)", label: "Crèche (Pré-éveil & Garderie)" }],
-  },
-  {
-    cycle: "Maternelle",
-    items: [
-      { id: "1ère Maternelle", label: "1ère Maternelle (Petite Section)" },
-      { id: "2ème Maternelle", label: "2ème Maternelle (Moyenne Section)" },
-      { id: "3ème Maternelle", label: "3ème Maternelle (Grande Section)" },
-    ],
-  },
-  {
-    cycle: "Primaire",
-    items: [
-      { id: "1ère Primaire", label: "1ère Année Primaire" },
-      { id: "2ème Primaire", label: "2ème Année Primaire" },
-      { id: "3ème Primaire", label: "3ème Année Primaire" },
-      { id: "4ème Primaire", label: "4ème Année Primaire" },
-      { id: "5ème Primaire", label: "5ème Année Primaire" },
-      { id: "6ème Primaire", label: "6ème Année Primaire" },
-    ],
-  },
-];
 
 function computeAge(birthDateStr: string): number | null {
   if (!birthDateStr) return null;
@@ -601,41 +576,26 @@ function ContactPage() {
                       </h4>
                     </div>
 
-                    <div className="grid sm:grid-cols-2 gap-4">
+                    <div className="space-y-4">
                       <div>
-                        <label className="block text-xs font-semibold mb-1.5 text-foreground" htmlFor="a-class_level">
+                        <label className="block text-xs font-semibold mb-1.5 text-foreground">
                           Classe demandée <span className="text-primary">*</span>
                         </label>
-                        <select
-                          id="a-class_level"
-                          required
+                        <ClassSelector
                           value={admissionData.class_level}
-                          onChange={(e) => {
-                            const val = e.target.value;
-                            // Synchronise automatiquement le program_id correspondant si possible
+                          onChange={(label, selection) => {
+                            const section = selection?.section || label;
                             let matchedProg = "";
-                            if (val.includes("Crèche")) matchedProg = "Creche";
-                            else if (val.includes("Maternelle")) matchedProg = "Maternelle";
-                            else if (val.includes("Primaire")) matchedProg = "Primaire";
+                            if (/crèche|creche/i.test(section)) matchedProg = "Creche";
+                            else if (/maternelle/i.test(section)) matchedProg = "Maternelle";
+                            else if (/primaire|éducation|education/i.test(section)) matchedProg = "Primaire";
                             setAdmissionData({
                               ...admissionData,
-                              class_level: val,
+                              class_level: label,
                               program_id: matchedProg || admissionData.program_id,
                             });
                           }}
-                          className="w-full px-3.5 py-3 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 text-sm"
-                        >
-                          <option value="">-- Sélectionner la classe --</option>
-                          {AVAILABLE_CLASSES.map((grp) => (
-                            <optgroup key={grp.cycle} label={`Cycle : ${grp.cycle}`}>
-                              {grp.items.map((it) => (
-                                <option key={it.id} value={it.id}>
-                                  {it.label}
-                                </option>
-                              ))}
-                            </optgroup>
-                          ))}
-                        </select>
+                        />
                         {formErrors.class_level && (
                           <p className="text-xs text-destructive mt-1">{formErrors.class_level.join(', ')}</p>
                         )}

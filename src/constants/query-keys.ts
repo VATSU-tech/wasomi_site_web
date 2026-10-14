@@ -27,6 +27,17 @@ export const queryKeys = {
   pages: {
     detail: (key: string) => ['pages', key] as const,
   },
+  hero: {
+    slides: ['hero', 'slides'] as const,
+  },
+  reviews: {
+    featured: ['reviews', 'featured'] as const,
+    all: ['reviews', 'all'] as const,
+  },
+  classes: {
+    tree: ['classes', 'tree'] as const,
+    list: ['classes', 'list'] as const,
+  },
   admin: {
     posts: ['admin', 'posts'] as const,
     programs: ['admin', 'programs'] as const,
