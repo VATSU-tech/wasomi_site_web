@@ -93,7 +93,7 @@ export function Gallery({ items, categories }: Props) {
     };
   }, [lightbox, close, next, prev, shareItem]);
 
-  const getShareUrl = (item: GalleryItem) => `${window.location.origin}${item.src}`;
+  const getShareUrl = (item: GalleryItem) => item.src; //`${window.location.origin}${item.src}`;
 
   const onShare = async (item: GalleryItem) => {
     // Panneau manuel uniquement : navigator.share peut déclencher des invites système.
