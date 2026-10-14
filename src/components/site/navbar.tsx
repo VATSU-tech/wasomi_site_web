@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
 import { Menu, X, Moon, Sun, Phone } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
@@ -16,20 +16,37 @@ const links = [
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
   const [cta, setCta] = useState<"admission" | "contact">("admission");
+  const lastY = useRef(0);
   const { theme, toggle } = useTheme();
   const location = useLocation();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
+    lastY.current = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      const delta = y - lastY.current;
+      setScrolled(y > 24);
+
+      // Keep visible near top, when menu open, or when scrolling up
+      if (open || y < 80) {
+        setHidden(false);
+      } else if (delta > 8) {
+        setHidden(true);
+      } else if (delta < -6) {
+        setHidden(false);
+      }
+      lastY.current = y;
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [open]);
 
   useEffect(() => {
     setOpen(false);
+    setHidden(false);
   }, [location.pathname]);
 
   useEffect(() => {
@@ -47,8 +64,10 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        "fixed top-0 inset-x-0 z-50 transition-all duration-300",
+        "fixed top-0 inset-x-0 z-50 will-change-transform",
+        "transition-[transform,padding] duration-500 ease-[cubic-bezier(0.22,1.2,0.36,1)]",
         scrolled ? "py-2" : "py-3 md:py-4",
+        hidden && !open ? "-translate-y-[120%]" : "translate-y-0",
       )}
     >
       <div className="container mx-auto px-4 max-w-7xl">
@@ -67,7 +86,7 @@ export function Navbar() {
               <img
                 src="./icon-cercle.png"
                 className="h-10"
-                alt="icon de l'ecode"
+                alt="Logo CS Wasomi"
               />
             </div>
             <span
@@ -179,7 +198,6 @@ export function Navbar() {
           </div>
         </nav>
 
-        {/* Mobile menu */}
         <div
           id="mobile-menu"
           className={cn(
