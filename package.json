@@ -10,7 +10,7 @@
     "npm": ">=10.0.0"
   },
   "scripts": {
-    "dev": "vite dev --host",
+    "dev": "vite dev",
     "dev:api": "npm --prefix server run dev",
     "dev:all": "npm run dev:api & npm run dev",
     "api:setup": "npm --prefix server run setup",
