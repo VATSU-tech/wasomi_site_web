@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Linkedin, Twitter, Mail, AlertCircle, Users } from "lucide-react";
+import { Linkedin, Facebook, MessageCircle, Mail, AlertCircle, Users } from "lucide-react";
 import { useStaffQuery } from "@/hooks/useWasomiApi";
 import { Link } from "@tanstack/react-router";
 
@@ -126,15 +126,30 @@ function EquipePage() {
                           <Linkedin className="size-4" />
                         </a>
                       )}
-                      {(member.social_links?.twitter || member.social_links?.facebook) && (
+                      {member.social_links?.facebook && (
                         <a
-                          href={member.social_links?.twitter || member.social_links?.facebook}
+                          href={member.social_links.facebook}
                           target="_blank"
                           rel="noopener noreferrer"
-                          aria-label={`Réseau de ${member.name}`}
+                          aria-label={`Facebook de ${member.name}`}
                           className="size-11 rounded-xl bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/40 transition-all duration-200"
                         >
-                          <Twitter className="size-4" />
+                          <Facebook className="size-4" />
+                        </a>
+                      )}
+                      {member.social_links?.whatsapp && (
+                        <a
+                          href={
+                            member.social_links.whatsapp.startsWith("http")
+                              ? member.social_links.whatsapp
+                              : `https://wa.me/${member.social_links.whatsapp.replace(/\D/g, "")}`
+                          }
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`WhatsApp de ${member.name}`}
+                          className="size-11 rounded-xl bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/40 transition-all duration-200"
+                        >
+                          <MessageCircle className="size-4" />
                         </a>
                       )}
                     </div>
