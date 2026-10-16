@@ -922,7 +922,7 @@ opacity: 0;
   transform: translateZ(0);
   backface-visibility: hidden;
   will-change: transform, opacity;
-  animation: slide-in-home 5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: slide-in-home 5s ease-in-out /*cubic-bezier(0.22, 1, 0.36, 1)*/ both;
 }
 
 @media (prefers-reduced-motion: reduce) {
