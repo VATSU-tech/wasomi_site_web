@@ -86,8 +86,34 @@ async function main() {
     await ensureColumn(conn, 'Media', name, def);
   }
 
+  console.log('Colonnes User…');
+  const userColumns = [
+    ['last_login_at', '`last_login_at` datetime(3) DEFAULT NULL'],
+    ['password_changed_at', '`password_changed_at` datetime(3) DEFAULT NULL'],
+    ['email_verified_at', '`email_verified_at` datetime(3) DEFAULT NULL'],
+    ['deleted_at', '`deleted_at` datetime(3) DEFAULT NULL'],
+  ];
+  for (const [name, def] of userColumns) {
+    await ensureColumn(conn, 'User', name, def);
+  }
+
   console.log('Colonnes Role…');
   await ensureColumn(conn, 'Role', 'deleted_at', '`deleted_at` datetime(3) DEFAULT NULL');
+
+  console.log('Colonnes AuditLog…');
+  const auditLogColumns = [
+    ['actor_user_id', '`actor_user_id` varchar(191) DEFAULT NULL'],
+    ['before_json', '`before_json` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL'],
+    ['after_json', '`after_json` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL'],
+    ['ip_hash', "`ip_hash` varchar(191) NOT NULL DEFAULT 'n/a'"],
+    ['request_id', '`request_id` varchar(64) DEFAULT NULL'],
+  ];
+  for (const [name, def] of auditLogColumns) {
+    await ensureColumn(conn, 'AuditLog', name, def);
+  }
+
+  console.log('Colonnes Setting…');
+  await ensureColumn(conn, 'Setting', 'updated_by_user_id', '`updated_by_user_id` varchar(191) DEFAULT NULL');
 
   // alt_text / caption / width / height existent déjà sur le schéma Prisma
   for (const [name, def] of [
