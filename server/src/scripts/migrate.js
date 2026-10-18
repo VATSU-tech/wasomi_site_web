@@ -86,6 +86,9 @@ async function main() {
     await ensureColumn(conn, 'Media', name, def);
   }
 
+  console.log('Colonnes Role…');
+  await ensureColumn(conn, 'Role', 'deleted_at', '`deleted_at` datetime(3) DEFAULT NULL');
+
   // alt_text / caption / width / height existent déjà sur le schéma Prisma
   for (const [name, def] of [
     ['alt_text', '`alt_text` varchar(255) DEFAULT NULL'],
