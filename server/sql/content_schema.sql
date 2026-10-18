@@ -198,6 +198,8 @@ CREATE TABLE IF NOT EXISTS `User` (
   `password_hash` varchar(255) NOT NULL,
   `is_active` tinyint(1) NOT NULL DEFAULT 1,
   `email_verified_at` datetime(3) DEFAULT NULL,
+  `last_login_at` datetime(3) DEFAULT NULL,
+  `password_changed_at` datetime(3) DEFAULT NULL,
   `deleted_at` datetime(3) DEFAULT NULL,
   `created_at` datetime(3) NOT NULL DEFAULT current_timestamp(3),
   `updated_at` datetime(3) NOT NULL DEFAULT current_timestamp(3) ON UPDATE current_timestamp(3),
@@ -208,6 +210,7 @@ CREATE TABLE IF NOT EXISTS `User` (
 CREATE TABLE IF NOT EXISTS `Role` (
   `id` varchar(191) NOT NULL,
   `name` varchar(100) NOT NULL,
+  `deleted_at` datetime(3) DEFAULT NULL,
   `created_at` datetime(3) NOT NULL DEFAULT current_timestamp(3),
   `updated_at` datetime(3) NOT NULL DEFAULT current_timestamp(3) ON UPDATE current_timestamp(3),
   PRIMARY KEY (`id`),
@@ -253,16 +256,20 @@ CREATE TABLE IF NOT EXISTS `Setting` (
 
 CREATE TABLE IF NOT EXISTS `AuditLog` (
   `id` varchar(191) NOT NULL,
-  `user_id` varchar(191) DEFAULT NULL,
-  `action` varchar(120) NOT NULL,
-  `entity_type` varchar(120) DEFAULT NULL,
+  `actor_user_id` varchar(191) DEFAULT NULL,
+  `action` varchar(191) NOT NULL,
+  `entity_type` varchar(191) NOT NULL,
   `entity_id` varchar(191) DEFAULT NULL,
+  `before_json` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `after_json` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `details_json` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `ip_hash` varchar(191) DEFAULT NULL,
   `ip_address` varchar(64) DEFAULT NULL,
-  `user_agent` varchar(255) DEFAULT NULL,
+  `user_agent` varchar(512) NOT NULL,
+  `request_id` varchar(64) DEFAULT NULL,
   `created_at` datetime(3) NOT NULL DEFAULT current_timestamp(3),
   PRIMARY KEY (`id`),
-  KEY `AuditLog_user_idx` (`user_id`),
+  KEY `AuditLog_actor_idx` (`actor_user_id`),
   KEY `AuditLog_action_idx` (`action`),
   KEY `AuditLog_created_idx` (`created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
