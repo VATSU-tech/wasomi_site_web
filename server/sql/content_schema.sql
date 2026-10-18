@@ -142,7 +142,6 @@ CREATE TABLE IF NOT EXISTS `AdmissionRequest` (
   `age` int DEFAULT NULL,
   `gender` varchar(20) DEFAULT NULL,
   `class_level` varchar(120) DEFAULT NULL,
-  `education_level` varchar(120) DEFAULT NULL,
   `program_id` varchar(191) DEFAULT NULL,
   `email` varchar(254) NOT NULL,
   `phone` varchar(60) NOT NULL,
@@ -151,9 +150,6 @@ CREATE TABLE IF NOT EXISTS `AdmissionRequest` (
   `guardian_phone` varchar(60) DEFAULT NULL,
   `guardian_email` varchar(254) DEFAULT NULL,
   `emergency_phone` varchar(60) DEFAULT NULL,
-  `preferred_schedule` varchar(80) DEFAULT NULL,
-  `source` varchar(120) DEFAULT NULL,
-  `payment_mode_preference` varchar(120) DEFAULT NULL,
   `address` varchar(255) DEFAULT NULL,
   `previous_school` varchar(255) DEFAULT NULL,
   `last_grade_result` varchar(120) DEFAULT NULL,
@@ -202,8 +198,6 @@ CREATE TABLE IF NOT EXISTS `User` (
   `password_hash` varchar(255) NOT NULL,
   `is_active` tinyint(1) NOT NULL DEFAULT 1,
   `email_verified_at` datetime(3) DEFAULT NULL,
-  `last_login_at` datetime(3) DEFAULT NULL,
-  `password_changed_at` datetime(3) DEFAULT NULL,
   `deleted_at` datetime(3) DEFAULT NULL,
   `created_at` datetime(3) NOT NULL DEFAULT current_timestamp(3),
   `updated_at` datetime(3) NOT NULL DEFAULT current_timestamp(3) ON UPDATE current_timestamp(3),
@@ -214,7 +208,6 @@ CREATE TABLE IF NOT EXISTS `User` (
 CREATE TABLE IF NOT EXISTS `Role` (
   `id` varchar(191) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `deleted_at` datetime(3) DEFAULT NULL,
   `created_at` datetime(3) NOT NULL DEFAULT current_timestamp(3),
   `updated_at` datetime(3) NOT NULL DEFAULT current_timestamp(3) ON UPDATE current_timestamp(3),
   PRIMARY KEY (`id`),
@@ -252,7 +245,6 @@ CREATE TABLE IF NOT EXISTS `Setting` (
   `id` varchar(191) NOT NULL,
   `key` varchar(120) NOT NULL,
   `value_json` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `updated_by_user_id` varchar(191) DEFAULT NULL,
   `created_at` datetime(3) NOT NULL DEFAULT current_timestamp(3),
   `updated_at` datetime(3) NOT NULL DEFAULT current_timestamp(3) ON UPDATE current_timestamp(3),
   PRIMARY KEY (`id`),
@@ -261,28 +253,20 @@ CREATE TABLE IF NOT EXISTS `Setting` (
 
 CREATE TABLE IF NOT EXISTS `AuditLog` (
   `id` varchar(191) NOT NULL,
-  `actor_user_id` varchar(191) DEFAULT NULL,
+  `user_id` varchar(191) DEFAULT NULL,
   `action` varchar(120) NOT NULL,
   `entity_type` varchar(120) DEFAULT NULL,
   `entity_id` varchar(191) DEFAULT NULL,
-  `before_json` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
-  `after_json` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `details_json` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `ip_address` varchar(64) DEFAULT NULL,
-  `ip_hash` varchar(191) NOT NULL DEFAULT '',
   `user_agent` varchar(255) DEFAULT NULL,
-  `request_id` varchar(64) NOT NULL DEFAULT '',
   `created_at` datetime(3) NOT NULL DEFAULT current_timestamp(3),
   PRIMARY KEY (`id`),
-  KEY `AuditLog_user_idx` (`actor_user_id`),
+  KEY `AuditLog_user_idx` (`user_id`),
   KEY `AuditLog_action_idx` (`action`),
-  KEY `AuditLog_created_idx` (`created_at`),
-  KEY `AuditLog_entity_idx` (`entity_type`,`entity_id`)
+  KEY `AuditLog_created_idx` (`created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Sessions de rafraîchissement (rotation des refresh tokens).
--- Indispensable : src/middleware/auth.js fait INSERT/UPDATE/SELECT sur cette table
--- à chaque connexion et chaque renouvellement de token.
 CREATE TABLE IF NOT EXISTS `RefreshSession` (
   `id` varchar(191) NOT NULL,
   `user_id` varchar(191) NOT NULL,
@@ -293,25 +277,10 @@ CREATE TABLE IF NOT EXISTS `RefreshSession` (
   `ip_hash` varchar(191) NOT NULL,
   `user_agent` varchar(512) NOT NULL,
   `created_at` datetime(3) NOT NULL DEFAULT current_timestamp(3),
-  `updated_at` datetime(3) NOT NULL,
+  `updated_at` datetime(3) NOT NULL DEFAULT current_timestamp(3) ON UPDATE current_timestamp(3),
   PRIMARY KEY (`id`),
   UNIQUE KEY `RefreshSession_token_hash_key` (`token_hash`),
-  KEY `RefreshSession_user_id_expires_at_idx` (`user_id`,`expires_at`),
-  KEY `RefreshSession_user_id_idx` (`user_id`),
-  KEY `RefreshSession_expires_at_idx` (`expires_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE TABLE IF NOT EXISTS `PasswordResetToken` (
-  `id` varchar(191) NOT NULL,
-  `token_hash` varchar(191) NOT NULL,
-  `user_id` varchar(191) NOT NULL,
-  `used_at` datetime(3) DEFAULT NULL,
-  `expires_at` datetime(3) NOT NULL,
-  `created_at` datetime(3) NOT NULL DEFAULT current_timestamp(3),
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `PasswordResetToken_token_hash_key` (`token_hash`),
-  KEY `PasswordResetToken_expires_at_idx` (`expires_at`),
-  KEY `PasswordResetToken_user_id_idx` (`user_id`)
+  KEY `RefreshSession_user_id_expires_at_idx` (`user_id`,`expires_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `EmailVerificationToken` (
@@ -323,56 +292,17 @@ CREATE TABLE IF NOT EXISTS `EmailVerificationToken` (
   `created_at` datetime(3) NOT NULL DEFAULT current_timestamp(3),
   PRIMARY KEY (`id`),
   UNIQUE KEY `EmailVerificationToken_token_hash_key` (`token_hash`),
-  KEY `EmailVerificationToken_expires_at_idx` (`expires_at`),
-  KEY `EmailVerificationToken_user_id_idx` (`user_id`)
+  KEY `EmailVerificationToken_expires_at_idx` (`expires_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS `HeroSlide` (
+CREATE TABLE IF NOT EXISTS `PasswordResetToken` (
   `id` varchar(191) NOT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `subtitle` text,
-  `image_url` varchar(2048) DEFAULT NULL,
-  `video_url` varchar(2048) DEFAULT NULL,
-  `cta_label` varchar(120) DEFAULT NULL,
-  `cta_href` varchar(512) DEFAULT NULL,
-  `sort_order` int NOT NULL DEFAULT 0,
-  `is_active` tinyint(1) NOT NULL DEFAULT 1,
-  `deleted_at` datetime(3) DEFAULT NULL,
+  `token_hash` varchar(191) NOT NULL,
+  `user_id` varchar(191) NOT NULL,
+  `used_at` datetime(3) DEFAULT NULL,
+  `expires_at` datetime(3) NOT NULL,
   `created_at` datetime(3) NOT NULL DEFAULT current_timestamp(3),
-  `updated_at` datetime(3) NOT NULL DEFAULT current_timestamp(3) ON UPDATE current_timestamp(3),
   PRIMARY KEY (`id`),
-  KEY `HeroSlide_active_idx` (`is_active`,`sort_order`)
+  UNIQUE KEY `PasswordResetToken_token_hash_key` (`token_hash`),
+  KEY `PasswordResetToken_expires_at_idx` (`expires_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE TABLE IF NOT EXISTS `Review` (
-  `id` varchar(191) NOT NULL,
-  `author_name` varchar(160) NOT NULL,
-  `author_role` varchar(160) DEFAULT NULL,
-  `content` text NOT NULL,
-  `rating` tinyint NOT NULL DEFAULT 5,
-  `status` varchar(40) NOT NULL DEFAULT 'pending',
-  `is_featured` tinyint(1) NOT NULL DEFAULT 0,
-  `sort_order` int NOT NULL DEFAULT 0,
-  `admin_notes` text,
-  `deleted_at` datetime(3) DEFAULT NULL,
-  `created_at` datetime(3) NOT NULL DEFAULT current_timestamp(3),
-  `updated_at` datetime(3) NOT NULL DEFAULT current_timestamp(3) ON UPDATE current_timestamp(3),
-  PRIMARY KEY (`id`),
-  KEY `Review_status_idx` (`status`,`is_featured`,`sort_order`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE TABLE IF NOT EXISTS `SchoolClass` (
-  `id` varchar(191) NOT NULL,
-  `section` varchar(120) NOT NULL,
-  `option_name` varchar(120) DEFAULT NULL,
-  `class_name` varchar(160) NOT NULL,
-  `label` varchar(255) DEFAULT NULL,
-  `is_open` tinyint(1) NOT NULL DEFAULT 1,
-  `sort_order` int NOT NULL DEFAULT 0,
-  `deleted_at` datetime(3) DEFAULT NULL,
-  `created_at` datetime(3) NOT NULL DEFAULT current_timestamp(3),
-  `updated_at` datetime(3) NOT NULL DEFAULT current_timestamp(3) ON UPDATE current_timestamp(3),
-  PRIMARY KEY (`id`),
-  KEY `SchoolClass_open_idx` (`is_open`,`section`,`sort_order`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
