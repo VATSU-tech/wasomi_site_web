@@ -1,42 +1,22 @@
-# AGENTS.md — Smart School Management Portal
+# AGENTS.md — Wasomi Site Web
 
 ## Stack
 
-- React 19 + TypeScript + Vite + TanStack Router
-- TailwindCSS v4 + DaisyUI (portail `/app/*` uniquement)
-- API v2 : `VITE_SCHOOL_API_BASE_URL` (défaut `http://localhost:8000/api`)
-- Référence OpenAPI : `../smart_school_managment/acounts.txt` (v2) et `data.txt` (v1)
-
-## Règles UI (portail `/app`)
-
-1. **Styling exclusif DaisyUI** : `btn`, `card`, `modal`, `input`, `badge`, `table`, `select`, `alert`, `drawer`, etc.
-2. **Multi-tenancy transparente** : aucun sélecteur d'école dans l'UI ; résolution via JWT / sous-domaine / header côté API.
-3. **Mode Operate** (skill impeccable) : densité ergonomique, lisibilité, feedback systématique.
+- React 19 + TypeScript + Vite + TanStack Router / Query
+- TailwindCSS v4 + composants UI (shadcn/radix)
+- API Node/Express : `VITE_API_BASE_URL` (défaut `/api` via le serveur local `server/`)
 
 ## Architecture
 
 ```
-src/api/          → core client JWT, endpoints v2, types
-src/context/      → AuthContext (rôles, suspension)
-src/features/     → auth, enrollments, teachings, gradings, school
-src/layouts/      → AppShell, Sidebar, TopNavbar
-src/pages/        → Welcome, Dashboard, AccountSuspended
-src/routes/app/   → routes TanStack du portail
+src/api/          → client HTTP (cookies CSRF)
+src/services/     → appels API métier (cms, admin, auth…)
+src/components/   → UI site + admin
+src/routes/       → pages publiques + /admin + /login
+server/           → API Express locale (miroir du backend)
 ```
 
-## Rôles
+## Admin CMS
 
-| Rôle | Slug API | Accès clé |
-|------|----------|-----------|
-| Préfet | `prefet` | Personnel, paramètres école |
-| Proviseur | `proviseur` | Inscriptions, cours, délibération |
-| Enseignant | `enseignant` | Affectations, catégories, évaluations |
-| Titulaire | `titulaire` | Compilation des résultats |
-| Parent | `parent` | Enfants, bulletins |
-| Élève | `eleve` | Notes personnelles |
-
-## Auth v2
-
-- Login : `identifier` (email ou téléphone E.164) + `password`
-- Tokens JWT : `access` + `refresh` en localStorage
-- Suspension : redirection automatique vers `/app/account-suspended`
+- `/admin` : dashboard, préinscriptions, messages, formations, carousel hero, avis, classes, blog, galerie, équipe, médias
+- Authentification cookie + CSRF ; rôle `super_admin`
