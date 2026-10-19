@@ -10,6 +10,7 @@ import {
   Trophy,
   Pyramid,
   Calendar,
+  type LucideIcon,
 } from "lucide-react";
 import { SectionHeading } from "@/components/site/section-heading";
 import { Gallery } from "@/components/site/gallery";
@@ -18,8 +19,9 @@ import { CountUp } from "@/components/site/count-up";
 import { HeroCarousel } from "@/components/site/HeroCarousel";
 import { NewsFeatured } from "@/components/site/NewsFeatured";
 import { ReviewsSection } from "@/components/site/ReviewsSection";
-import { usePublicSettingsQuery } from "@/hooks/useWasomiApi";
+import { useProgramsQuery, usePublicSettingsQuery } from "@/hooks/useWasomiApi";
 import { normalizeSiteKpis } from "@/lib/site-kpis";
+import type { Program } from "@/types/domain";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -46,8 +48,29 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const cycles = [
+type CycleCard = {
+  id: string | number;
+  icon: LucideIcon;
+  title: string;
+  subtitle: string;
+  desc: string;
+  image: string;
+  color: string;
+  stat: string;
+};
+
+const CYCLE_ICONS: LucideIcon[] = [Baby, Blocks, BookOpen, Pyramid];
+const CYCLE_COLORS = [
+  "from-sky-500 to-teal-500",
+  "from-rose-500 to-orange-400",
+  "from-primary to-primary-glow",
+  "from-emerald-500 to-teal-600",
+];
+
+/** Fallback si l'API formations est indisponible — même ordre que les 4 premiers cycles historiques */
+const fallbackCycles: CycleCard[] = [
   {
+    id: "fallback-1",
     icon: Baby,
     title: "Crèche",
     subtitle: "De 6 mois à 3 ans",
@@ -57,6 +80,7 @@ const cycles = [
     stat: "Éveil & motricité",
   },
   {
+    id: "fallback-2",
     icon: Blocks,
     title: "Maternelle",
     subtitle: "Petite, moyenne & grande section",
@@ -66,6 +90,7 @@ const cycles = [
     stat: "Lire, compter, créer",
   },
   {
+    id: "fallback-3",
     icon: BookOpen,
     title: "Primaire",
     subtitle: "De la 1ère à la 6ème",
@@ -75,6 +100,7 @@ const cycles = [
     stat: "Bases solides",
   },
   {
+    id: "fallback-4",
     icon: Pyramid,
     title: "Éducation de base",
     subtitle: "7ème & 8ème année",
@@ -84,6 +110,19 @@ const cycles = [
     stat: "Autonomie & méthode",
   },
 ];
+
+function mapProgramsToCycles(programs: Program[]): CycleCard[] {
+  return programs.slice(0, 4).map((p, idx) => ({
+    id: p.id,
+    icon: CYCLE_ICONS[idx % CYCLE_ICONS.length],
+    title: p.title,
+    subtitle: p.level || p.duration || "Cycle Wasomi",
+    desc: p.summary || p.description || "Formation d'excellence au Complexe Scolaire Wasomi.",
+    image: p.image || "/gallerie/formation_maternelle.jpg",
+    color: p.color || CYCLE_COLORS[idx % CYCLE_COLORS.length],
+    stat: p.duration || p.students || "Wasomi",
+  }));
+}
 
 const values = [
   {
@@ -110,16 +149,27 @@ const values = [
 
 function Home() {
   const { data: settings } = usePublicSettingsQuery();
+  const { data: apiPrograms, isLoading: programsLoading } = useProgramsQuery();
   const stats = normalizeSiteKpis(settings?.site_kpis).items;
+  const cycles: CycleCard[] =
+    apiPrograms && apiPrograms.length > 0
+      ? mapProgramsToCycles(apiPrograms)
+      : fallbackCycles;
 
   return (
     <>
       <HeroCarousel />
       <NewsFeatured />
 
-      {/* ============ STATS BAR ============ */}
+      {/* ============ STATS BAR / VALEURS ============ */}
       <section className="relative bg-surface border-y border-border">
-        <div className="container mx-auto px-4 max-w-7xl py-12">
+        <div className="container mx-auto px-4 max-w-7xl py-12 sm:py-16">
+          <SectionHeading
+            eyebrow="Nos valeurs"
+            title="Wasomi en chiffres"
+            description="Des indicateurs concrets qui reflètent la vie de l'école et notre engagement auprès des familles."
+            className="mb-10"
+          />
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {stats.map((s, i) => (
               <div
@@ -219,7 +269,7 @@ function Home() {
         </div>
       </section>
 
-      {/* ============ CYCLES D'ENSEIGNEMENT ============ */}
+      {/* ============ CYCLES D'ENSEIGNEMENT (4 premières formations, ordre admin) ============ */}
       <section className="py-14 sm:py-24 bg-surface border-y border-border">
         <div className="container mx-auto px-4 max-w-7xl">
           <SectionHeading
@@ -227,54 +277,65 @@ function Home() {
             title="Un parcours continu, de la crèche à la 8ème"
             description="Chaque étape a ses besoins. Nos programmes sont pensés pour que l'enfant grandisse en confiance, sans rupture."
           />
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {cycles.map((c, i) => (
-              <article
-                key={c.title}
-                data-aos="fade-up"
-                data-aos-delay={i * 90}
-                className="group relative rounded-3xl overflow-hidden bg-card border border-border shadow-sm hover:shadow-2xl transition-all duration-500 hover:rotate-1"
-              >
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <img
-                    src={c.image}
-                    alt={`${c.title} — ${c.subtitle}`}
-                    loading="lazy"
-                    className="size-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/40 to-transparent" />
-                  <div
-                    className={`absolute top-4 left-4 size-12 rounded-2xl bg-gradient-to-br ${c.color} flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300`}
-                  >
-                    <c.icon className="size-6 text-white" />
+          {programsLoading && (!apiPrograms || apiPrograms.length === 0) ? (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[1, 2, 3, 4].map((i) => (
+                <div
+                  key={i}
+                  className="h-[380px] rounded-3xl bg-card border border-border animate-pulse"
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {cycles.map((c, i) => (
+                <article
+                  key={c.id}
+                  data-aos="fade-up"
+                  data-aos-delay={i * 90}
+                  className="group relative rounded-3xl overflow-hidden bg-card border border-border shadow-sm hover:shadow-2xl transition-all duration-500 hover:rotate-1"
+                >
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <img
+                      src={c.image}
+                      alt={`${c.title} — ${c.subtitle}`}
+                      loading="lazy"
+                      className="size-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-card via-card/40 to-transparent" />
+                    <div
+                      className={`absolute top-4 left-4 size-12 rounded-2xl bg-gradient-to-br ${c.color} flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300`}
+                    >
+                      <c.icon className="size-6 text-white" />
+                    </div>
+                    <span className="absolute top-4 right-4 px-3 py-1 rounded-full bg-card/90 backdrop-blur text-xs font-semibold text-foreground shadow">
+                      {c.stat}
+                    </span>
                   </div>
-                  <span className="absolute top-4 right-4 px-3 py-1 rounded-full bg-card/90 backdrop-blur text-xs font-semibold text-foreground shadow">
-                    {c.stat}
-                  </span>
-                </div>
-                <div className="p-6">
-                  <h3 className="font-display text-xl font-bold">
-                    {c.title}
-                  </h3>
-                  <p className="text-xs font-semibold text-primary mt-1 uppercase tracking-wide">
-                    {c.subtitle}
-                  </p>
-                  <p className="text-sm text-muted-foreground leading-relaxed mt-3">
-                    {c.desc}
-                  </p>
-                </div>
-                <div className="px-6 pb-6">
-                  <Link
-                    to="/formations"
-                    className="inline-flex items-center gap-2 text-sm font-semibold text-primary group-hover:gap-3 transition-all duration-300"
-                  >
-                    En savoir plus
-                    <ArrowRight className="size-4" />
-                  </Link>
-                </div>
-              </article>
-            ))}
-          </div>
+                  <div className="p-6">
+                    <h3 className="font-display text-xl font-bold">
+                      {c.title}
+                    </h3>
+                    <p className="text-xs font-semibold text-primary mt-1 uppercase tracking-wide">
+                      {c.subtitle}
+                    </p>
+                    <p className="text-sm text-muted-foreground leading-relaxed mt-3">
+                      {c.desc}
+                    </p>
+                  </div>
+                  <div className="px-6 pb-6">
+                    <Link
+                      to="/formations"
+                      className="inline-flex items-center gap-2 text-sm font-semibold text-primary group-hover:gap-3 transition-all duration-300"
+                    >
+                      En savoir plus
+                      <ArrowRight className="size-4" />
+                    </Link>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
