@@ -8,6 +8,7 @@ import {
   Trash2,
   Eye,
   EyeOff,
+  Timer,
 } from 'lucide-react';
 import { adminService } from '@/services/admin.service';
 import { ImagePickerModal, type SelectedMedia } from '@/components/admin/ImagePickerModal';
@@ -15,12 +16,18 @@ import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import type { HeroSlide } from '@/types/domain';
 
+const DEFAULT_DURATION_SEC = 5;
+const MIN_DURATION_SEC = 1;
+const MAX_DURATION_SEC = 120;
+
 type FormState = {
   title: string;
   subtitle: string;
   image_url: string;
   cta_label: string;
   cta_href: string;
+  /** Durée en secondes (stockée en ms côté API) */
+  duration_sec: number;
   is_active: boolean;
 };
 
@@ -30,8 +37,21 @@ const emptyForm = (): FormState => ({
   image_url: '',
   cta_label: 'Découvrir',
   cta_href: '/formations',
+  duration_sec: DEFAULT_DURATION_SEC,
   is_active: true,
 });
+
+function msToSec(ms: number | null | undefined): number {
+  const n = Number(ms);
+  if (!Number.isFinite(n) || n <= 0) return DEFAULT_DURATION_SEC;
+  return Math.min(MAX_DURATION_SEC, Math.max(MIN_DURATION_SEC, Math.round(n / 1000)));
+}
+
+function secToMs(sec: number): number {
+  const n = Number(sec);
+  if (!Number.isFinite(n)) return DEFAULT_DURATION_SEC * 1000;
+  return Math.min(MAX_DURATION_SEC, Math.max(MIN_DURATION_SEC, Math.round(n))) * 1000;
+}
 
 export function AdminHeroPanel() {
   const [items, setItems] = useState<HeroSlide[]>([]);
@@ -71,19 +91,29 @@ export function AdminHeroPanel() {
       image_url: item.image_url || '',
       cta_label: item.cta_label || '',
       cta_href: item.cta_href || '',
+      duration_sec: msToSec(item.duration_ms),
       is_active: item.is_active !== false,
     });
   };
 
   const save = async () => {
+    const payload = {
+      title: form.title,
+      subtitle: form.subtitle,
+      image_url: form.image_url,
+      cta_label: form.cta_label,
+      cta_href: form.cta_href,
+      duration_ms: secToMs(form.duration_sec),
+      is_active: form.is_active,
+    };
     try {
       if (editing === 'new') {
         await adminService.createHeroSlide({
-          ...form,
+          ...payload,
           sort_order: items.length,
         });
       } else if (editing) {
-        await adminService.updateHeroSlide(editing.id, form);
+        await adminService.updateHeroSlide(editing.id, payload);
       }
       toast.success('Slide enregistré');
       setEditing(null);
@@ -144,7 +174,7 @@ export function AdminHeroPanel() {
         <div>
           <h2 className="text-xl font-bold font-display">Carousel d’accueil</h2>
           <p className="text-xs text-muted-foreground mt-1">
-            Glissez-déposez pour réordonner. Les slides inactifs sont masqués sur le site.
+            Glissez-déposez pour réordonner. Chaque slide peut avoir sa propre durée d’affichage.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -230,6 +260,32 @@ export function AdminHeroPanel() {
                 )}
               </div>
             ))}
+            <div>
+              <label className="text-xs font-semibold uppercase text-muted-foreground inline-flex items-center gap-1.5">
+                <Timer className="size-3.5" />
+                Durée d’affichage (secondes)
+              </label>
+              <input
+                type="number"
+                min={MIN_DURATION_SEC}
+                max={MAX_DURATION_SEC}
+                step={1}
+                value={form.duration_sec}
+                onChange={(e) => {
+                  const raw = Number.parseInt(e.target.value, 10);
+                  setForm({
+                    ...form,
+                    duration_sec: Number.isFinite(raw)
+                      ? Math.min(MAX_DURATION_SEC, Math.max(MIN_DURATION_SEC, raw))
+                      : DEFAULT_DURATION_SEC,
+                  });
+                }}
+                className="w-full mt-1.5 px-3 py-2 rounded-xl border border-border bg-background text-sm focus:border-primary focus:outline-none"
+              />
+              <p className="text-[11px] text-muted-foreground mt-1">
+                Entre {MIN_DURATION_SEC} et {MAX_DURATION_SEC} s. Ce slide restera visible {form.duration_sec} s avant le suivant.
+              </p>
+            </div>
             <label className="inline-flex items-center gap-2 text-sm font-semibold sm:col-span-2">
               <input
                 type="checkbox"
@@ -292,6 +348,10 @@ export function AdminHeroPanel() {
               <div className="min-w-0 flex-1">
                 <p className="font-semibold truncate">{item.title || 'Sans titre'}</p>
                 <p className="text-xs text-muted-foreground truncate">{item.subtitle}</p>
+                <p className="text-[11px] text-muted-foreground mt-0.5 inline-flex items-center gap-1">
+                  <Timer className="size-3" />
+                  {msToSec(item.duration_ms)} s
+                </p>
               </div>
               <div className="flex items-center gap-1.5">
                 <button
