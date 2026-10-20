@@ -156,6 +156,8 @@ export interface Program {
       sort_order?: number;
     }>;
     installments?: Array<{ id?: string; label: string; amount: string }>;
+    /** Afficher les tranches sur le site public (défaut : true si absent) */
+    showInstallments?: boolean;
     connectedFees?: string;
     labotech?: string;
     infirmary?: string;
