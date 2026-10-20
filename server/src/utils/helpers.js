@@ -32,8 +32,47 @@ export function toJson(value) {
 }
 
 /**
+ * Construit la liste des tranches à partir du tableau moderne ou des
+ * anciens champs first/second/thirdInstallment.
+ */
+function buildInstallments(fees) {
+  if (Array.isArray(fees.installments)) {
+    return fees.installments
+      .map((inst, i) => {
+        if (!inst || typeof inst !== 'object') return null;
+        const label = String(inst.label || '').trim().slice(0, 80);
+        if (!label) return null;
+        return {
+          id: String(inst.id || createId()),
+          label,
+          amount: String(inst.amount ?? '').trim().slice(0, 40),
+          sort_order: i,
+        };
+      })
+      .filter(Boolean);
+  }
+
+  const legacy = [
+    { id: 'inst-1', label: '1ère tranche', amount: fees.firstInstallment },
+    { id: 'inst-2', label: '2ème tranche', amount: fees.secondInstallment },
+    { id: 'inst-3', label: '3ème tranche', amount: fees.thirdInstallment },
+  ]
+    .filter((row) => row.amount != null && String(row.amount).trim() !== '')
+    .map((row, i) => ({
+      id: row.id,
+      label: row.label,
+      amount: String(row.amount).trim().slice(0, 40),
+      sort_order: i,
+    }));
+
+  return legacy;
+}
+
+/**
  * Normalise la structure des frais d'une formation.
  * Prix total = somme des composantes lorsqu'elles existent.
+ * Les tranches (installments) sont éditables par formation et exposées
+ * au site public selon showInstallments.
  */
 export function normalizeFees(fees, currencyFallback = '$') {
   if (fees == null) return null;
@@ -68,42 +107,28 @@ export function normalizeFees(fees, currencyFallback = '$') {
     total = formatMoney(componentsTotal);
   }
 
-  const installments = Array.isArray(fees.installments)
-    ? fees.installments
-        .map((inst, i) => {
-          if (!inst || typeof inst !== 'object') return null;
-          const label = String(inst.label || '').trim().slice(0, 80);
-          if (!label) return null;
-          return {
-            id: String(inst.id || createId()),
-            label,
-            amount: String(inst.amount ?? '').trim().slice(0, 40),
-            sort_order: i,
-          };
-        })
-        .filter(Boolean)
-    : undefined;
+  const installments = buildInstallments(fees);
+  const showInstallments =
+    fees.showInstallments !== false && fees.show_installments !== false;
 
   const result = {
     currency,
     total: total || null,
     components,
     cycle: fees.cycle != null ? String(fees.cycle).slice(0, 120) : undefined,
+    showInstallments,
+    installments,
   };
 
-  if (installments?.length) result.installments = installments;
-
-  // Conservé pour compatibilité lecture des anciennes données
-  for (const key of [
-    'connectedFees',
-    'labotech',
-    'infirmary',
-    'firstInstallment',
-    'secondInstallment',
-    'thirdInstallment',
-  ]) {
+  for (const key of ['connectedFees', 'labotech', 'infirmary']) {
     if (fees[key] != null && fees[key] !== '') result[key] = String(fees[key]);
   }
+  if (installments[0]) result.firstInstallment = installments[0].amount;
+  else if (fees.firstInstallment) result.firstInstallment = String(fees.firstInstallment);
+  if (installments[1]) result.secondInstallment = installments[1].amount;
+  else if (fees.secondInstallment) result.secondInstallment = String(fees.secondInstallment);
+  if (installments[2]) result.thirdInstallment = installments[2].amount;
+  else if (fees.thirdInstallment) result.thirdInstallment = String(fees.thirdInstallment);
 
   return result;
 }
