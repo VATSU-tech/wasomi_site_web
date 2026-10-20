@@ -175,6 +175,7 @@ async function main() {
         { id: 't2', label: '2ème tranche', amount: '150 $' },
         { id: 't3', label: '3ème tranche', amount: '180 $' },
       ],
+      showInstallments: true,
       // Compat lecture ancienne UI
       connectedFees: '10 $',
       labotech: '50 $',
