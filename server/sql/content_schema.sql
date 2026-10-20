@@ -39,6 +39,8 @@ CREATE TABLE IF NOT EXISTS `Program` (
   `students` varchar(40) DEFAULT NULL,
   `color` varchar(120) DEFAULT NULL,
   `features_json` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`features_json`) OR `features_json` IS NULL),
+  -- fees_json : { currency, total, cycle, components[], installments[], showInstallments, … }
+  -- installments[] = tranches éditables par formation ; showInstallments contrôle l'affichage public
   `fees_json` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`fees_json`) OR `fees_json` IS NULL),
   `schedule_json` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`schedule_json`) OR `schedule_json` IS NULL),
   `modules_json` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`modules_json`) OR `modules_json` IS NULL),
