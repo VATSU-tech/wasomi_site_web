@@ -38,6 +38,8 @@ export interface HeroSlide {
   video_url?: string | null;
   cta_label?: string | null;
   cta_href?: string | null;
+  /** Durée d'affichage de ce slide en millisecondes (défaut : 5000) */
+  duration_ms?: number;
   sort_order?: number;
   is_active?: boolean;
   createdAt?: string;
