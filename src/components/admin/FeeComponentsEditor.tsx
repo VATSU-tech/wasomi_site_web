@@ -20,6 +20,8 @@ export type ProgramFees = {
   cycle?: string;
   components?: FeeComponent[];
   installments?: FeeInstallment[];
+  /** Afficher les tranches de paiement sur le site public (défaut : true) */
+  showInstallments?: boolean;
   connectedFees?: string;
   labotech?: string;
   infirmary?: string;
@@ -47,6 +49,7 @@ export function FeeComponentsEditor({ value, onChange }: Props) {
   const currency = value?.currency || '$';
   const components = Array.isArray(value?.components) ? value!.components! : [];
   const installments = Array.isArray(value?.installments) ? value!.installments! : [];
+  const showInstallments = value?.showInstallments !== false;
   const total = formatTotal(components, currency);
 
   const emit = (next: Partial<ProgramFees> & { components?: FeeComponent[] }) => {
@@ -206,8 +209,13 @@ export function FeeComponentsEditor({ value, onChange }: Props) {
       </div>
 
       <div className="border-t border-border pt-4 space-y-3">
-        <div className="flex items-center justify-between gap-2">
-          <h4 className="font-semibold text-sm">Tranches de paiement (optionnel)</h4>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h4 className="font-semibold text-sm">Tranches de paiement (optionnel)</h4>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              Gérez les échéances et choisissez si elles apparaissent sur le site.
+            </p>
+          </div>
           <button
             type="button"
             onClick={addInstallment}
@@ -216,6 +224,25 @@ export function FeeComponentsEditor({ value, onChange }: Props) {
             <Plus className="size-3.5" /> Ajouter
           </button>
         </div>
+
+        <label className="flex items-start gap-3 rounded-xl border border-border bg-background px-3 py-3 cursor-pointer select-none">
+          <input
+            type="checkbox"
+            checked={showInstallments}
+            onChange={(e) => emit({ showInstallments: e.target.checked })}
+            className="mt-0.5 size-4 rounded border-border accent-primary"
+          />
+          <span className="min-w-0">
+            <span className="block text-sm font-semibold text-foreground">
+              Afficher les tranches de paiement sur le site
+            </span>
+            <span className="block text-xs text-muted-foreground mt-0.5">
+              Si décoché, les échéances restent enregistrées ici mais ne sont pas visibles
+              sur la page Formations.
+            </span>
+          </span>
+        </label>
+
         {installments.map((inst) => (
           <div key={inst.id} className="flex gap-2">
             <input
