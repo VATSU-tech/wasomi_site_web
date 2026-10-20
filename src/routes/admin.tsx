@@ -6,7 +6,12 @@ import { adminService } from '@/services/admin.service';
 import { toast } from 'sonner';
 import { AdmissionRequest, MediaItem } from '@/types/domain';
 import { ImagePickerModal, SelectedMedia } from '@/components/admin/ImagePickerModal';
-import { FeeComponentsEditor, type ProgramFees } from '@/components/admin/FeeComponentsEditor';
+import {
+  FeeComponentsEditor,
+  sumFeeComponents,
+  sumInstallments,
+  type ProgramFees,
+} from '@/components/admin/FeeComponentsEditor';
 import { ScheduleEditor, type ProgramSchedule } from '@/components/admin/ScheduleEditor';
 import { StatusFilterPills } from '@/components/admin/StatusFilterPills';
 import { AdminHeroPanel } from '@/components/admin/AdminHeroPanel';
@@ -367,6 +372,17 @@ export function AdminPage() {
         }
       } else if (activeTab === 'programs') {
         const fees = form.fees as ProgramFees | undefined;
+        const installments = Array.isArray(fees?.installments) ? fees!.installments! : [];
+        if (installments.length > 0) {
+          const total = sumFeeComponents(fees?.components);
+          const sum = sumInstallments(installments);
+          if (Math.abs(sum - total) >= 0.009) {
+            toast.error(
+              `La somme des tranches (${sum.toLocaleString('fr-FR')}) doit égaler le total de la formation (${total.toLocaleString('fr-FR')}).`,
+            );
+            return;
+          }
+        }
         const payload = {
           title: form.title,
           summary: form.summary,
