@@ -125,6 +125,34 @@ async function main() {
     await ensureColumn(conn, 'Media', name, def);
   }
 
+  console.log('Normalisation Program.fees_json (tranches / showInstallments)…');
+  const { normalizeFees, toJson } = await import('../utils/helpers.js');
+  const [programs] = await conn.query(
+    `SELECT id, fees_json FROM Program WHERE deleted_at IS NULL`,
+  );
+  let feesUpdated = 0;
+  for (const row of programs) {
+    let raw = row.fees_json;
+    if (typeof raw === 'string') {
+      try {
+        raw = JSON.parse(raw);
+      } catch {
+        raw = null;
+      }
+    }
+    if (raw == null || typeof raw !== 'object') continue;
+
+    const normalized = normalizeFees(raw);
+    if (!normalized) continue;
+
+    await conn.query(
+      `UPDATE Program SET fees_json = ?, updated_at = NOW(3) WHERE id = ?`,
+      [toJson(normalized), row.id],
+    );
+    feesUpdated += 1;
+  }
+  console.log(`  → ${feesUpdated} formation(s) normalisée(s) (${programs.length} au total).`);
+
   // Vérification finale des colonnes critiques
   const required = [
     ['Media', 'title'],
