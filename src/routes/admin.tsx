@@ -245,6 +245,7 @@ export function AdminPage() {
           cycle: '',
           components: [],
           installments: [],
+          showInstallments: true,
         } satisfies ProgramFees,
         schedule: {
           arrivalTime: '',
@@ -321,6 +322,7 @@ export function AdminPage() {
           cycle: fees.cycle || item.level || '',
           components: legacyComponents as ProgramFees['components'],
           installments: installments as ProgramFees['installments'],
+          showInstallments: fees.showInstallments !== false,
         },
         schedule: {
           arrivalTime: schedule.arrivalTime || '',
