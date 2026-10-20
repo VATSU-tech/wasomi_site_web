@@ -5,6 +5,10 @@ import { useHeroSlidesQuery } from "@/hooks/useWasomiApi";
 import type { HeroSlide } from "@/types/domain";
 import { cn } from "@/lib/utils";
 
+const DEFAULT_DURATION_MS = 5000;
+const MIN_DURATION_MS = 1000;
+const MAX_DURATION_MS = 120_000;
+
 const FALLBACK: HeroSlide = {
   id: "fallback",
   title: "Une école qui fait grandir chaque enfant",
@@ -13,7 +17,14 @@ const FALLBACK: HeroSlide = {
   video_url: "./gallerie/vid.mp4",
   cta_label: "Préinscrire mon enfant",
   cta_href: "/contact?tab=admission",
+  duration_ms: DEFAULT_DURATION_MS,
 };
+
+function slideDurationMs(slide: HeroSlide | undefined): number {
+  const n = Number(slide?.duration_ms);
+  if (!Number.isFinite(n) || n <= 0) return DEFAULT_DURATION_MS;
+  return Math.min(MAX_DURATION_MS, Math.max(MIN_DURATION_MS, Math.round(n)));
+}
 
 export function HeroCarousel() {
   const { data } = useHeroSlidesQuery();
@@ -21,11 +32,13 @@ export function HeroCarousel() {
   const [index, setIndex] = useState(0);
   const slide = slides[index % slides.length];
 
+  const activeDurationMs = slideDurationMs(slide);
+
   useEffect(() => {
     if (slides.length < 2) return;
-    const id = setInterval(() => setIndex((i) => (i + 1) % slides.length), 5000);
-    return () => clearInterval(id);
-  }, [slides.length]);
+    const id = setTimeout(() => setIndex((i) => (i + 1) % slides.length), activeDurationMs);
+    return () => clearTimeout(id);
+  }, [index, slides.length, activeDurationMs]);
 
   const ctaIsAdmission =
     !slide.cta_href ||
