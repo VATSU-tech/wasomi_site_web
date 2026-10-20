@@ -30,13 +30,62 @@ export type ProgramFees = {
   thirdInstallment?: string;
 };
 
+/** Extrait un montant numérique depuis "200 $", "1 200,50", etc. */
+export function parseMoneyAmount(value: string | number | null | undefined): number {
+  if (value == null || value === '') return 0;
+  if (typeof value === 'number') return Number.isFinite(value) ? value : 0;
+  const cleaned = String(value)
+    .replace(/\s/g, '')
+    .replace(/[^\d,.-]/g, '')
+    .replace(',', '.');
+  const n = Number.parseFloat(cleaned);
+  return Number.isFinite(n) ? n : 0;
+}
+
+export function sumFeeComponents(components: FeeComponent[] | undefined): number {
+  return (components || []).reduce((s, c) => s + (Number(c.amount) || 0), 0);
+}
+
+export function sumInstallments(installments: FeeInstallment[] | undefined): number {
+  return (installments || []).reduce((s, i) => s + parseMoneyAmount(i.amount), 0);
+}
+
+/** Tranches réellement affichables (libellé + montant non vide) */
+export function getVisibleInstallments(
+  fees: {
+    installments?: Array<{ id?: string; label: string; amount: string }>;
+    firstInstallment?: string;
+    secondInstallment?: string;
+    thirdInstallment?: string;
+  } | null | undefined,
+): Array<{ id: string; label: string; amount: string }> {
+  if (!fees) return [];
+
+  if (Array.isArray(fees.installments)) {
+    // Tableau explicite : vide = volontairement aucune tranche (même si checkbox cochée)
+    return fees.installments
+      .filter((i) => i && String(i.label || '').trim() && String(i.amount || '').trim())
+      .map((i, idx) => ({
+        id: String(i.id || `inst-${idx}`),
+        label: String(i.label).trim(),
+        amount: String(i.amount).trim(),
+      }));
+  }
+
+  return [
+    fees.firstInstallment && { id: 't1', label: '1ère tranche', amount: String(fees.firstInstallment) },
+    fees.secondInstallment && { id: 't2', label: '2ème tranche', amount: String(fees.secondInstallment) },
+    fees.thirdInstallment && { id: 't3', label: '3ème tranche', amount: String(fees.thirdInstallment) },
+  ].filter(Boolean) as Array<{ id: string; label: string; amount: string }>;
+}
+
 function newId() {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID();
   return `fee-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
 function formatTotal(components: FeeComponent[], currency: string) {
-  const sum = components.reduce((s, c) => s + (Number(c.amount) || 0), 0);
+  const sum = sumFeeComponents(components);
   return `${sum.toLocaleString('fr-FR', { maximumFractionDigits: 2 })} ${currency}`.trim();
 }
 
@@ -51,6 +100,13 @@ export function FeeComponentsEditor({ value, onChange }: Props) {
   const installments = Array.isArray(value?.installments) ? value!.installments! : [];
   const showInstallments = value?.showInstallments !== false;
   const total = formatTotal(components, currency);
+
+  const formationTotal = sumFeeComponents(components);
+  const installmentsSum = sumInstallments(installments);
+  const hasInstallments = installments.length > 0;
+  const sumsMatch =
+    !hasInstallments || Math.abs(installmentsSum - formationTotal) < 0.009;
+  const diff = installmentsSum - formationTotal;
 
   const emit = (next: Partial<ProgramFees> & { components?: FeeComponent[] }) => {
     const comps = next.components ?? components;
@@ -102,17 +158,20 @@ export function FeeComponentsEditor({ value, onChange }: Props) {
   };
 
   const addInstallment = () => {
+    const n = installments.length + 1;
+    const label =
+      n === 1 ? '1ère tranche' : n === 2 ? '2ème tranche' : `${n}ème tranche`;
     emit({
-      installments: [
-        ...installments,
-        { id: newId(), label: `${installments.length + 1}ère tranche`, amount: '' },
-      ],
+      installments: [...installments, { id: newId(), label, amount: '' }],
     });
   };
 
   const removeInstallment = (id: string) => {
     emit({ installments: installments.filter((i) => i.id !== id) });
   };
+
+  const fmt = (n: number) =>
+    `${n.toLocaleString('fr-FR', { maximumFractionDigits: 2 })} ${currency}`.trim();
 
   return (
     <div className="sm:col-span-2 space-y-4 rounded-2xl border border-border bg-card/60 p-4">
@@ -213,7 +272,7 @@ export function FeeComponentsEditor({ value, onChange }: Props) {
           <div>
             <h4 className="font-semibold text-sm">Tranches de paiement (optionnel)</h4>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Gérez les échéances et choisissez si elles apparaissent sur le site.
+              La somme des tranches doit égaler le total de la formation.
             </p>
           </div>
           <button
@@ -237,11 +296,16 @@ export function FeeComponentsEditor({ value, onChange }: Props) {
               Afficher les tranches de paiement sur le site
             </span>
             <span className="block text-xs text-muted-foreground mt-0.5">
-              Si décoché, les échéances restent enregistrées ici mais ne sont pas visibles
-              sur la page Formations.
+              Sans tranche ajoutée, rien n&apos;apparaît sur le site — même si la case est cochée.
             </span>
           </span>
         </label>
+
+        {!hasInstallments && (
+          <p className="text-xs text-muted-foreground rounded-xl border border-dashed border-border px-3 py-3 text-center">
+            Aucune tranche. Ajoutez-en si vous souhaitez un échéancier public.
+          </p>
+        )}
 
         {installments.map((inst) => (
           <div key={inst.id} className="flex gap-2">
@@ -254,8 +318,8 @@ export function FeeComponentsEditor({ value, onChange }: Props) {
             <input
               value={inst.amount}
               onChange={(e) => updateInstallment(inst.id, { amount: e.target.value })}
-              placeholder="Montant"
-              className="w-28 px-3 py-2 rounded-lg border border-border bg-card text-sm"
+              placeholder={`ex. 200 ${currency}`}
+              className="w-32 px-3 py-2 rounded-lg border border-border bg-card text-sm"
             />
             <button
               type="button"
@@ -267,6 +331,28 @@ export function FeeComponentsEditor({ value, onChange }: Props) {
             </button>
           </div>
         ))}
+
+        {hasInstallments && (
+          <div
+            className={
+              sumsMatch
+                ? 'rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-3 text-xs'
+                : 'rounded-xl border border-amber-500/40 bg-amber-500/10 px-3 py-3 text-xs'
+            }
+          >
+            <div className="flex flex-wrap items-center justify-between gap-2 font-semibold">
+              <span>Somme des tranches : {fmt(installmentsSum)}</span>
+              <span>Total formation : {fmt(formationTotal)}</span>
+            </div>
+            <p className={`mt-1.5 ${sumsMatch ? 'text-emerald-700 dark:text-emerald-400' : 'text-amber-800 dark:text-amber-300'}`}>
+              {sumsMatch
+                ? 'Les montants correspondent.'
+                : diff > 0
+                  ? `Écart : +${fmt(Math.abs(diff))} par rapport au total (trop élevé).`
+                  : `Écart : −${fmt(Math.abs(diff))} par rapport au total (trop bas).`}
+            </p>
+          </div>
+        )}
       </div>
 
       <div>
