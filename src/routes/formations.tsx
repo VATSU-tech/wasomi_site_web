@@ -314,17 +314,32 @@ function FormationsPage() {
                     },
                   ].filter(Boolean);
 
+            const resolvedInstallments =
+              apiInstallments.length > 0
+                ? (apiInstallments as FormationDetail["fees"]["installments"])
+                : apiFees
+                  ? []
+                  : sharedFees.installments;
+
             return {
               ...sharedFees,
               ...(apiFees || {}),
               components: components.length > 0 ? components : sharedFees.components,
               // Tranches propres à cette formation (jamais le fallback partagé si l'API a des frais)
-              installments:
-                apiInstallments.length > 0
-                  ? (apiInstallments as FormationDetail["fees"]["installments"])
-                  : apiFees
-                    ? []
-                    : sharedFees.installments,
+              installments: resolvedInstallments,
+              // Évite d'afficher d'anciens first/second/third si le tableau est volontairement vide
+              firstInstallment:
+                resolvedInstallments?.[0]?.amount ||
+                (apiFees ? undefined : sharedFees.firstInstallment) ||
+                "",
+              secondInstallment:
+                resolvedInstallments?.[1]?.amount ||
+                (apiFees ? undefined : sharedFees.secondInstallment) ||
+                "",
+              thirdInstallment:
+                resolvedInstallments?.[2]?.amount ||
+                (apiFees ? undefined : sharedFees.thirdInstallment) ||
+                "",
               showInstallments: apiFees?.showInstallments !== false,
               total:
                 computedTotal ||
@@ -503,8 +518,38 @@ function FormationsPage() {
                                 </div>
                               )}
 
-                              {f.fees.showInstallments !== false &&
-                                (f.fees.installments?.length || f.fees.firstInstallment) && (
+                              {(() => {
+                                const visibleInstallments =
+                                  f.fees.showInstallments === false
+                                    ? []
+                                    : Array.isArray(f.fees.installments)
+                                      ? f.fees.installments.filter(
+                                          (i) =>
+                                            i &&
+                                            String(i.label || "").trim() &&
+                                            String(i.amount || "").trim(),
+                                        )
+                                      : [
+                                          f.fees.firstInstallment && {
+                                            id: "t1",
+                                            label: "1ère tranche",
+                                            amount: f.fees.firstInstallment,
+                                          },
+                                          f.fees.secondInstallment && {
+                                            id: "t2",
+                                            label: "2ème tranche",
+                                            amount: f.fees.secondInstallment,
+                                          },
+                                          f.fees.thirdInstallment && {
+                                            id: "t3",
+                                            label: "3ème tranche",
+                                            amount: f.fees.thirdInstallment,
+                                          },
+                                        ].filter(Boolean);
+
+                                if (!visibleInstallments.length) return null;
+
+                                return (
                                 <div className="rounded-2xl border border-primary/25 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent px-4 py-4 mt-2 space-y-3">
                                   <div className="flex flex-wrap items-center justify-between gap-2">
                                     <p className="inline-flex items-center gap-2 text-sm font-bold text-foreground">
@@ -524,32 +569,20 @@ function FormationsPage() {
                                         </tr>
                                       </thead>
                                       <tbody>
-                                        {(f.fees.installments && f.fees.installments.length > 0
-                                          ? f.fees.installments.map((inst, idx) => ({
-                                              key: inst.id || inst.label,
-                                              label: inst.label,
-                                              amount: inst.amount,
-                                              idx,
-                                            }))
-                                          : [
-                                              { key: "t1", label: "1ère tranche", amount: f.fees.firstInstallment, idx: 0 },
-                                              { key: "t2", label: "2ème tranche", amount: f.fees.secondInstallment, idx: 1 },
-                                              { key: "t3", label: "3ème tranche", amount: f.fees.thirdInstallment, idx: 2 },
-                                            ].filter((row) => Boolean(row.amount))
-                                        ).map((row) => (
-                                          <tr key={row.key} className="border-b border-border last:border-0">
+                                        {visibleInstallments.map((inst, idx) => (
+                                          <tr key={inst.id || inst.label} className="border-b border-border last:border-0">
                                             <td className="px-4 py-3">
                                               <span className="inline-flex items-center gap-2 font-medium text-foreground">
                                                 <span className="inline-flex size-6 items-center justify-center rounded-full bg-primary/15 text-[11px] font-bold text-primary">
-                                                  {row.idx + 1}
+                                                  {idx + 1}
                                                 </span>
-                                                {row.label}
+                                                {inst.label}
                                               </span>
                                             </td>
                                             <td className="px-4 py-3 text-right">
                                               <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-3 py-1 text-xs font-bold tabular-nums text-emerald-700 dark:text-emerald-400">
                                                 <Check className="size-3" />
-                                                {row.amount}
+                                                {inst.amount}
                                               </span>
                                             </td>
                                           </tr>
@@ -558,14 +591,7 @@ function FormationsPage() {
                                     </table>
                                   </div>
                                   <div className="flex flex-wrap gap-2">
-                                    {(f.fees.installments && f.fees.installments.length > 0
-                                      ? f.fees.installments
-                                      : [
-                                          { id: "t1", label: "1ère", amount: f.fees.firstInstallment },
-                                          { id: "t2", label: "2ème", amount: f.fees.secondInstallment },
-                                          { id: "t3", label: "3ème", amount: f.fees.thirdInstallment },
-                                        ].filter((inst) => Boolean(inst.amount))
-                                    ).map((inst) => (
+                                    {visibleInstallments.map((inst) => (
                                       <span
                                         key={inst.id || inst.label}
                                         className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card/80 px-3 py-1.5 text-xs font-semibold shadow-sm"
@@ -576,7 +602,8 @@ function FormationsPage() {
                                     ))}
                                   </div>
                                 </div>
-                              )}
+                                );
+                              })()}
                             </div>
 
                             <div className="grid gap-2.5 rounded-2xl border border-border bg-surface p-5">
