@@ -74,6 +74,7 @@ type FormationDetail = {
     cycle: string;
     components?: FeeComponent[];
     installments?: { id?: string; label: string; amount: string }[];
+    showInstallments?: boolean;
     connectedFees: string;
     labotech: string;
     infirmary: string;
@@ -291,20 +292,47 @@ function FormationsPage() {
           students: (p as { students?: string }).students || "30+",
           desc: p.summary || p.description || "Formation d'excellence.",
           color: (p as { color?: string }).color || ["from-indigo-500 to-purple-500", "from-pink-500 to-rose-500", "from-primary to-primary-glow", "from-emerald-500 to-teal-500", "from-primary to-primary-glow", "from-amber-500 to-yellow-500"][idx % 6],
-          fees: {
-            ...sharedFees,
-            ...(apiFees || {}),
-            components: components.length > 0 ? components : sharedFees.components,
-            installments:
+          fees: (() => {
+            const apiInstallments =
               Array.isArray(apiFees?.installments) && apiFees!.installments!.length > 0
                 ? apiFees!.installments!
-                : sharedFees.installments,
-            total:
-              computedTotal ||
-              apiFees?.total ||
-              (p.price ? `${p.price}` : sharedFees.total),
-            cycle: apiFees?.cycle || p.level || "Cycle complet",
-          },
+                : [
+                    apiFees?.firstInstallment && {
+                      id: "t1",
+                      label: "1ère tranche",
+                      amount: String(apiFees.firstInstallment),
+                    },
+                    apiFees?.secondInstallment && {
+                      id: "t2",
+                      label: "2ème tranche",
+                      amount: String(apiFees.secondInstallment),
+                    },
+                    apiFees?.thirdInstallment && {
+                      id: "t3",
+                      label: "3ème tranche",
+                      amount: String(apiFees.thirdInstallment),
+                    },
+                  ].filter(Boolean);
+
+            return {
+              ...sharedFees,
+              ...(apiFees || {}),
+              components: components.length > 0 ? components : sharedFees.components,
+              // Tranches propres à cette formation (jamais le fallback partagé si l'API a des frais)
+              installments:
+                apiInstallments.length > 0
+                  ? (apiInstallments as FormationDetail["fees"]["installments"])
+                  : apiFees
+                    ? []
+                    : sharedFees.installments,
+              showInstallments: apiFees?.showInstallments !== false,
+              total:
+                computedTotal ||
+                apiFees?.total ||
+                (p.price ? `${p.price}` : sharedFees.total),
+              cycle: apiFees?.cycle || p.level || "Cycle complet",
+            };
+          })(),
           schedule: {
             arrivalTime: "07h00 - 07h30",
             classStart: "07h30",
@@ -475,7 +503,8 @@ function FormationsPage() {
                                 </div>
                               )}
 
-                              {(f.fees.installments?.length || f.fees.firstInstallment) && (
+                              {f.fees.showInstallments !== false &&
+                                (f.fees.installments?.length || f.fees.firstInstallment) && (
                                 <div className="rounded-2xl border border-primary/25 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent px-4 py-4 mt-2 space-y-3">
                                   <div className="flex flex-wrap items-center justify-between gap-2">
                                     <p className="inline-flex items-center gap-2 text-sm font-bold text-foreground">
